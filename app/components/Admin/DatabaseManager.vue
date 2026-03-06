@@ -185,7 +185,7 @@
               {{ selectedFile ? selectedFile.name : '点击选择或拖拽备份文件' }}
             </h5>
             <p class="text-[10px] text-zinc-600 font-bold uppercase mt-1 tracking-widest">
-              仅支持 VoiceHub 导出的 .json 格式
+              仅支持 天津二中广播站 导出的 .json 格式
             </p>
             <input
               ref="fileInput"

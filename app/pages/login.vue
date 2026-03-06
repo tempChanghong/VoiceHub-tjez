@@ -3,17 +3,17 @@
     <div class="auth-container">
       <div class="form-section">
         <div class="form-header">
-          <div class="logo-row">
-            <img :src="brandLogoSrc" alt="Brand Logo" class="brand-logo-center" >
-            <div v-if="schoolLogoHomeUrl && schoolLogoHomeUrl.trim()" class="logo-divider" />
-            <img
-              v-if="schoolLogoHomeUrl && schoolLogoHomeUrl.trim()"
-              :src="schoolLogoHomeUrl"
-              alt="学校Logo"
-              class="school-logo"
-            >
+          <div class="flex items-center justify-center gap-4 mb-4">
+            <!-- VoiceHub Logo -->
+            <img :src="brandLogoSrc" alt="VoiceHub Logo" class="h-10 w-auto object-contain" >
+            <!-- 分割线 -->
+            <div class="w-px h-8 bg-zinc-600/50" />
+            <!-- 校徽和校名 -->
+            <div class="flex items-center gap-2">
+              <img src="/images/school.png" alt="天津市第二中学" class="h-10 w-10 object-contain" />
+              <span class="text-2xl font-bold text-[var(--text-primary)] tracking-wide">天津市第二中学</span>
+            </div>
           </div>
-          <h1 class="form-title">{{ siteTitle ? siteTitle + ' | VoiceHub' : 'VoiceHub' }}</h1>
           <div class="header-divider" />
         </div>
         <ClientOnly>

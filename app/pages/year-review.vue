@@ -1,7 +1,7 @@
 <template>
   <div class="review-page">
     <Head>
-      <Title>我的年度回顾 - VoiceHub</Title>
+      <Title>我的年度回顾 - 天津二中广播站</Title>
       <Meta name="theme-color" content="#000000" />
       <Meta
         name="viewport"

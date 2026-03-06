@@ -75,7 +75,7 @@
       </div>
       <h3 class="text-lg font-bold text-zinc-200">暂无API密钥</h3>
       <p class="text-xs text-zinc-500 mt-2 max-w-xs leading-relaxed">
-        您还没有创建任何访问密钥。创建密钥后，您可以安全地将 VoiceHub 集成到第三方应用程序中。
+        您还没有创建任何访问密钥。创建密钥后，您可以安全地将 天津二中广播站 集成到第三方应用程序中。
       </p>
       <button
         class="mt-8 flex items-center gap-2 px-6 py-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 text-xs font-bold rounded-2xl transition-all"

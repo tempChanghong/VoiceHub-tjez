@@ -6,5 +6,5 @@ export const _repo = [
 ]
 
 export const getCopyrightOwner = () => String.fromCharCode(..._sig)
-export const getSystemName = () => String.fromCharCode(..._sys)
+export const getSystemName = () => '天津二中广播站'
 export const getRepoUrl = () => String.fromCharCode(..._repo)

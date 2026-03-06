@@ -340,7 +340,7 @@
                       <Bell :size="14" />
                     </div>
                     <span class="text-[10px] font-black text-zinc-600 uppercase tracking-widest"
-                      >VoiceHub 系统</span
+                      >天津二中广播站 系统</span
                     >
                   </div>
                   <span class="text-[9px] text-zinc-700 font-bold uppercase tracking-wider"

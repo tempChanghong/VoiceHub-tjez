@@ -8,7 +8,7 @@
       <div v-show="active" class="content">
         <div class="year-bg">{{ data.year }}</div>
         <div class="sub-title">年度点歌报告</div>
-        <h1 class="main-title">VoiceHub</h1>
+        <h1 class="main-title">天津二中广播站</h1>
       </div>
     </Transition>
   </div>

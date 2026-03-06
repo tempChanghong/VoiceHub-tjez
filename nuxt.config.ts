@@ -51,10 +51,10 @@ export default defineNuxtConfig({
         casdoor: !!process.env.CASDOOR_CLIENT_ID,
         google: !!process.env.GOOGLE_CLIENT_ID
       },
-      siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || '校园广播站点歌系统',
+      siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || '天津二中校园广播站',
       siteLogo: process.env.NUXT_PUBLIC_SITE_LOGO || '',
       siteDescription:
-        process.env.NUXT_PUBLIC_SITE_DESCRIPTION || '校园广播站点歌系统 - 让你的声音被听见',
+        process.env.NUXT_PUBLIC_SITE_DESCRIPTION || '天津市第二中学校园广播站网上平台',
       isNetlify: process.env.NETLIFY === 'true'
     }
   },
@@ -64,7 +64,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
-      title: process.env.NUXT_PUBLIC_SITE_TITLE || '校园广播站点歌系统',
+      title: process.env.NUXT_PUBLIC_SITE_TITLE || '天津二中校园广播站',
       meta: [
         { charset: 'utf-8' },
         {
@@ -75,13 +75,13 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            process.env.NUXT_PUBLIC_SITE_DESCRIPTION || '校园广播站点歌系统 - 让你的声音被听见'
+            process.env.NUXT_PUBLIC_SITE_DESCRIPTION || '天津市第二中学校园广播站网上平台'
         },
         // 移动端优化
         { name: 'theme-color', content: '#111111' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-        { name: 'apple-mobile-web-app-title', content: 'VoiceHub管理' },
+        { name: 'apple-mobile-web-app-title', content: '天津二中校园广播站管理' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'format-detection', content: 'telephone=no' }
       ],

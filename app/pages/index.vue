@@ -3,15 +3,15 @@
     <div class="ellipse-effect" />
     <div class="main-content">
       <div class="top-bar">
-        <div class="logo-section">
-          <NuxtLink class="logo-link" to="/">
-            <img alt="VoiceHub Logo" class="logo-image" :src="logo" >
+        <div class="logo-section flex items-center gap-3">
+          <NuxtLink class="flex items-center gap-3" to="/">
+            <img alt="VoiceHub Logo" class="h-8 w-auto object-contain" :src="logo" >
+            <div class="w-px h-6 bg-zinc-600/50" />
+            <div class="flex items-center gap-2">
+              <img src="/images/school.png" alt="天津市第二中学" class="h-8 w-8 object-contain" />
+              <span class="text-xl font-bold text-[var(--text-primary)] tracking-wider whitespace-nowrap">天津市第二中学</span>
+            </div>
           </NuxtLink>
-          <!-- 横线和学校logo -->
-          <div v-if="schoolLogoHomeUrl && schoolLogoHomeUrl.trim()" class="logo-divider-container">
-            <div class="logo-divider" />
-            <img :src="proxiedSchoolLogoUrl" alt="学校Logo" class="school-logo" >
-          </div>
         </div>
 
         <!-- 用户信息区域 -->
@@ -68,7 +68,7 @@
         <div class="title-container">
           <h2 class="main-title">{{ siteTitle }}</h2>
           <div class="title-divider" />
-          <span class="sub-title">VoiceHub 校园广播系统</span>
+          <span class="sub-title">天津二中校园广播站</span>
         </div>
       </div>
 

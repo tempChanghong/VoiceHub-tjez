@@ -10,18 +10,21 @@
       <!-- 品牌标识区域 -->
       <div class="flex items-center px-2 mb-6 mt-2">
         <NuxtLink to="/" class="flex items-center gap-2.5 group">
-          <!-- Logo 图标 -->
+          <!-- VoiceHub Logo -->
           <div class="flex-shrink-0 group-hover:scale-110 transition-all duration-300">
-            <img :src="logo" alt="VoiceHub Logo" class="w-8 h-8 object-contain" >
+            <img :src="logo" alt="VoiceHub Logo" class="w-8 h-auto object-contain" >
           </div>
-          <!-- 品牌文字 -->
-          <div class="flex flex-col justify-center">
-            <h1 class="font-bold text-lg text-zinc-100 leading-none tracking-tight">VoiceHub</h1>
-            <p
-              class="text-[10px] text-zinc-500 mt-1.5 uppercase tracking-widest font-bold leading-none"
-            >
-              管理控制台
-            </p>
+          <!-- 分割线 -->
+          <div class="w-px h-6 bg-zinc-800" />
+          <!-- 学校Logo与文字 -->
+          <div class="flex items-center gap-2">
+            <img src="/images/school.png" alt="学校Logo" class="w-8 h-8 object-contain group-hover:scale-110 transition-all duration-300" >
+            <div class="flex flex-col justify-center">
+              <span class="font-bold text-sm text-zinc-100 leading-none tracking-tight whitespace-nowrap">天津市第二中学</span>
+              <p class="text-[9px] text-zinc-500 mt-1 uppercase tracking-widest font-bold leading-none">
+                广播站管理控制台
+              </p>
+            </div>
           </div>
         </NuxtLink>
       </div>

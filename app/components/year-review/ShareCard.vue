@@ -7,7 +7,7 @@
 
     <div class="card-content">
       <div class="header">
-        <div class="logo">VoiceHub</div>
+        <div class="logo">天津二中广播站</div>
         <div class="year">{{ data.year }}</div>
       </div>
 

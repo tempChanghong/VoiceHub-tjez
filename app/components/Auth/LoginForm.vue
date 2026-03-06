@@ -3,7 +3,7 @@
     <div class="form-header">
       <h2>{{ isBindMode ? '绑定账号' : '欢迎回来' }}</h2>
       <p v-if="isBindMode">即将绑定 {{ providerName }} 账号: {{ providerUsername }}</p>
-      <p v-else>登录您的VoiceHub账户</p>
+      <p v-else>登录您的天津二中广播站账户</p>
     </div>
 
     <form :class="['auth-form', { 'has-error': !!error }]" @submit.prevent="handleLogin">
@@ -141,7 +141,7 @@
     <AuthOAuthButtons v-if="!isBindMode" />
 
     <div class="form-footer">
-      <p class="help-text">不同VoiceHub平台的账号不互通</p>
+      <p class="help-text">不同天津二中广播站平台的账号不互通</p>
     </div>
 
     <AuthTwoFactorVerify

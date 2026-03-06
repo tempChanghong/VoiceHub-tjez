@@ -6,11 +6,11 @@
         <div class="info-content">
           <div class="logo-section">
             <img alt="VoiceHub Logo" class="brand-logo" :src="logo" >
-            <h1 v-if="siteTitle" class="brand-title">{{ siteTitle || 'VoiceHub' }}</h1>
+            <h1 v-if="siteTitle" class="brand-title">{{ siteTitle || '天津二中广播站' }}</h1>
           </div>
 
           <div v-if="isFirstLogin" class="welcome-message">
-            <h2>欢迎使用VoiceHub</h2>
+            <h2>欢迎使用天津二中广播站</h2>
             <p>为了保障您的账号安全，请设置一个新的密码</p>
           </div>
           <div v-else class="security-message">
