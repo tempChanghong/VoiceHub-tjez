@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
     })
 
     // 清除歌曲列表缓存
-    await cacheService.clearSongsCache()
+    await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
 
     return {
       message: '已成功退出联合投稿',
@@ -176,7 +176,7 @@ export default defineEventHandler(async (event) => {
   await db.delete(songs).where(eq(songs.id, body.songId))
 
   // 清除歌曲列表缓存
-  await cacheService.clearSongsCache()
+  await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
   console.log('[Cache] 歌曲缓存已清除（撤回歌曲）')
 
   return {
@@ -185,3 +185,4 @@ export default defineEventHandler(async (event) => {
     quotaReturned: canReturnQuota
   }
 })
+

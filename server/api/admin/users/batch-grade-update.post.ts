@@ -111,7 +111,7 @@ export default defineEventHandler(async (event) => {
     if (updated > 0) {
       try {
         const cacheService = CacheService.getInstance()
-        await cacheService.clearSongsCache()
+        await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
         console.log('批量年级更新后缓存清除成功')
       } catch (cacheError) {
         console.error('批量年级更新后缓存清除失败:', cacheError)
@@ -153,3 +153,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

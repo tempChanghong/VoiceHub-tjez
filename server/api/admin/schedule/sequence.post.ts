@@ -35,8 +35,8 @@ export default defineEventHandler(async (event) => {
 
     // 清除排期相关缓存
     try {
-      await cacheService.clearSchedulesCache()
-      await cacheService.clearSongsCache()
+      await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
+      await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
       console.log('[Cache] 排期缓存和歌曲列表缓存已清除（更新排期顺序）')
     } catch (cacheError) {
       console.error('[Cache] 清除缓存失败:', cacheError)
@@ -55,3 +55,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

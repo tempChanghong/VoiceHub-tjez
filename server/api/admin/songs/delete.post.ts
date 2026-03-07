@@ -77,9 +77,9 @@ export default defineEventHandler(async (event) => {
 
     // 清除相关缓存
     try {
-      await cacheService.clearSongsCache()
+      await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
       if (result.deletedSchedules) {
-        await cacheService.clearSchedulesCache()
+        await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
       }
       console.log('[Cache] 歌曲和排期缓存已清除（删除歌曲）')
     } catch (cacheError) {
@@ -110,3 +110,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

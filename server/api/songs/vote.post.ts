@@ -139,7 +139,7 @@ export default defineEventHandler(async (event) => {
       // 清除统计缓存和歌曲缓存
       try {
         await cacheService.clearStatsCache()
-        await cacheService.clearSongsCache()
+        await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
         console.log('[Cache] 统计缓存和歌曲缓存已清除（取消投票）')
       } catch (cacheError) {
         console.error('[Cache] 缓存清除失败（取消投票）:', cacheError)
@@ -194,7 +194,7 @@ export default defineEventHandler(async (event) => {
       // 清除统计缓存和歌曲缓存
       try {
         await cacheService.clearStatsCache()
-        await cacheService.clearSongsCache()
+        await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
         console.log('[Cache] 统计缓存和歌曲缓存已清除（投票）')
       } catch (cacheError) {
         console.error('[Cache] 缓存清除失败（投票）:', cacheError)
@@ -222,3 +222,4 @@ export default defineEventHandler(async (event) => {
     }
   }
 })
+

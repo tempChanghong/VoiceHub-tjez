@@ -127,7 +127,7 @@ export default defineEventHandler(async (event) => {
 
     // 清除歌曲相关缓存
     try {
-      await cacheService.clearSongsCache()
+      await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
       console.log('[Cache] 歌曲缓存已清除（添加歌曲）')
     } catch (error) {
       console.error('清除歌曲缓存失败:', error)
@@ -150,3 +150,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

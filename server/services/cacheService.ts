@@ -22,8 +22,7 @@ const CACHE_TTL = {
   REFRESH_AHEAD: 60 // 提前刷新时间（秒）
 } as const
 
-// 缓存刷新锁，防止缓存击穿
-const refreshLocks = new Map<string, Promise<any>>()
+// 缓存刷新锁，防止缓存击穿（由于改为纯Redis NX机制，单实例内存锁被移除）
 
 // 缓存服务类
 class CacheService {
@@ -99,124 +98,6 @@ class CacheService {
     await this.setCache(key, cacheData, ttl)
   }
 
-  // 清理损坏的缓存数据（UTF-8编码问题）
-  async cleanCorruptedCache(): Promise<void> {
-    if (!isRedisReady()) {
-      console.log('[Cache] Redis未就绪，跳过损坏缓存清理')
-      return
-    }
-
-    await executeRedisCommand(async () => {
-      const client = (await import('../utils/redis')).getRedisClient()
-      if (!client) return
-
-      try {
-        console.log('[Cache] 开始清理损坏的缓存数据...')
-
-        // 获取所有缓存键
-        const keys = await client.keys('*')
-        let corruptedCount = 0
-        let checkedCount = 0
-        let repairedCount = 0
-
-        for (const key of keys) {
-          try {
-            const data = await client.get(key)
-            checkedCount++
-
-            if (!data) continue
-
-            // 检查数据是否可以正确解析
-            try {
-              const parsedData = JSON.parse(data)
-
-              // 检查解析后的数据是否包含乱码
-              if (this.hasCorruptedText(parsedData)) {
-                console.warn(`[Cache] 检测到缓存键 ${key} 包含乱码数据，尝试修复`)
-
-                // 尝试清理数据
-                const cleanedData = this.cleanCorruptedData(parsedData)
-                const cleanedJsonString = this.serialize(cleanedData)
-
-                // 获取原始TTL
-                const ttl = await client.ttl(key)
-                const newTtl = ttl > 0 ? ttl : 3600 // 如果没有TTL，设置为1小时
-
-                // 重新写入清理后的数据
-                await client.setEx(key, newTtl, cleanedJsonString)
-                repairedCount++
-                console.log(`[Cache] 已修复缓存键: ${key}`)
-              }
-            } catch (parseError) {
-              console.warn(`[Cache] 缓存键 ${key} 数据无法解析，删除该缓存`)
-              try {
-                await client.del(key)
-              } catch (delError) {
-                console.error(`[Cache] 删除损坏缓存键 ${key} 失败:`, delError)
-              }
-              corruptedCount++
-            }
-          } catch (error) {
-            console.error(`[Cache] 检查缓存键 ${key} 时出错:`, error)
-            // 如果无法读取，也删除这个键
-            try {
-              await client.del(key)
-            } catch (delError) {
-              console.error(`[Cache] 删除问题缓存键 ${key} 失败:`, delError)
-            }
-            corruptedCount++
-          }
-        }
-
-        console.log(
-          `[Cache] 缓存清理完成: 检查了 ${checkedCount} 个键，删除了 ${corruptedCount} 个损坏的缓存，修复了 ${repairedCount} 个缓存`
-        )
-      } catch (error) {
-        console.error('[Cache] 清理损坏缓存时出错:', error)
-      }
-    })
-  }
-
-  // 手动修复特定缓存键的数据
-  async repairCacheKey(key: string): Promise<boolean> {
-    if (!isRedisReady()) return false
-
-    return (
-      (await executeRedisCommand(async () => {
-        const client = (await import('../utils/redis')).getRedisClient()
-        if (!client) return false
-
-        try {
-          const data = await client.get(key)
-          if (!data) {
-            console.log(`[Cache] 缓存键 ${key} 不存在`)
-            return false
-          }
-
-          const parsedData = JSON.parse(data)
-
-          if (this.hasCorruptedText(parsedData)) {
-            console.log(`[Cache] 修复缓存键: ${key}`)
-            const cleanedData = this.cleanCorruptedData(parsedData)
-            const cleanedJsonString = this.serialize(cleanedData)
-
-            const ttl = await client.ttl(key)
-            const newTtl = ttl > 0 ? ttl : 3600
-
-            await client.setEx(key, newTtl, cleanedJsonString)
-            console.log(`[Cache] 缓存键 ${key} 修复完成`)
-            return true
-          } else {
-            console.log(`[Cache] 缓存键 ${key} 数据正常，无需修复`)
-            return true
-          }
-        } catch (error) {
-          console.error(`[Cache] 修复缓存键 ${key} 失败:`, error)
-          return false
-        }
-      })) || false
-    )
-  }
 
   // 获取排期列表缓存
   async getSchedulesList(startDate?: Date, endDate?: Date): Promise<any[] | null> {
@@ -518,70 +399,11 @@ class CacheService {
     await this.clearSystemSettingsCache()
     console.log('[Cache] 所有缓存已清除')
   }
-
-  // 启动定期刷新任务
-  startPeriodicRefresh(): void {
-    if (!isRedisReady()) {
-      console.log('[Cache] Redis未启用，跳过定期刷新任务')
-      return
-    }
-
-    console.log('[Cache] 启动定期刷新任务')
-
-    // 注意：移除了歌曲和排期的定期预热，改为按需缓存
-
-    // 每小时清理过期的刷新锁
-    setInterval(
-      () => {
-        const now = Date.now()
-        for (const [key, promise] of refreshLocks.entries()) {
-          // 检查Promise状态，如果已完成则清理
-          Promise.race([promise, Promise.resolve('timeout')])
-            .then(() => {
-              if (refreshLocks.has(key)) {
-                refreshLocks.delete(key)
-              }
-            })
-            .catch(() => {
-              refreshLocks.delete(key)
-            })
-        }
-        console.log(`[Cache] 清理刷新锁，当前锁数量: ${refreshLocks.size}`)
-      },
-      60 * 60 * 1000
-    )
-  }
-
   // ==================== 系统设置相关缓存 ====================
 
-  // 停止定期刷新任务（用于优雅关闭）
-  stopPeriodicRefresh(): void {
-    // 清理所有刷新锁
-    refreshLocks.clear()
-    console.log('[Cache] 定期刷新任务已停止')
-  }
-
-  // 初始化缓存系统
-  async initialize(): Promise<void> {
-    if (!isRedisReady()) {
-      console.log('[Cache] Redis未启用，缓存系统初始化跳过')
-      return
-    }
-
-    console.log('[Cache] 初始化缓存系统')
-
-    try {
-      this.startPeriodicRefresh()
-
-      console.log('[Cache] 缓存系统初始化完成')
-    } catch (error) {
-      console.error('[Cache] 缓存系统初始化失败:', error)
-    }
-  }
-
   // 生成缓存键
-  private generateKey(prefix: string, ...parts: (string | number)[]): string {
-    return `voicehub:${prefix}:${parts.join(':')}`
+  private generateKey(prefix: string, ...parts: (string | number | undefined | null)[]): string {
+    return `voicehub:${prefix}:${parts.filter(p => p !== undefined && p !== null).join(':')}`
   }
 
   // ==================== 播放时间相关缓存 ====================
@@ -595,29 +417,7 @@ class CacheService {
   // 序列化数据（确保UTF-8编码）
   private serialize(data: any): string {
     try {
-      // 在序列化前清理数据中的乱码字符
-      const cleanedData = this.cleanCorruptedData(data)
-
-      // 使用JSON.stringify确保正确处理中文字符
-      const jsonString = JSON.stringify(cleanedData)
-
-      // 验证序列化后的字符串是否包含有效的UTF-8字符
-      if (this.containsInvalidUTF8(jsonString)) {
-        console.warn('[Cache] 检测到编码问题，进行二次清理')
-        // 对JSON字符串本身进行清理
-        const cleanedJsonString = this.cleanCorruptedString(jsonString)
-
-        // 验证清理后的字符串是否为有效JSON
-        try {
-          JSON.parse(cleanedJsonString)
-          return cleanedJsonString
-        } catch {
-          console.error('[Cache] 清理后的数据不是有效JSON，使用原始数据')
-          return JSON.stringify(cleanedData, null, 0)
-        }
-      }
-
-      return jsonString
+      return Buffer.from(JSON.stringify(data)).toString('base64')
     } catch (error) {
       console.error('[Cache] 序列化失败:', error)
       throw new Error(`序列化失败: ${error}`)
@@ -629,110 +429,16 @@ class CacheService {
     if (!data) return null
 
     try {
-      // 检查数据是否包含乱码字符
-      if (this.containsInvalidUTF8(data)) {
-        console.warn('[Cache] 检测到缓存数据包含乱码字符:', data.substring(0, 100))
-        return null
-      }
-
-      const parsed = JSON.parse(data) as T
-
-      // 递归检查解析后的对象是否包含乱码
-      if (this.hasCorruptedText(parsed)) {
-        console.warn('[Cache] 解析后的数据包含乱码，返回null')
-        return null
-      }
-
-      return parsed
+      return JSON.parse(Buffer.from(data, 'base64').toString('utf-8')) as T
     } catch (error) {
-      console.error('[Cache] 反序列化失败:', error)
+      console.warn('[Cache] 反序列化失败（可能因为遗留明文数据格式），将自动容错并退化:', error)
       return null
     }
   }
 
   // ==================== 统计数据缓存 ====================
 
-  // 检查字符串是否包含无效的UTF-8字符或乱码
-  private containsInvalidUTF8(str: string): boolean {
-    // 检查是否包含替换字符（�）或其他常见乱码模式
-    const invalidPatterns = [
-      /\uFFFD/g, // Unicode替换字符
-      /�/g // 乱码字符
-      // 移除对正常JSON Unicode转义的误判
-      // /\\u[0-9a-fA-F]{4}/g // 这会误判正常的JSON Unicode转义
-    ]
-
-    // 检查是否包含明显的乱码模式
-    const corruptedPatterns = [
-      /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, // 控制字符（除了\t\n\r）
-      /[\uD800-\uDFFF]/g // 孤立的代理对字符
-    ]
-
-    return (
-      invalidPatterns.some((pattern) => pattern.test(str)) ||
-      corruptedPatterns.some((pattern) => pattern.test(str))
-    )
-  }
-
-  // 递归检查对象是否包含乱码文本
-  private hasCorruptedText(obj: any): boolean {
-    if (typeof obj === 'string') {
-      return this.containsInvalidUTF8(obj)
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.some((item) => this.hasCorruptedText(item))
-    }
-
-    if (obj && typeof obj === 'object') {
-      return Object.values(obj).some((value) => this.hasCorruptedText(value))
-    }
-
-    return false
-  }
-
-  // 清理字符串中的乱码字符
-  private cleanCorruptedString(str: string): string {
-    if (typeof str !== 'string') return str
-
-    return (
-      str
-        // 移除Unicode替换字符
-        .replace(/\uFFFD/g, '')
-        // 移除乱码字符
-        .replace(/�/g, '')
-        // 移除控制字符（保留\t\n\r）
-        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-        // 移除孤立的代理对字符
-        .replace(/[\uD800-\uDFFF]/g, '')
-        // 规范化Unicode字符
-        .normalize('NFC')
-    )
-  }
-
-  // 递归清理对象中的乱码文本
-  private cleanCorruptedData(obj: any): any {
-    if (typeof obj === 'string') {
-      return this.cleanCorruptedString(obj)
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.map((item) => this.cleanCorruptedData(item))
-    }
-
-    if (obj && typeof obj === 'object') {
-      const cleaned: any = {}
-      for (const [key, value] of Object.entries(obj)) {
-        const cleanedKey = this.cleanCorruptedString(key)
-        cleaned[cleanedKey] = this.cleanCorruptedData(value)
-      }
-      return cleaned
-    }
-
-    return obj
-  }
-
-  // 设置缓存（带编码验证）
+  // 设置缓存
   private async setCache(key: string, data: any, ttl: number): Promise<boolean> {
     if (!isRedisReady()) return false
 
@@ -758,12 +464,6 @@ class CacheService {
             return false
           }
 
-          // 简化验证逻辑，只检查明显的乱码
-          if (this.containsInvalidUTF8(serializedData)) {
-            console.warn(`[Cache] 检测到潜在编码问题，但继续写入: ${key}`)
-            // 不再阻止写入，只是记录警告
-          }
-
           // 计算最终TTL
           const finalTTL = this.getRandomTTL(ttl)
 
@@ -780,7 +480,7 @@ class CacheService {
   }
 
   // 获取缓存（带编码验证）
-  private async getCache<T>(key: string): Promise<T | null> {
+  public async getCache<T>(key: string): Promise<T | null> {
     if (!isRedisReady()) return null
 
     return (
@@ -795,24 +495,10 @@ class CacheService {
             return null
           }
 
-          // 检查原始数据是否包含乱码
-          if (this.containsInvalidUTF8(data)) {
-            // 删除损坏的缓存
-            await executeRedisCommand(
-              async () => {
-                const redisClient = (await import('../utils/redis')).getRedisClient()
-                if (!redisClient) return
-                await redisClient.del(key)
-              },
-              async () => {}
-            )
-            return null
-          }
-
-          // 反序列化数据（内部已包含UTF-8验证）
+          // 反序列化数据
           const result = this.deserialize<T>(data)
 
-          // 如果反序列化返回null（可能因为乱码），记录日志
+          // 如果反序列化返回null且数据不为空（说明可能存在遗留或失效格式数据）
           if (result === null && data.length > 0) {
             // 删除有问题的缓存
             await executeRedisCommand(
@@ -835,7 +521,7 @@ class CacheService {
   }
 
   // 删除缓存
-  private async deleteCache(key: string): Promise<boolean> {
+  public async deleteCache(key: string): Promise<boolean> {
     if (!isRedisReady()) return false
 
     return (
@@ -855,7 +541,7 @@ class CacheService {
   // ==================== 缓存统计 ====================
 
   // 批量删除缓存（按模式）
-  private async deleteCachePattern(pattern: string): Promise<boolean> {
+  public async deleteCachePattern(pattern: string): Promise<boolean> {
     if (!isRedisReady()) return false
 
     return (
@@ -926,16 +612,6 @@ class CacheService {
       return cached
     }
 
-    // 检查是否有正在进行的刷新操作
-    if (refreshLocks.has(lockKey)) {
-      try {
-        return await refreshLocks.get(lockKey)!
-      } catch (error) {
-        console.error(`[Cache] 等待刷新锁失败: ${lockKey}`, error)
-        return null
-      }
-    }
-
     // 尝试获取分布式锁
     const lockAcquired = await this.acquireLock(lockKey)
     if (!lockAcquired) {
@@ -945,21 +621,15 @@ class CacheService {
     }
 
     // 获取到锁，开始数据加载
-    const refreshPromise = (async () => {
-      try {
-        const data = await dataLoader()
-        if (data !== null) {
-          await this.setCache(cacheKey, data, ttl)
-        }
-        return data
-      } finally {
-        await this.releaseLock(lockKey)
-        refreshLocks.delete(lockKey)
+    try {
+      const data = await dataLoader()
+      if (data !== null) {
+        await this.setCache(cacheKey, data, ttl)
       }
-    })()
-
-    refreshLocks.set(lockKey, refreshPromise)
-    return await refreshPromise
+      return data
+    } finally {
+      await this.releaseLock(lockKey)
+    }
   }
 
   // 清除 Redis 中的 public_schedules 相关缓存
@@ -987,20 +657,21 @@ class CacheService {
       }
     })
   }
+
+  // 精确失效缓存
+  public async invalidateCache(keys: string[]): Promise<void> {
+    if (!isRedisReady() || keys.length === 0) return
+    await executeRedisCommand(async () => {
+      const client = (await import('../utils/redis')).getRedisClient()
+      if (client) {
+        await client.del(keys)
+      }
+    })
+  }
 }
 
 // 创建全局缓存服务实例
 const cacheService = new CacheService()
-
-// 在服务启动时初始化缓存系统
-if (process.env.NODE_ENV !== 'test') {
-  // 延迟初始化，确保Redis连接已建立
-  setTimeout(() => {
-    cacheService.initialize().catch((error) => {
-      console.error('[Cache] 缓存系统初始化失败:', error)
-    })
-  }, 1000)
-}
 
 export { cacheService, CacheService }
 export default cacheService

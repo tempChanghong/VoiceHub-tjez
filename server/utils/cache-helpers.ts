@@ -63,7 +63,7 @@ export class CacheHelper {
 
       // 尝试写入Redis（永久缓存）
       if (isRedisReady()) {
-        redisSuccess = await executeRedisCommand(
+        redisSuccess = (await executeRedisCommand(
           async () => {
             const client = (await import('./redis')).getRedisClient()
             if (!client) return false
@@ -74,7 +74,7 @@ export class CacheHelper {
             return true
           },
           async () => false
-        )
+        )) || false
       }
 
       // 不使用内存缓存的setCache方法，因为它是private且需要TTL
@@ -222,7 +222,7 @@ export class CacheHelper {
         )
         return storedVersion === expectedVersion
       } else {
-        const cached = await cacheService.getCache(key)
+        const cached = await cacheService.getCache<any>(key)
         return cached?.version === expectedVersion
       }
     } catch (error) {
@@ -263,11 +263,16 @@ export class CacheHelper {
     if (isRedisReady()) {
       stats.redis.enabled = true
       try {
-        const keyCount = await executeRedisCommand(async (client) => {
-          const keys = await client.keys('*')
-          return keys.length
-        }, 0)
-        stats.redis.keyCount = keyCount
+        const keyCount = await executeRedisCommand(
+          async () => {
+            const client = (await import('./redis')).getRedisClient()
+            if (!client) return 0
+            const keys = await client.keys('*')
+            return keys.length
+          },
+          async () => 0
+        )
+        stats.redis.keyCount = keyCount || 0
       } catch (error) {
         console.error('获取Redis统计失败:', error)
       }

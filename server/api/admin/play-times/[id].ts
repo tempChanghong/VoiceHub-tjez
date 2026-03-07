@@ -124,7 +124,7 @@ export default defineEventHandler(async (event) => {
       // 清除相关缓存
       try {
         const cacheService = CacheService.getInstance()
-        await cacheService.clearSchedulesCache()
+        await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
         await cacheService.clearPlayTimesCache()
         console.log('[Cache] 排期缓存已清除（播放时间更新）')
       } catch (cacheError) {
@@ -186,7 +186,7 @@ export default defineEventHandler(async (event) => {
       // 清除相关缓存
       try {
         const cacheService = CacheService.getInstance()
-        await cacheService.clearSchedulesCache()
+        await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
         await cacheService.clearPlayTimesCache()
         console.log('[Cache] 排期缓存已清除（播放时间部分更新）')
       } catch (cacheError) {
@@ -244,10 +244,10 @@ export default defineEventHandler(async (event) => {
       // 清除相关缓存
       try {
         const cacheService = CacheService.getInstance()
-        await cacheService.clearSchedulesCache()
+        await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
         await cacheService.clearPlayTimesCache()
         if (songsCount > 0) {
-          await cacheService.clearSongsCache()
+          await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
         }
         console.log('[Cache] 缓存已清除（播放时间删除）')
       } catch (cacheError) {

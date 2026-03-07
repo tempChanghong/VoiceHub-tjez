@@ -1,9 +1,10 @@
-import type { RedisClientOptions, RedisClientType } from 'redis'
+import type { RedisClientOptions } from 'redis'
 import { createClient } from 'redis'
 
 // Redis连接池管理类
 class RedisPool {
-  private client: RedisClientType | null = null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private client: any = null
   private isConnected = false
   private isConnecting = false
   private reconnectAttempts = 0
@@ -23,7 +24,6 @@ class RedisPool {
     url: process.env.REDIS_URL,
     socket: {
       connectTimeout: 10000, // 10秒连接超时
-      lazyConnect: true, // 延迟连接
       reconnectStrategy: (retries) => {
         if (retries >= this.maxReconnectAttempts) {
           console.error('[Redis] 达到最大重连次数，停止重连')
@@ -31,13 +31,9 @@ class RedisPool {
         }
         const delay = Math.min(this.reconnectDelay * Math.pow(2, retries), 30000)
         console.log(`[Redis] 第${retries + 1}次重连，延迟${delay}ms`)
-        return delay
+        return Math.min(1000 * Math.pow(2, retries), 5000)
       }
-    },
-    // 启用离线队列，在断线时缓存命令
-    enableOfflineQueue: false,
-    // 确保使用UTF-8编码
-    encoding: 'utf8'
+    }
   }
 
   constructor() {
@@ -103,8 +99,8 @@ class RedisPool {
     this.isConnecting = false
   }
 
-  // 获取Redis客户端
-  getClient(): RedisClientType | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getClient(): any {
     return this.isConnected ? this.client : null
   }
 
@@ -186,7 +182,7 @@ class RedisPool {
       this.startHealthCheck()
     })
 
-    this.client.on('error', (error) => {
+    this.client.on('error', (error: any) => {
       console.error('[Redis] 连接错误:', error.message)
       this.isConnected = false
       this.connectionStats.failedConnections++

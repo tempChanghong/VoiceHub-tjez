@@ -123,8 +123,8 @@ export default defineEventHandler(async (event) => {
     }
 
     // 清除相关缓存
-    await cacheService.clearSongsCache()
-    await cacheService.clearSchedulesCache()
+    await cacheService.invalidateCache(['voicehub:songs:list:all', 'voicehub:song_count:all'])
+    await cacheService.invalidateCache(['voicehub:schedules:list:all:all', 'voicehub:schedule_date:all'])
 
     console.log(`歌曲驳回操作完成: ${body.songId}`)
 
@@ -151,3 +151,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+
