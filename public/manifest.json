@@ -9,15 +9,20 @@
   "icons": [
     {
       "src": "/images/logo.png",
-      "sizes": "192x192",
+      "sizes": "800x800",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "/images/logo.png",
-      "sizes": "512x512",
+      "sizes": "800x800",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ]
 }
