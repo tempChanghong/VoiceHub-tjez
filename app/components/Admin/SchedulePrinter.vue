@@ -144,31 +144,6 @@
                   >
                 </label>
 
-                <label
-                  v-if="schoolLogoPrintUrl"
-                  class="flex items-center gap-3 cursor-pointer group select-none"
-                >
-                  <div
-                    :class="[
-                      'w-5 h-5 rounded flex items-center justify-center border transition-all',
-                      settings.showSchoolLogo
-                        ? 'bg-blue-600 border-blue-600'
-                        : 'bg-zinc-950 border-zinc-800 group-hover:border-zinc-700'
-                    ]"
-                  >
-                    <CheckCircle2 v-if="settings.showSchoolLogo" class="w-3 h-3 text-white" />
-                  </div>
-                  <input v-model="settings.showSchoolLogo" type="checkbox" class="hidden" >
-                  <span
-                    :class="[
-                      'text-sm font-medium transition-colors',
-                      settings.showSchoolLogo
-                        ? 'text-zinc-200'
-                        : 'text-zinc-500 group-hover:text-zinc-400'
-                    ]"
-                    >学校Logo</span
-                  >
-                </label>
               </div>
             </div>
 
@@ -260,18 +235,11 @@
                 <!-- 页面头部 -->
                 <div class="page-header">
                   <div class="logo-section">
-                    <img :src="logoUrl" alt="VoiceHub Logo" class="logo" >
+                    <img src="/images/school.png" alt="天津二中Logo" class="school-logo-print" >
                     <!-- 竖线分割 -->
                     <div class="logo-divider" />
-                    <!-- 学校logo -->
-                    <img
-                      v-if="settings.showSchoolLogo && schoolLogoPrintUrl"
-                      :src="schoolLogoPrintUrl"
-                      alt="学校Logo"
-                      class="school-logo-print"
-                    >
                     <div class="title-section">
-                      <h1>{{ siteTitle }}</h1>
+                      <h1>天津市第二中学</h1>
                       <h2>广播排期表</h2>
                     </div>
                   </div>
@@ -389,19 +357,16 @@ import CustomSelect from '~/components/UI/Common/CustomSelect.vue'
 
 // 导入子组件
 import ScheduleItemPrint from './ScheduleItemPrint.vue'
-import logoPng from '~~/public/images/logo.png'
+
 
 // 权限检查
 const { canPrintSchedule } = usePermissions()
 
 // 站点配置
-const { siteTitle, schoolLogoPrintUrl, initSiteConfig } = useSiteConfig()
+const { initSiteConfig } = useSiteConfig()
 
 // 配置
 const config = useRuntimeConfig()
-
-// Logo URL处理
-const logoUrl = computed(() => logoPng)
 
 // 响应式数据
 const schedules = ref([])
@@ -423,7 +388,6 @@ const settings = ref({
   showRequester: true,
   showVotes: true,
   showSequence: true,
-  showSchoolLogo: false,
   showPlayTime: true,
   remark: ''
 })

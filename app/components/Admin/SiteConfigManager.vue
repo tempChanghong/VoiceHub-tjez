@@ -79,43 +79,6 @@
         </div>
       </section>
 
-      <!-- 视觉识别 -->
-      <section :class="cardClass">
-        <h3
-          class="text-sm font-black text-zinc-100 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-800 pb-4"
-        >
-          <ImageIcon :size="16" class="text-purple-500" /> 视觉识别
-        </h3>
-        <div class="space-y-4">
-          <div>
-            <label :class="labelClass">站点 Logo URL</label>
-            <input
-              v-model="formData.siteLogoUrl"
-              type="text"
-              placeholder="请输入Logo图片URL"
-              :class="inputClass"
-            >
-          </div>
-          <div>
-            <label :class="labelClass">首页学校 Logo URL (大尺寸)</label>
-            <input
-              v-model="formData.schoolLogoHomeUrl"
-              type="text"
-              placeholder="请输入首页学校Logo URL"
-              :class="inputClass"
-            >
-          </div>
-          <div>
-            <label :class="labelClass">打印排期 Logo URL (小尺寸)</label>
-            <input
-              v-model="formData.schoolLogoPrintUrl"
-              type="text"
-              placeholder="请输入打印页学校Logo URL"
-              :class="inputClass"
-            >
-          </div>
-        </div>
-      </section>
 
       <!-- 投稿须知 -->
       <section
@@ -294,7 +257,6 @@
 import { computed, onMounted, ref } from 'vue'
 import {
   Globe,
-  ImageIcon,
   FileText,
   Settings2,
   Shield,
@@ -327,10 +289,7 @@ const defaultSubmissionGuidelines = `1. 投稿时无需加入书名号
 8. 最终解释权归广播站所有`
 
 const formData = ref({
-  siteTitle: '',
-  siteLogoUrl: '',
-  schoolLogoHomeUrl: '',
-  schoolLogoPrintUrl: '',
+    siteTitle: '',
   siteDescription: '',
   submissionGuidelines: '',
   icpNumber: '',
@@ -383,9 +342,6 @@ const loadConfig = async () => {
 
     formData.value = {
       siteTitle: data.siteTitle || '',
-      siteLogoUrl: data.siteLogoUrl || '',
-      schoolLogoHomeUrl: data.schoolLogoHomeUrl || '',
-      schoolLogoPrintUrl: data.schoolLogoPrintUrl || '',
       siteDescription: data.siteDescription || '',
       submissionGuidelines: data.submissionGuidelines || defaultSubmissionGuidelines,
       icpNumber: data.icpNumber || '',
@@ -414,7 +370,6 @@ const saveConfig = async () => {
     const configToSave = {
       ...formData.value,
       siteTitle: (formData.value.siteTitle || '').trim() || '校园广播站点歌系统',
-      siteLogoUrl: (formData.value.siteLogoUrl || '').trim() || '/favicon.ico',
       submissionGuidelines:
         (formData.value.submissionGuidelines || '').trim() || defaultSubmissionGuidelines,
       // 确保根据限额类型处理空值
