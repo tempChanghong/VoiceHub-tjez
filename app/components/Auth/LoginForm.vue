@@ -141,7 +141,7 @@
     <AuthOAuthButtons v-if="!isBindMode" />
 
     <div class="form-footer">
-      <p class="help-text">不同天津二中广播站平台的账号不互通</p>
+      <p class="help-text">不同VoiceHub平台的账号不互通</p>
     </div>
 
     <AuthTwoFactorVerify
