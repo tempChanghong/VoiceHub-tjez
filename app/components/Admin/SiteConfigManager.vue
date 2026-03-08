@@ -67,6 +67,7 @@
               :class="inputClass"
             >
           </div>
+
           <div>
             <label :class="labelClass">站点描述</label>
             <textarea

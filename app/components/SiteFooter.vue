@@ -11,6 +11,7 @@
           {{ icpNumber }}
         </a>
       </span>
+
       <span v-if="siteTitle" class="footer-item">© {{ currentYear }} {{ siteTitle }}</span>
       <span v-else class="footer-item">© {{ currentYear }} {{ copyrightOwner }}</span>
       <span class="footer-item">Worker in {{ responseTime }}ms</span>
@@ -44,6 +45,9 @@ import packageJson from '~~/package.json'
 // 使用 useSiteConfig composable 获取配置
 const { siteTitle, icp: icpNumber } = useSiteConfig()
 const config = useRuntimeConfig()
+
+
+
 const isNetlify = config.public.isNetlify
 
 const copyrightOwner = getCopyrightOwner()

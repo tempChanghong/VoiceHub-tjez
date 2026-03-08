@@ -701,6 +701,7 @@ VoiceHub/
 │   │   │   │   ├── index.post.ts    # 创建学期
 │   │   │   │   └── set-active.post.ts # 设置活跃学期
 │   │   │   ├── smtp/                # SMTP邮件服务API
+│   │   │   │   ├── reload.post.ts   # 重新加载SMTP配置
 │   │   │   │   ├── test-connection.post.ts # 测试SMTP连接
 │   │   │   │   └── test-email.post.ts # 发送测试邮件
 │   │   │   ├── songs/               # 管理员歌曲管理API
@@ -880,6 +881,7 @@ VoiceHub/
 │   │   ├── redis.ts        # Redis连接和操作工具
 │   │   ├── siteUtils.ts    # 站点工具函数
 │   │   ├── studentMask.ts  # 学生隐私工具
+│   │   ├── submissionLimit.ts # 投稿限额工具
 │   │   └── twoFactorStore.ts # 双重认证存储工具
 │   └── tsconfig.json       # 服务端TypeScript配置
 ├── types/                 # TypeScript类型定义

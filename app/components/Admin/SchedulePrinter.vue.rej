@@ -1,0 +1,11 @@
+diff a/app/components/Admin/SchedulePrinter.vue b/app/components/Admin/SchedulePrinter.vue	(rejected hunks)
+@@ -394,6 +395,9 @@ import logoPng from '~~/public/images/logo.png'
+ // 权限检查
+ const { canPrintSchedule } = usePermissions()
+ 
++// 认证信息
++const { getAuthConfig } = useAuth()
++
+ // 站点配置
+ const { siteTitle, schoolLogoPrintUrl, initSiteConfig } = useSiteConfig()
+ 

@@ -74,6 +74,8 @@ export default defineEventHandler(async (event) => {
       updateData.icpNumber = body.icpNumber
     }
 
+
+
     if (body.enableSubmissionLimit !== undefined) {
       if (typeof body.enableSubmissionLimit !== 'boolean') {
         throw createError({
@@ -295,6 +297,14 @@ export default defineEventHandler(async (event) => {
       console.log('[Cache] 系统设置缓存已清除（更新系统设置）')
     } catch (cacheError) {
       console.warn('清除系统设置缓存失败:', cacheError)
+    }
+
+    try {
+      const { SmtpService } = await import('~~/server/services/smtpService')
+      await SmtpService.getInstance().initializeSmtpConfig()
+      console.log('[SMTP] SMTP配置已重新加载（更新系统设置）')
+    } catch (smtpError) {
+      console.warn('[SMTP] SMTP配置重载失败:', smtpError)
     }
 
     return settings
