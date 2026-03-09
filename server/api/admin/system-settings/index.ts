@@ -38,6 +38,8 @@ export default defineEventHandler(async (event) => {
         .insert(systemSettings)
         .values({
           enablePlayTimeSelection: false,
+          enableRecommendation: false,
+          requireRecommendation: false,
           siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || 'VoiceHub',
           siteLogoUrl: process.env.NUXT_PUBLIC_SITE_LOGO || '/favicon.ico',
           schoolLogoHomeUrl: null,

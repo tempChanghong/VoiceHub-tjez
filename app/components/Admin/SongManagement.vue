@@ -236,6 +236,14 @@
                 class="lg:hidden text-[9px] font-black text-zinc-700 uppercase tracking-wider mt-1 inline-block"
                 >{{ formatDate(song.createdAt) }}</span
               >
+              <p
+                v-if="song.recommendation"
+                class="text-[10px] text-blue-400 mt-1 truncate max-w-xs flex items-center"
+                :title="song.recommendation"
+              >
+                <MessageSquare :size="10" class="inline mr-1 flex-shrink-0" />
+                <span class="truncate">{{ song.recommendation }}</span>
+              </p>
             </div>
           </div>
 

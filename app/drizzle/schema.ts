@@ -60,6 +60,7 @@ export const songs = pgTable('Song', {
   musicPlatform: text('musicPlatform'),
   musicId: text('musicId'),
   hitRequestId: integer(),
+  recommendation: text('recommendation'),
 });
 
 // 投票表
@@ -151,6 +152,8 @@ export const systemSettings = pgTable('SystemSettings', {
   enableRequestTimeLimitation: boolean('enableRequestTimeLimitation').default(false).notNull(),
   forceBlockAllRequests: boolean().default(false).notNull(),
   enableReplayRequests: boolean('enableReplayRequests').default(false).notNull(),
+  enableRecommendation: boolean('enableRecommendation').default(false).notNull(),
+  requireRecommendation: boolean('requireRecommendation').default(false).notNull(),
 });
 
 // 歌曲黑名单表

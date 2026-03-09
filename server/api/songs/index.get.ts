@@ -22,6 +22,7 @@ interface SongResponse {
   artist: string
   requester: string
   requesterId?: number
+  recommendation?: string | null
   collaborators: any[]
   voteCount: number
   played: boolean
@@ -220,6 +221,7 @@ export default defineEventHandler(async (event) => {
         createdAt: songs.createdAt,
         updatedAt: songs.updatedAt,
         cover: songs.cover,
+        recommendation: songs.recommendation,
         musicPlatform: songs.musicPlatform,
         musicId: songs.musicId,
         playUrl: songs.playUrl,
@@ -491,6 +493,7 @@ export default defineEventHandler(async (event) => {
         requestedAt: formatDateTime(song.createdAt), // 添加请求时间的格式化字符串
         scheduled: scheduledSongs.has(song.id), // 添加是否已排期的标志
         cover: song.cover || null, // 添加封面字段
+        recommendation: song.recommendation || null,
         musicPlatform: song.musicPlatform || null, // 添加音乐平台字段
         musicId: song.musicId || null, // 添加音乐ID字段
         playUrl: song.playUrl || null, // 添加播放地址字段

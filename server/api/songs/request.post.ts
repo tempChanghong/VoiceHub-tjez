@@ -132,6 +132,20 @@ export default defineEventHandler(async (event) => {
     const systemSettingsData = systemSettingsResult[0]
     const isAdmin = user.role === 'SUPER_ADMIN' || user.role === 'ADMIN'
 
+    let finalRecommendation: string | null = null
+    if (systemSettingsData?.enableRecommendation) {
+      const rec = typeof body.recommendation === 'string' ? body.recommendation.trim() : ''
+      if (systemSettingsData?.requireRecommendation && rec.length === 0) {
+        throw createError({ statusCode: 400, message: '请填写点歌推荐语' })
+      }
+      if (rec.length > 0) {
+        if (rec.length < 50 || rec.length > 100) {
+          throw createError({ statusCode: 400, message: '推荐语字数需在50-100字之间' })
+        }
+        finalRecommendation = rec
+      }
+    }
+
     // 1. 检查强制关闭
     if (systemSettingsData?.forceBlockAllRequests && !isAdmin) {
       throw createError({
@@ -323,7 +337,8 @@ export default defineEventHandler(async (event) => {
           musicPlatform: isBilibili ? 'bilibili' : (body.musicPlatform || null),
           musicId: finalMusicId,
           playUrl: body.playUrl || null,
-          hitRequestId: hitRequestTime?.id || null
+          hitRequestId: hitRequestTime?.id || null,
+          recommendation: finalRecommendation
         })
         .returning()
       const newSong = songResult[0]

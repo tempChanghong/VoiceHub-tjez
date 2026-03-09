@@ -22,7 +22,9 @@ const publicFields = [
   'enableReplayRequests',
   'enableRequestTimeLimitation',
   'forceBlockAllRequests',
-  'smtpEnabled'
+  'smtpEnabled',
+  'enableRecommendation',
+  'requireRecommendation'
 ]
 
 const filterPublicSettings = (data: any) => {
@@ -59,6 +61,8 @@ export default defineEventHandler(async (event) => {
         .insert(systemSettings)
         .values({
           enablePlayTimeSelection: false,
+          enableRecommendation: false,
+          requireRecommendation: false,
           siteTitle: 'VoiceHub',
           siteLogoUrl: '/favicon.ico',
           schoolLogoHomeUrl: null,

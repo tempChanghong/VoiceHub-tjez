@@ -72,6 +72,8 @@ export const useSiteConfig = () => {
   )
   const icp = computed(() => siteConfig.value.icpNumber || '')
   const enableReplayRequests = computed(() => siteConfig.value.enableReplayRequests || false)
+  const enableRecommendation = computed(() => siteConfig.value.enableRecommendation || false)
+  const requireRecommendation = computed(() => siteConfig.value.requireRecommendation || false)
   const smtpEnabled = computed(() => !!siteConfig.value.smtpEnabled)
 
   // 初始化配置（仅在客户端执行）
@@ -99,6 +101,8 @@ export const useSiteConfig = () => {
     guidelines,
     icp,
     enableReplayRequests,
+    enableRecommendation,
+    requireRecommendation,
     smtpEnabled,
     fetchSiteConfig,
     initSiteConfig,

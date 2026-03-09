@@ -120,6 +120,35 @@
             >
           </div>
 
+          <div
+            class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+          >
+            <div>
+              <p class="text-xs font-bold text-zinc-200">启用点歌推荐语</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">允许用户在点歌时附上推荐语（寄语）</p>
+            </div>
+            <input
+              v-model="formData.enableRecommendation"
+              type="checkbox"
+              class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
+            >
+          </div>
+
+          <div
+            v-if="formData.enableRecommendation"
+            class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+          >
+            <div>
+              <p class="text-xs font-bold text-zinc-200">强制要求填写推荐语</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">开启后，点歌必须包含 50-100 字的推荐语</p>
+            </div>
+            <input
+              v-model="formData.requireRecommendation"
+              type="checkbox"
+              class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
+            >
+          </div>
+
           <div class="space-y-4">
             <div
               class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
@@ -295,6 +324,8 @@ const formData = ref({
   submissionGuidelines: '',
   icpNumber: '',
   enableReplayRequests: false,
+  enableRecommendation: false,
+  requireRecommendation: false,
   enableSubmissionLimit: false,
   dailySubmissionLimit: 5,
   weeklySubmissionLimit: null,
@@ -347,6 +378,8 @@ const loadConfig = async () => {
       submissionGuidelines: data.submissionGuidelines || defaultSubmissionGuidelines,
       icpNumber: data.icpNumber || '',
       enableReplayRequests: !!data.enableReplayRequests,
+      enableRecommendation: !!data.enableRecommendation,
+      requireRecommendation: !!data.requireRecommendation,
       enableSubmissionLimit: !!data.enableSubmissionLimit,
       dailySubmissionLimit: data.dailySubmissionLimit ?? 5,
       weeklySubmissionLimit: data.weeklySubmissionLimit ?? null,

@@ -35,6 +35,9 @@
         <div v-if="settings.showArtist" class="song-artist">
           {{ schedule.song.artist }}
         </div>
+        <div v-if="settings.showRecommendation && schedule.song.recommendation" class="song-recommendation">
+          "{{ schedule.song.recommendation }}"
+        </div>
       </div>
 
       <!-- 投稿人信息（重播歌曲不显示申请人，只显示原投稿人） -->
@@ -190,6 +193,16 @@ const handleImageError = (event) => {
   text-overflow: ellipsis;
 }
 
+.song-recommendation {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+  font-style: italic;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: break-all;
+}
+
 .requester-info,
 .votes-info {
   display: flex;
@@ -254,6 +267,7 @@ const handleImageError = (event) => {
   }
 
   .song-artist,
+  .song-recommendation,
   .label,
   .value {
     color: #333 !important;

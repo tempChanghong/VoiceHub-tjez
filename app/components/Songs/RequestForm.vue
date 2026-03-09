@@ -963,6 +963,13 @@
       type="file"
       @change="handleImportData"
     >
+    <RecommendationModal
+      :show="showRecommendationModal"
+      :require-recommendation="requireRecommendation"
+      @close="showRecommendationModal = false"
+      @confirm="handleRecommendationConfirm"
+      @skip="handleRecommendationSkip"
+    />
   </div>
 </template>
 
@@ -978,6 +985,32 @@ import { useSemesters } from '~/composables/useSemesters'
 import { useMusicSources } from '~/composables/useMusicSources'
 import { useAudioQuality } from '~/composables/useAudioQuality'
 import CustomSelect from '~/components/UI/Common/CustomSelect.vue'
+import RecommendationModal from './RecommendationModal.vue'
+
+const { enableRecommendation, requireRecommendation } = useSiteConfig()
+const showRecommendationModal = ref(false)
+const pendingSongData = ref(null)
+
+const handleRecommendationConfirm = (text) => {
+  showRecommendationModal.value = false
+  if (pendingSongData.value) {
+    pendingSongData.value.recommendation = text
+    emit('request', pendingSongData.value)
+    resetForm()
+    if (typeof showManualModal !== 'undefined' && showManualModal) showManualModal.value = false
+    pendingSongData.value = null
+  }
+}
+
+const handleRecommendationSkip = () => {
+  showRecommendationModal.value = false
+  if (pendingSongData.value) {
+    emit('request', pendingSongData.value)
+    resetForm()
+    if (typeof showManualModal !== 'undefined' && showManualModal) showManualModal.value = false
+    pendingSongData.value = null
+  }
+}
 import Icon from '../UI/Icon.vue'
 import { convertToHttps, validateUrl } from '~/utils/url'
 import { isBilibiliSong } from '~/utils/bilibiliSource'
@@ -2223,6 +2256,13 @@ const submitSong = async (result, options = {}) => {
       bilibiliPage: bilibiliPage
     }
 
+    if (enableRecommendation && enableRecommendation.value) {
+      pendingSongData.value = songData
+      showRecommendationModal.value = true
+      submitting.value = false
+      return true
+    }
+
     // 只emit事件，让父组件处理实际的API调用
     emit('request', songData)
 
@@ -2500,6 +2540,13 @@ const handleManualSubmit = async () => {
       playUrl: manualPlayUrl.value || '',
       musicPlatform: platform.value,
       musicId: null // 手动输入时没有musicId
+    }
+
+    if (enableRecommendation && enableRecommendation.value) {
+      pendingSongData.value = songData
+      showRecommendationModal.value = true
+      submitting.value = false
+      return
     }
 
     // 只emit事件，让父组件处理实际的API调用

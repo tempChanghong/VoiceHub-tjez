@@ -46,6 +46,27 @@ export default defineEventHandler(async (event) => {
       updateData.enablePlayTimeSelection = body.enablePlayTimeSelection
     }
 
+    if (body.enableRecommendation !== undefined) {
+      if (typeof body.enableRecommendation !== 'boolean') {
+        throw createError({
+          statusCode: 400,
+          message: 'enableRecommendation 必须是布尔值'
+        })
+      }
+      updateData.enableRecommendation = body.enableRecommendation
+    }
+
+    if (body.requireRecommendation !== undefined) {
+      if (typeof body.requireRecommendation !== 'boolean') {
+        throw createError({
+          statusCode: 400,
+          message: 'requireRecommendation 必须是布尔值'
+        })
+      }
+      updateData.requireRecommendation = body.requireRecommendation
+    }
+
+
     if (body.siteTitle !== undefined) {
       updateData.siteTitle = body.siteTitle
     }
@@ -244,6 +265,8 @@ export default defineEventHandler(async (event) => {
         .values({
           hideStudentInfo: updateData.hideStudentInfo ?? false,
           enablePlayTimeSelection: updateData.enablePlayTimeSelection ?? false,
+          enableRecommendation: updateData.enableRecommendation ?? false,
+          requireRecommendation: updateData.requireRecommendation ?? false,
           siteTitle: updateData.siteTitle ?? 'VoiceHub',
           siteLogoUrl: updateData.siteLogoUrl ?? '/favicon.ico',
           schoolLogoHomeUrl: updateData.schoolLogoHomeUrl ?? null,

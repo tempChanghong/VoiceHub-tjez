@@ -134,6 +134,7 @@ export default defineEventHandler(async (event) => {
           playUrl: songs.playUrl,
           semester: songs.semester,
           requesterId: songs.requesterId,
+          recommendation: songs.recommendation,
           createdAt: songs.createdAt
         },
         requester: {
@@ -387,6 +388,7 @@ export default defineEventHandler(async (event) => {
           musicPlatform: schedule.song.musicPlatform || null,
           musicId: schedule.song.musicId || null,
           playUrl: schedule.song.playUrl || null,
+          recommendation: schedule.song.recommendation || null,
           semester: schedule.song.semester || null,
           requestedAt: schedule.song.createdAt ? formatDateTime(schedule.song.createdAt) : null,
           // 重播申请信息

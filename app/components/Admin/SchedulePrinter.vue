@@ -393,6 +393,7 @@ const settings = ref({
   showVotes: true,
   showSequence: true,
   showPlayTime: true,
+  showRecommendation: false,
   remark: ''
 })
 
@@ -416,7 +417,8 @@ const contentOptions = [
   { key: 'showArtist', label: '歌手' },
   { key: 'showRequester', label: '投稿人' },
   { key: 'showVotes', label: '热度' },
-  { key: 'showSequence', label: '播放顺序' }
+  { key: 'showSequence', label: '播放顺序' },
+  { key: 'showRecommendation', label: '推荐语 (作为介绍参考)' }
 ]
 
 // 计算属性
