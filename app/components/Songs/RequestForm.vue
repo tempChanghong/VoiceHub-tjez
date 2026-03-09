@@ -1035,7 +1035,7 @@ const props = defineProps({
 const emit = defineEmits(['request', 'vote'])
 
 // 站点配置
-const { guidelines: submissionGuidelines, initSiteConfig, enableReplayRequests } = useSiteConfig()
+const { guidelines: submissionGuidelines, refreshSiteConfig, enableReplayRequests } = useSiteConfig()
 
 // 用户认证
 const auth = useAuth()
@@ -1373,7 +1373,7 @@ watch(
 onMounted(async () => {
   checkNeteaseLoginStatus()
   fetchPlayTimes()
-  initSiteConfig()
+  refreshSiteConfig()
   fetchSubmissionStatus()
   // 获取当前学期和所有学期选项
   await Promise.all([fetchCurrentSemester(), fetchSemesterOptions()])
