@@ -48,13 +48,13 @@
                 class="text-xs font-medium"
                 :class="[
                   requireRecommendation ? 'text-rose-500' : 'text-zinc-400',
-                  (recommendationText.length > 0 && recommendationText.length < 50) || recommendationText.length > 100 ? 'text-amber-500' : ''
+                  (recommendationText.length > 0 && recommendationText.length < recommendationMinLength) || recommendationText.length > recommendationMaxLength ? 'text-amber-500' : ''
                 ]"
               >
-                字数要求：50-100字<span v-if="requireRecommendation">（必填）</span>
+                字数要求：{{ recommendationMinLength }}-{{ recommendationMaxLength }}字<span v-if="requireRecommendation">（必填）</span>
               </span>
               <span class="text-xs text-zinc-500">
-                {{ recommendationText.length }} / 100
+                {{ recommendationText.length }} / {{ recommendationMaxLength }}
               </span>
             </div>
           </div>
@@ -85,6 +85,7 @@
 import { ref, watch } from 'vue'
 import Icon from '~/components/UI/Icon.vue'
 import { useToast } from '~/composables/useToast'
+import { useSiteConfig } from '~/composables/useSiteConfig'
 
 const props = defineProps({
   show: Boolean,
@@ -96,6 +97,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'confirm', 'skip'])
 const { showToast } = useToast()
+const { recommendationMinLength, recommendationMaxLength } = useSiteConfig()
 
 const recommendationText = ref('')
 
@@ -116,11 +118,14 @@ const handleSkip = () => {
 const handleConfirm = () => {
   if (props.requireRecommendation || recommendationText.value.trim().length > 0) {
     const len = recommendationText.value.trim().length
-    if (len < 50 || len > 100) {
+    const minLen = recommendationMinLength.value
+    const maxLen = recommendationMaxLength.value
+    
+    if (len < minLen || len > maxLen) {
       if (window.$showNotification) {
-        window.$showNotification('推荐语字数需在50-100字之间', 'error')
+        window.$showNotification(`推荐语字数需在${minLen}-${maxLen}字之间`, 'error')
       } else {
-        showToast('推荐语字数需在50-100字之间', 'error')
+        showToast(`推荐语字数需在${minLen}-${maxLen}字之间`, 'error')
       }
       return
     }

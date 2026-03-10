@@ -24,7 +24,9 @@ const publicFields = [
   'forceBlockAllRequests',
   'smtpEnabled',
   'enableRecommendation',
-  'requireRecommendation'
+  'requireRecommendation',
+  'recommendationMinLength',
+  'recommendationMaxLength'
 ]
 
 const filterPublicSettings = (data: any) => {
@@ -63,6 +65,8 @@ export default defineEventHandler(async (event) => {
           enablePlayTimeSelection: false,
           enableRecommendation: false,
           requireRecommendation: false,
+          recommendationMinLength: 50,
+          recommendationMaxLength: 100,
           siteTitle: 'VoiceHub',
           siteLogoUrl: '/favicon.ico',
           schoolLogoHomeUrl: null,

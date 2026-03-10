@@ -139,8 +139,10 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 400, message: '请填写点歌推荐语' })
       }
       if (rec.length > 0) {
-        if (rec.length < 50 || rec.length > 100) {
-          throw createError({ statusCode: 400, message: '推荐语字数需在50-100字之间' })
+        const minLen = systemSettingsData.recommendationMinLength ?? 50
+        const maxLen = systemSettingsData.recommendationMaxLength ?? 100
+        if (rec.length < minLen || rec.length > maxLen) {
+          throw createError({ statusCode: 400, message: `推荐语字数需在${minLen}-${maxLen}字之间` })
         }
         finalRecommendation = rec
       }
@@ -261,7 +263,7 @@ export default defineEventHandler(async (event) => {
         effectiveLimit > 0 &&
         limitType
       ) {
-        if (await isLimitReached(tx, user.id, limitType, effectiveLimit)) {
+        if (await isLimitReached(tx as any, user.id, limitType, effectiveLimit)) {
           const labelMap: Record<string, string> = { daily: '每日', weekly: '每周', monthly: '每月' }
           const timeMap: Record<string, string> = { daily: '今日', weekly: '本周', monthly: '本月' }
 
@@ -342,6 +344,7 @@ export default defineEventHandler(async (event) => {
         })
         .returning()
       const newSong = songResult[0]
+      if (!newSong) throw createError({ statusCode: 500, message: '歌曲创建失败' })
 
       // 处理联合投稿人
       if (
@@ -354,7 +357,7 @@ export default defineEventHandler(async (event) => {
 
         for (const collaboratorId of uniqueCollaboratorIds) {
           // 跳过自己或无效ID
-          if (isNaN(collaboratorId) || collaboratorId === user.id) continue
+          if (isNaN(collaboratorId as number) || collaboratorId === user.id) continue
 
           try {
             // 检查是否已经是联合投稿人
@@ -363,8 +366,8 @@ export default defineEventHandler(async (event) => {
               .from(songCollaborators)
               .where(
                 and(
-                  eq(songCollaborators.songId, newSong.id),
-                  eq(songCollaborators.userId, collaboratorId)
+                  eq(songCollaborators.songId, newSong.id as number),
+                  eq(songCollaborators.userId, collaboratorId as number)
                 )
               )
               .limit(1)
@@ -375,13 +378,14 @@ export default defineEventHandler(async (event) => {
             const collabResult = await tx
               .insert(songCollaborators)
               .values({
-                songId: newSong.id,
-                userId: collaboratorId,
+                songId: newSong.id as number,
+                userId: collaboratorId as number,
                 status: 'PENDING'
               })
               .returning()
 
             const collab = collabResult[0]
+            if (!collab) continue
 
             // 记录审计日志
             await tx.insert(collaborationLogs).values({
@@ -395,8 +399,8 @@ export default defineEventHandler(async (event) => {
 
             // 添加到通知列表，事务结束后发送
             notificationsToSend.push({
-              userId: collaboratorId,
-              songId: newSong.id,
+              userId: collaboratorId as number,
+              songId: newSong.id as number,
               songTitle: newSong.title
             })
           } catch (err) {

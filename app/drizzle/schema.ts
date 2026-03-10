@@ -154,6 +154,8 @@ export const systemSettings = pgTable('SystemSettings', {
   enableReplayRequests: boolean('enableReplayRequests').default(false).notNull(),
   enableRecommendation: boolean('enableRecommendation').default(false).notNull(),
   requireRecommendation: boolean('requireRecommendation').default(false).notNull(),
+  recommendationMinLength: integer('recommendationMinLength').default(50).notNull(),
+  recommendationMaxLength: integer('recommendationMaxLength').default(100).notNull(),
 });
 
 // 歌曲黑名单表

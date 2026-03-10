@@ -40,6 +40,8 @@ export default defineEventHandler(async (event) => {
           enablePlayTimeSelection: false,
           enableRecommendation: false,
           requireRecommendation: false,
+          recommendationMinLength: 50,
+          recommendationMaxLength: 100,
           siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || 'VoiceHub',
           siteLogoUrl: process.env.NUXT_PUBLIC_SITE_LOGO || '/favicon.ico',
           schoolLogoHomeUrl: null,

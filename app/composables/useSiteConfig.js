@@ -74,6 +74,8 @@ export const useSiteConfig = () => {
   const enableReplayRequests = computed(() => siteConfig.value.enableReplayRequests || false)
   const enableRecommendation = computed(() => siteConfig.value.enableRecommendation || false)
   const requireRecommendation = computed(() => siteConfig.value.requireRecommendation || false)
+  const recommendationMinLength = computed(() => siteConfig.value.recommendationMinLength ?? 50)
+  const recommendationMaxLength = computed(() => siteConfig.value.recommendationMaxLength ?? 100)
   const smtpEnabled = computed(() => !!siteConfig.value.smtpEnabled)
 
   // 初始化配置（仅在客户端执行）
@@ -103,6 +105,8 @@ export const useSiteConfig = () => {
     enableReplayRequests,
     enableRecommendation,
     requireRecommendation,
+    recommendationMinLength,
+    recommendationMaxLength,
     smtpEnabled,
     fetchSiteConfig,
     initSiteConfig,

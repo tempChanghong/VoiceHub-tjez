@@ -66,6 +66,36 @@ export default defineEventHandler(async (event) => {
       updateData.requireRecommendation = body.requireRecommendation
     }
 
+    if (body.recommendationMinLength !== undefined) {
+      if (!Number.isInteger(body.recommendationMinLength) || body.recommendationMinLength < 0) {
+        throw createError({
+          statusCode: 400,
+          message: 'recommendationMinLength 必须是非负整数'
+        })
+      }
+      updateData.recommendationMinLength = body.recommendationMinLength
+    }
+
+    if (body.recommendationMaxLength !== undefined) {
+      if (!Number.isInteger(body.recommendationMaxLength) || body.recommendationMaxLength < 0) {
+        throw createError({
+          statusCode: 400,
+          message: 'recommendationMaxLength 必须是非负整数'
+        })
+      }
+      updateData.recommendationMaxLength = body.recommendationMaxLength
+    }
+
+    // 验证 min <= max
+    const newMin = updateData.recommendationMinLength !== undefined ? updateData.recommendationMinLength : (body.recommendationMinLength ?? 50);
+    const newMax = updateData.recommendationMaxLength !== undefined ? updateData.recommendationMaxLength : (body.recommendationMaxLength ?? 100);
+    if (newMin > newMax) {
+      throw createError({
+        statusCode: 400,
+        message: '推荐语最小字数不能大于最大字数'
+      })
+    }
+
 
     if (body.siteTitle !== undefined) {
       updateData.siteTitle = body.siteTitle
@@ -267,6 +297,8 @@ export default defineEventHandler(async (event) => {
           enablePlayTimeSelection: updateData.enablePlayTimeSelection ?? false,
           enableRecommendation: updateData.enableRecommendation ?? false,
           requireRecommendation: updateData.requireRecommendation ?? false,
+          recommendationMinLength: updateData.recommendationMinLength ?? 50,
+          recommendationMaxLength: updateData.recommendationMaxLength ?? 100,
           siteTitle: updateData.siteTitle ?? 'VoiceHub',
           siteLogoUrl: updateData.siteLogoUrl ?? '/favicon.ico',
           schoolLogoHomeUrl: updateData.schoolLogoHomeUrl ?? null,

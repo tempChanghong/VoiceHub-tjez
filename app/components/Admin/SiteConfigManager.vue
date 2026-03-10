@@ -140,13 +140,39 @@
           >
             <div>
               <p class="text-xs font-bold text-zinc-200">强制要求填写推荐语</p>
-              <p class="text-[10px] text-zinc-500 mt-0.5">开启后，点歌必须包含 50-100 字的推荐语</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">开启后，点歌必须包含 {{ formData.recommendationMinLength }}-{{ formData.recommendationMaxLength }} 字的推荐语</p>
             </div>
             <input
               v-model="formData.requireRecommendation"
               type="checkbox"
               class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
             >
+          </div>
+
+          <div
+            v-if="formData.enableRecommendation"
+            class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+          >
+            <div class="flex-1 mr-4">
+              <p class="text-xs font-bold text-zinc-200">推荐语字数限制</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">设置推荐语的最少和最多字数要求</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                v-model.number="formData.recommendationMinLength"
+                type="number"
+                min="0"
+                class="w-16 bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1.5 text-xs text-zinc-200 text-center focus:outline-none focus:border-blue-500/50"
+              >
+              <span class="text-zinc-500 text-xs">-</span>
+              <input
+                v-model.number="formData.recommendationMaxLength"
+                type="number"
+                min="0"
+                class="w-16 bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1.5 text-xs text-zinc-200 text-center focus:outline-none focus:border-blue-500/50"
+              >
+              <span class="text-zinc-500 text-xs">字</span>
+            </div>
           </div>
 
           <div class="space-y-4">
@@ -326,6 +352,8 @@ const formData = ref({
   enableReplayRequests: false,
   enableRecommendation: false,
   requireRecommendation: false,
+  recommendationMinLength: 50,
+  recommendationMaxLength: 100,
   enableSubmissionLimit: false,
   dailySubmissionLimit: 5,
   weeklySubmissionLimit: null,
@@ -380,6 +408,8 @@ const loadConfig = async () => {
       enableReplayRequests: !!data.enableReplayRequests,
       enableRecommendation: !!data.enableRecommendation,
       requireRecommendation: !!data.requireRecommendation,
+      recommendationMinLength: data.recommendationMinLength ?? 50,
+      recommendationMaxLength: data.recommendationMaxLength ?? 100,
       enableSubmissionLimit: !!data.enableSubmissionLimit,
       dailySubmissionLimit: data.dailySubmissionLimit ?? 5,
       weeklySubmissionLimit: data.weeklySubmissionLimit ?? null,

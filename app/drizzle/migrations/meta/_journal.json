@@ -78,6 +78,13 @@
       "when": 1772187630689,
       "tag": "20260227102030_add_monthly_submission_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1773070663619,
+      "tag": "20260309153743_auto-migration",
+      "breakpoints": true
     }
   ]
 }
