@@ -1,0 +1,941 @@
+[90m[[90mnuxt:tailwindcss[90m][39m [36m鈩?[39m Using default Tailwind CSS file
+app/components/Admin/EmailTemplateManager.vue(267,60): error TS2345: Argument of type '{ key: string; name: string; subject: string; html: string; isBuiltin: boolean; isOverridden?: boolean | undefined; } | undefined' is not assignable to parameter of type 'TemplateItem'.
+  Type 'undefined' is not assignable to type 'TemplateItem'.
+app/components/Admin/PlayTimeManager.vue(358,31): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/components/Admin/PlayTimeManager.vue(599,6): error TS7006: Parameter 'pt' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(507,34): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/components/Admin/RequestTimeManager.vue(556,39): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(562,39): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(562,44): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(568,39): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(568,44): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(575,56): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(575,61): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(576,56): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(576,61): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/components/Admin/RequestTimeManager.vue(784,6): error TS7006: Parameter 'pt' implicitly has an 'any' type.
+app/components/Auth/LoginForm.vue(238,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+app/components/Auth/LoginForm.vue(239,9): error TS2322: Type 'string[] | undefined' is not assignable to type 'string[]'.
+  Type 'undefined' is not assignable to type 'string[]'.
+app/components/Auth/LoginForm.vue(240,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/components/Auth/LoginForm.vue(241,41): error TS2339: Property 'maskedEmail' does not exist on type 'LoginResponse'.
+app/components/Auth/LoginForm.vue(255,7): error TS18046: 'err' is of type 'unknown'.
+app/components/Auth/LoginForm.vue(276,50): error TS2345: Argument of type '{ timeout?: number | undefined; challenge: string; rpId?: string | undefined; allowCredentials?: SerializeObject<PublicKeyCredentialDescriptorJSON>[] | undefined; userVerification?: UserVerificationRequirement | undefined; hints?: PublicKeyCredentialHint[] | undefined; extensions?: { ...; } | undefined; }' is not assignable to parameter of type '{ optionsJSON: PublicKeyCredentialRequestOptionsJSON; useBrowserAutofill?: boolean | undefined; verifyBrowserAutofillInput?: boolean | undefined; }'.
+  Property 'optionsJSON' is missing in type '{ timeout?: number | undefined; challenge: string; rpId?: string | undefined; allowCredentials?: SerializeObject<PublicKeyCredentialDescriptorJSON>[] | undefined; userVerification?: UserVerificationRequirement | undefined; hints?: PublicKeyCredentialHint[] | undefined; extensions?: { ...; } | undefined; }' but required in type '{ optionsJSON: PublicKeyCredentialRequestOptionsJSON; useBrowserAutofill?: boolean | undefined; verifyBrowserAutofillInput?: boolean | undefined; }'.
+app/components/Auth/OAuthBindingCard.vue(22,30): error TS2339: Property 'providerUsername' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(59,31): error TS2339: Property 'providerUsername' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(96,30): error TS2339: Property 'providerUsername' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(171,26): error TS2339: Property 'id' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(175,47): error TS2339: Property 'id' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(181,52): error TS2339: Property 'id' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(188,75): error TS2339: Property 'providerUsername' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(199,41): error TS2339: Property 'createdAt' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(212,52): error TS2339: Property 'id' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(216,51): error TS2339: Property 'id' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(350,70): error TS2339: Property 'provider' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(351,71): error TS2339: Property 'provider' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(352,70): error TS2339: Property 'provider' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(353,76): error TS2339: Property 'provider' does not exist on type 'never'.
+app/components/Auth/OAuthBindingCard.vue(366,21): error TS7006: Parameter 'provider' implicitly has an 'any' type.
+app/components/Auth/OAuthBindingCard.vue(372,24): error TS7006: Parameter 'provider' implicitly has an 'any' type.
+app/components/Auth/OAuthBindingCard.vue(388,32): error TS7006: Parameter 'cred' implicitly has an 'any' type.
+app/components/Auth/OAuthBindingCard.vue(402,29): error TS7006: Parameter 'provider' implicitly has an 'any' type.
+app/components/Auth/OAuthBindingCard.vue(414,15): error TS18046: 'e' is of type 'unknown'.
+app/components/Auth/OAuthBindingCard.vue(433,41): error TS2345: Argument of type '{ user: { id: string; name: string; displayName: string; }; timeout?: number | undefined; rp: { id?: string | undefined; name: string; }; challenge: string; hints?: PublicKeyCredentialHint[] | undefined; ... 5 more ...; attestationFormats?: AttestationFormat[] | undefined; }' is not assignable to parameter of type '{ optionsJSON: PublicKeyCredentialCreationOptionsJSON; useAutoRegister?: boolean | undefined; }'.
+  Property 'optionsJSON' is missing in type '{ user: { id: string; name: string; displayName: string; }; timeout?: number | undefined; rp: { id?: string | undefined; name: string; }; challenge: string; hints?: PublicKeyCredentialHint[] | undefined; ... 5 more ...; attestationFormats?: AttestationFormat[] | undefined; }' but required in type '{ optionsJSON: PublicKeyCredentialCreationOptionsJSON; useAutoRegister?: boolean | undefined; }'.
+app/components/Auth/OAuthBindingCard.vue(435,11): error TS18046: 'e' is of type 'unknown'.
+app/components/Auth/TwoFactorSetup.vue(104,6): error TS2345: Argument of type '{ show: boolean; title: string; content: string; confirmText: string; confirmType: string; showInput: true; inputPlaceholder: string; inputType: string; onCancel: any; onConfirm: any; }' is not assignable to parameter of type 'Partial<{ loading: boolean; title: string; type: string; show: boolean; confirmText: string; cancelText: string; closeOnOverlay: boolean; showInput: boolean; inputType: string; inputPlaceholder: string; }> & Omit<...> & Record<...>'.
+  Property 'message' is missing in type '{ show: boolean; title: string; content: string; confirmText: string; confirmType: string; showInput: true; inputPlaceholder: string; inputType: string; onCancel: any; onConfirm: any; }' but required in type 'Omit<{ readonly loading: boolean; readonly message: string; readonly title: string; readonly type: string; readonly show: boolean; readonly confirmText: string; readonly cancelText: string; ... 7 more ...; readonly "onUpdate:show"?: ((...args: any[]) => any) | undefined; } & VNodeProps & AllowedComponentProps & Comp...'.
+app/components/Player/PlayerLyric/AMLyric.vue(34,10): error TS2322: Type '{ words: { startTime: number; endTime: number; word: string; romanWord: string; }[]; translatedLyric: string; romanLyric: string; isBG: boolean; isDuet: boolean; startTime: number; endTime: number; }[]' is not assignable to type 'LyricLine[]'.
+  Type '{ words: { startTime: number; endTime: number; word: string; romanWord: string; }[]; translatedLyric: string; romanLyric: string; isBG: boolean; isDuet: boolean; startTime: number; endTime: number; }' is not assignable to type 'LyricLine'.
+    Types of property 'words' are incompatible.
+      Type '{ startTime: number; endTime: number; word: string; romanWord: string; }[]' is not assignable to type 'LyricWord[]'.
+        Property 'obscene' is missing in type '{ startTime: number; endTime: number; word: string; romanWord: string; }' but required in type 'LyricWord'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(92,63): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(199,7): error TS2322: Type '{ words: { startTime: number; endTime: number; word: string; romanWord: string; }[]; translatedLyric: string; romanLyric: string; isBG: boolean; isDuet: boolean; startTime: number; endTime: number; } | undefined' is not assignable to type 'LyricLine'.
+  Type 'undefined' is not assignable to type 'LyricLine'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(203,26): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(237,9): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(238,15): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(238,20): error TS2339: Property 'data' does not exist on type 'ProcessedLyricItem'.
+  Property 'data' does not exist on type '{ type: "countdown"; startTime: number; duration: number; }'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(239,13): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(239,18): error TS2339: Property 'data' does not exist on type 'ProcessedLyricItem'.
+  Property 'data' does not exist on type '{ type: "countdown"; startTime: number; duration: number; }'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(241,15): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(241,20): error TS2339: Property 'startTime' does not exist on type 'ProcessedLyricItem'.
+  Property 'startTime' does not exist on type '{ type: "lyric"; originalIndex: number; data: LyricLine; }'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(242,13): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(242,18): error TS2339: Property 'startTime' does not exist on type 'ProcessedLyricItem'.
+  Property 'startTime' does not exist on type '{ type: "lyric"; originalIndex: number; data: LyricLine; }'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(242,30): error TS18048: 'item' is possibly 'undefined'.
+app/components/Player/PlayerLyric/DefaultLyric.vue(242,35): error TS2339: Property 'duration' does not exist on type 'ProcessedLyricItem'.
+  Property 'duration' does not exist on type '{ type: "lyric"; originalIndex: number; data: LyricLine; }'.
+app/components/Songs/DuplicateSongModal.vue(123,27): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/components/Songs/NeteaseLoginModal.vue(234,27): error TS2345: Argument of type '{ cookie: string; uid: any; nickname: any; avatarUrl: any; userName: any; }' is not assignable to parameter of type '{ cookie: string; user: any; }'.
+  Property 'user' is missing in type '{ cookie: string; uid: any; nickname: any; avatarUrl: any; userName: any; }' but required in type '{ cookie: string; user: any; }'.
+app/components/Songs/NeteaseLoginModal.vue(238,27): error TS2345: Argument of type '{ cookie: string; }' is not assignable to parameter of type '{ cookie: string; user: any; }'.
+  Property 'user' is missing in type '{ cookie: string; }' but required in type '{ cookie: string; user: any; }'.
+app/components/Songs/NeteaseUploadDialog.vue(284,27): error TS2532: Object is possibly 'undefined'.
+app/components/UI/Common/Popover.vue(47,22): error TS2589: Type instantiation is excessively deep and possibly infinite.
+app/composables/useAdmin.ts(3,47): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useAudioPlayer.ts(42,7): error TS2322: Type '{ song: PlayableSong; }[]' is not assignable to type 'PlaylistItem[] | { id: number; song: { id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }; playDate?: string | undefined; playTimeId?: nu...'.
+  Type '{ song: PlayableSong; }[]' is not assignable to type 'PlaylistItem[]'.
+    Property 'id' is missing in type '{ song: PlayableSong; }' but required in type 'PlaylistItem'.
+app/composables/useAudioPlayer.ts(100,24): error TS2532: Object is possibly 'undefined'.
+app/composables/useAudioPlayer.ts(120,22): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(121,23): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(122,24): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(128,13): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+app/composables/useAudioPlayer.ts(171,24): error TS2532: Object is possibly 'undefined'.
+app/composables/useAudioPlayer.ts(191,22): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(192,23): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(193,24): error TS2339: Property 'sourceInfo' does not exist on type '{ id: number; title: string; artist: string; musicUrl?: string | null | undefined; cover?: string | null | undefined; musicPlatform?: string | undefined; musicId?: string | undefined; playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayer.ts(199,13): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+app/composables/useAudioPlayer.ts(310,9): error TS2532: Object is possibly 'undefined'.
+app/composables/useAudioPlayerControl.ts(76,11): error TS18046: 'error' is of type 'unknown'.
+app/composables/useAudioPlayerControl.ts(247,11): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+app/composables/useAudioPlayerControl.ts(319,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerControl.ts(320,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerControl.ts(358,29): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+app/composables/useAudioPlayerControl.ts(497,24): error TS18048: 'touch' is possibly 'undefined'.
+app/composables/useAudioPlayerControl.ts(509,20): error TS18048: 'touch' is possibly 'undefined'.
+app/composables/useAudioPlayerControl.ts(642,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerControl.ts(643,14): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerEnhanced.ts(8,28): error TS7006: Parameter 'options' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(9,49): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerEnhanced.ts(11,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerEnhanced.ts(13,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerEnhanced.ts(39,5): error TS7006: Parameter 'platform' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(40,5): error TS7006: Parameter 'musicId' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(41,5): error TS7006: Parameter 'qualityOrPlayUrl' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(76,35): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(86,52): error TS7006: Parameter 'option' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(160,5): error TS7006: Parameter 'error' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(161,5): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(162,5): error TS7006: Parameter 'onSongChange' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(163,5): error TS7006: Parameter 'onNext' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(164,5): error TS7006: Parameter 'onClose' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(261,40): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(261,46): error TS7006: Parameter 'newQuality' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(283,32): error TS7006: Parameter 'option' implicitly has an 'any' type.
+app/composables/useAudioPlayerEnhanced.ts(315,39): error TS18046: 'error' is of type 'unknown'.
+app/composables/useAudioPlayerEnhanced.ts(332,18): error TS2339: Property 'voiceHubPlayerInstance' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerEnhanced.ts(333,16): error TS2339: Property 'voiceHubPlayerInstance' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerEnhanced.ts(337,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerEnhanced.ts(337,43): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerEnhanced.ts(338,16): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(30,16): error TS2339: Property 'harmonyOSBridge' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(33,16): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(33,48): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(80,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(82,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(88,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(94,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(101,22): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(102,20): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(104,20): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(112,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(118,18): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(132,14): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(133,14): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(160,14): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(163,18): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(163,38): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(164,16): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(206,16): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(207,16): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(217,16): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(238,20): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(239,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(248,35): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(248,60): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(250,31): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(285,39): error TS2339: Property 'duration' does not exist on type '{ readonly id: number; readonly title: string; readonly artist: string; readonly musicUrl?: string | null | undefined; readonly cover?: string | null | undefined; readonly musicPlatform?: string | undefined; readonly musicId?: string | undefined; readonly playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayerSync.ts(301,20): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(302,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(307,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(308,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(316,30): error TS7006: Parameter 'platform' implicitly has an 'any' type.
+app/composables/useAudioPlayerSync.ts(316,40): error TS7006: Parameter 'musicId' implicitly has an 'any' type.
+app/composables/useAudioPlayerSync.ts(316,49): error TS7006: Parameter 'quality' implicitly has an 'any' type.
+app/composables/useAudioPlayerSync.ts(351,39): error TS18046: 'error' is of type 'unknown'.
+app/composables/useAudioPlayerSync.ts(360,20): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(361,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(370,35): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(370,60): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(372,31): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(407,39): error TS2339: Property 'duration' does not exist on type '{ readonly id: number; readonly title: string; readonly artist: string; readonly musicUrl?: string | null | undefined; readonly cover?: string | null | undefined; readonly musicPlatform?: string | undefined; readonly musicId?: string | undefined; readonly playUrl?: string | ... 1 more ... | undefined; }'.
+app/composables/useAudioPlayerSync.ts(423,20): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(424,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(429,18): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(430,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useAudioPlayerSync.ts(469,15): error TS2339: Property 'getToken' does not exist on type '{ user: Ref<any, any>; token: Ref<string | null, string | null>; isAuthenticated: Ref<boolean, boolean>; isAdmin: Ref<boolean, boolean>; loading: Ref<boolean, boolean>; ... 7 more ...; getAuthConfig: () => { ...; }; }'.
+app/composables/useAudioPlayerSync.ts(519,48): error TS2339: Property 'time' does not exist on type 'CustomEvent<any>'.
+app/composables/useAudioPlayerSync.ts(526,48): error TS2339: Property 'time' does not exist on type 'CustomEvent<any>'.
+app/composables/useAudioPlayerSync.ts(593,14): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(593,38): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(614,28): error TS2339: Property 'voiceHubPlayer' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(617,18): error TS2339: Property 'voiceHubPlayerInstance' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioPlayerSync.ts(618,31): error TS2339: Property 'voiceHubPlayerInstance' does not exist on type 'Window & typeof globalThis'.
+app/composables/useAudioQuality.ts(102,44): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ netease: number; tencent: number; bilibili: number; }'.
+  No index signature with a parameter of type 'string' was found on type '{ netease: number; tencent: number; bilibili: number; }'.
+app/composables/useAudioQuality.ts(118,12): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ netease: { value: number; label: string; description: string; }[]; tencent: { value: number; label: string; description: string; }[]; bilibili: { value: number; label: string; description: string; }[]; }'.
+  No index signature with a parameter of type 'string' was found on type '{ netease: { value: number; label: string; description: string; }[]; tencent: { value: number; label: string; description: string; }[]; bilibili: { value: number; label: string; description: string; }[]; }'.
+app/composables/useAudioQuality.ts(128,34): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+app/composables/useAudioQuality.ts(139,34): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+app/composables/useAuth.ts(2,27): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useBackgroundRenderer.ts(170,41): error TS2339: Property 'blur' does not exist on type '{ type: "cover" | "gradient"; dynamic: boolean; flowSpeed: number; colorMask: boolean; maskColor: string; maskOpacity: number; }'.
+app/composables/useLyricManager.ts(28,55): error TS2345: Argument of type '"line"' is not assignable to parameter of type '"ttml" | LrcFormat | "qrc"'.
+app/composables/useLyricManager.ts(77,11): error TS2322: Type '"line"' is not assignable to type '"ttml" | LrcFormat | "qrc"'.
+app/composables/useLyricManager.ts(120,17): error TS2322: Type '"word-by-word"' is not assignable to type '"ttml" | LrcFormat | "qrc"'.
+app/composables/useLyrics.ts(47,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(48,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(49,39): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(50,25): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(108,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(109,37): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(115,35): error TS18048: 'wordsText' is possibly 'undefined'.
+app/composables/useLyrics.ts(117,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(118,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(124,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(130,37): error TS18048: 'wordsText' is possibly 'undefined'.
+app/composables/useLyrics.ts(131,40): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(132,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(137,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/composables/useLyrics.ts(236,49): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useLyrics.ts(236,69): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useLyrics.ts(244,16): error TS2339: Property 'HarmonyOS' does not exist on type 'Window & typeof globalThis'.
+app/composables/useLyrics.ts(266,19): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(266,72): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(284,12): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(299,24): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(301,25): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(303,16): error TS2532: Object is possibly 'undefined'.
+app/composables/useLyrics.ts(394,14): error TS2532: Object is possibly 'undefined'.
+app/composables/useMusicSources.ts(467,9): error TS2322: Type '(data: any) => Promise<any[]>' is not assignable to type '(data: any) => any[]'.
+  Type 'Promise<any[]>' is missing the following properties from type 'any[]': length, pop, push, concat, and 35 more.
+app/composables/useMusicSources.ts(471,9): error TS2322: Type '(data: any) => Promise<any[]>' is not assignable to type '(data: any) => any[]'.
+  Type 'Promise<any[]>' is missing the following properties from type 'any[]': length, pop, push, concat, and 35 more.
+app/composables/useMusicSources.ts(683,14): error TS18046: 'response' is of type 'unknown'.
+app/composables/useMusicSources.ts(838,60): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+app/composables/useMusicSources.ts(852,28): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(852,55): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(853,38): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(862,36): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(862,66): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(862,91): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(864,45): error TS2339: Property 'message' does not exist on type '{}'.
+app/composables/useMusicSources.ts(864,83): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(873,29): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(881,62): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+app/composables/useMusicSources.ts(887,27): error TS2339: Property 'getQuality' does not exist on type 'typeof import("F:/WebstormProjects/VoiceHub-tjez/app/composables/useAudioQuality")'.
+app/composables/useMusicSources.ts(923,27): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(923,51): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(924,37): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(933,32): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(933,57): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(934,42): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(984,25): error TS2339: Property 'getQuality' does not exist on type 'typeof import("F:/WebstormProjects/VoiceHub-tjez/app/composables/useAudioQuality")'.
+app/composables/useMusicSources.ts(1008,27): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1008,66): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1008,84): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1009,30): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1084,64): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1086,21): error TS2339: Property 'lrc' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1086,53): error TS2339: Property 'lrc' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1087,21): error TS2339: Property 'tlyric' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1087,58): error TS2339: Property 'tlyric' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1089,64): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1091,21): error TS2339: Property 'yrc' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1091,53): error TS2339: Property 'yrc' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1093,66): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1095,21): error TS2339: Property 'ttml' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1095,68): error TS2339: Property 'ttml' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1144,21): error TS2339: Property 'code' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1144,43): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useMusicSources.ts(1145,28): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useNotifications.ts(3,57): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useNotifications.ts(73,23): error TS2540: Cannot assign to 'value' because it is a read-only property.
+app/composables/useNotifications.ts(74,23): error TS2540: Cannot assign to 'value' because it is a read-only property.
+app/composables/useNotifications.ts(97,17): error TS2540: Cannot assign to 'value' because it is a read-only property.
+app/composables/useNotifications.ts(98,17): error TS2540: Cannot assign to 'value' because it is a read-only property.
+app/composables/useNotifications.ts(254,38): error TS7006: Parameter 'n' implicitly has an 'any' type.
+app/composables/useProgressEvents.ts(36,26): error TS2339: Property 'getToken' does not exist on type '{ user: Ref<any, any>; token: Ref<string | null, string | null>; isAuthenticated: Ref<boolean, boolean>; isAdmin: Ref<boolean, boolean>; loading: Ref<boolean, boolean>; ... 7 more ...; getAuthConfig: () => { ...; }; }'.
+app/composables/useSemesters.ts(2,31): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useSongPlayer.ts(5,27): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useSongs.ts(4,47): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+app/composables/useSongs.ts(24,16): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useSongs.ts(25,14): error TS2551: Property '$showNotification' does not exist on type 'Window & typeof globalThis'. Did you mean 'Notification'?
+app/composables/useSongs.ts(111,32): error TS2339: Property 'success' does not exist on type '{}'.
+app/composables/useSongs.ts(111,52): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useSongs.ts(111,83): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useSongs.ts(112,32): error TS2339: Property 'data' does not exist on type '{}'.
+app/composables/useSongs.ts(203,29): error TS18046: 'data' is of type 'unknown'.
+app/composables/useSongs.ts(256,37): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(257,37): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(262,9): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(263,11): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(264,11): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(265,11): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(271,22): error TS2532: Object is possibly 'undefined'.
+app/composables/useSongs.ts(310,44): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(331,26): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(378,26): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(480,44): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/composables/useSongs.ts(558,44): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/composables/useSongs.ts(575,16): error TS2339: Property 'action' does not exist on type 'Simplify<SerializeObject<{ message: string; songId: any; action: string; quotaReturned?: undefined; }> | SerializeObject<{ message: string; songId: any; quotaReturned: boolean; action?: undefined; }>>'.
+  Property 'action' does not exist on type '{ message: string; quotaReturned: boolean; }'.
+app/composables/useSongs.ts(581,24): error TS2339: Property 'quotaReturned' does not exist on type 'Simplify<SerializeObject<{ message: string; songId: any; action: string; quotaReturned?: undefined; }> | SerializeObject<{ message: string; songId: any; quotaReturned: boolean; action?: undefined; }>>'.
+  Property 'quotaReturned' does not exist on type '{ message: string; action: string; }'.
+app/composables/useSongs.ts(586,16): error TS2339: Property 'action' does not exist on type 'Simplify<SerializeObject<{ message: string; songId: any; action: string; quotaReturned?: undefined; }> | SerializeObject<{ message: string; songId: any; quotaReturned: boolean; action?: undefined; }>>'.
+  Property 'action' does not exist on type '{ message: string; quotaReturned: boolean; }'.
+app/composables/useSongs.ts(587,24): error TS2339: Property 'quotaReturned' does not exist on type 'Simplify<SerializeObject<{ message: string; songId: any; action: string; quotaReturned?: undefined; }> | SerializeObject<{ message: string; songId: any; quotaReturned: boolean; action?: undefined; }>>'.
+  Property 'quotaReturned' does not exist on type '{ message: string; action: string; }'.
+app/composables/useSongs.ts(728,48): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/composables/useSongs.ts(771,48): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/composables/useSongs.ts(801,32): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(806,32): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(812,32): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(818,32): error TS7006: Parameter 'song' implicitly has an 'any' type.
+app/composables/useSongs.ts(844,45): error TS7006: Parameter 'pt' implicitly has an 'any' type.
+app/drizzle/db.ts(4,25): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+app/drizzle/db.ts(64,43): error TS2345: Argument of type '{ max: number; idle_timeout: number; connect_timeout: number; max_lifetime: number; ssl: string | boolean; prepare: boolean; transform: { undefined: null; }; connection: { application_name: string; }; onnotice: { ...; } | undefined; debug: boolean; }' is not assignable to parameter of type 'Options<{}>'.
+  Types of property 'ssl' are incompatible.
+    Type 'string | boolean' is not assignable to type 'boolean | object | "require" | "allow" | "prefer" | "verify-full" | undefined'.
+      Type 'string' is not assignable to type 'boolean | object | "require" | "allow" | "prefer" | "verify-full" | undefined'.
+app/drizzle/db.ts(73,15): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+app/drizzle/db.ts(93,26): error TS2551: Property 'ended' does not exist on type 'Sql<{}>'. Did you mean 'end'?
+app/drizzle/db.ts(115,21): error TS2551: Property 'ended' does not exist on type 'Sql<{}>'. Did you mean 'end'?
+app/drizzle/db.ts(138,56): error TS2551: Property 'ended' does not exist on type 'Sql<{}>'. Did you mean 'end'?
+app/drizzle/db.ts(155,17): error TS2551: Property 'ended' does not exist on type 'Sql<{}>'. Did you mean 'end'?
+app/plugins/auth.client.ts(63,24): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+app/utils/bilibiliSource.ts(12,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricFormat.ts(106,53): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(107,40): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(107,68): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(109,15): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(109,27): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(109,63): error TS18048: 'word' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(147,32): error TS18048: 'prev' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(148,17): error TS18048: 'prev' is possibly 'undefined'.
+app/utils/lyric/lyricFormat.ts(148,29): error TS18048: 'prev' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(114,39): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(141,25): error TS2532: Object is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(147,33): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(148,11): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(148,43): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(149,30): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(176,41): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(188,41): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(215,25): error TS2532: Object is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(220,33): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(221,11): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(221,43): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(222,30): error TS18048: 'prevLastWord' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(285,18): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(285,35): error TS18048: 'other' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(289,7): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(289,19): error TS18048: 'other' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(332,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(333,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(339,21): error TS18048: 'lineContent' is possibly 'undefined'.
+app/utils/lyric/lyricParser.ts(343,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(344,37): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricParser.ts(459,11): error TS2578: Unused '@ts-expect-error' directive.
+app/utils/lyric/lyricParser.ts(476,5): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+app/utils/lyric/lyricStripper.ts(138,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricStripper.ts(140,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricStripper.ts(141,39): error TS18048: 'open' is possibly 'undefined'.
+app/utils/lyric/lyricStripper.ts(141,71): error TS18048: 'close' is possibly 'undefined'.
+app/utils/lyric/lyricStripper.ts(147,44): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/lyricStripper.ts(149,59): error TS18048: 'close' is possibly 'undefined'.
+app/utils/lyric/lyricStripper.ts(240,30): error TS2345: Argument of type 'LyricLine | undefined' is not assignable to parameter of type 'LyricLine'.
+  Type 'undefined' is not assignable to type 'LyricLine'.
+app/utils/lyric/lyricStripper.ts(287,30): error TS2345: Argument of type 'LyricLine | undefined' is not assignable to parameter of type 'LyricLine'.
+  Type 'undefined' is not assignable to type 'LyricLine'.
+app/utils/lyric/lyricStripper.ts(331,39): error TS2345: Argument of type 'LyricLine | undefined' is not assignable to parameter of type 'LyricLine'.
+  Type 'undefined' is not assignable to type 'LyricLine'.
+app/utils/lyric/parseLrc.ts(29,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/parseLrc.ts(30,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/parseLrc.ts(32,21): error TS2532: Object is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(57,7): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(59,7): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(59,22): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(63,9): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(64,7): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(64,7): error TS2532: Object is possibly 'undefined'.
+app/utils/lyric/parseLrc.ts(64,31): error TS18048: 'line' is possibly 'undefined'.
+app/utils/lyric/qrc-parser.ts(49,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyric/qrc-parser.ts(50,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/utils/lyricAdapter.ts(275,38): error TS2532: Object is possibly 'undefined'.
+app/utils/lyricAdapter.ts(275,61): error TS2532: Object is possibly 'undefined'.
+app/utils/lyricAdapter.ts(276,50): error TS2532: Object is possibly 'undefined'.
+app/utils/neteaseApi.ts(3,42): error TS7006: Parameter 'data' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(34,36): error TS7006: Parameter 'endpoint' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(34,59): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(37,9): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+app/utils/neteaseApi.ts(37,38): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+app/utils/neteaseApi.ts(38,25): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+app/utils/neteaseApi.ts(52,40): error TS7006: Parameter 'uid' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(52,45): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(56,38): error TS7006: Parameter 'name' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(56,44): error TS7006: Parameter 'isPrivate' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(56,55): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(59,12): error TS2339: Property 'privacy' does not exist on type '{ name: any; }'.
+app/utils/neteaseApi.ts(64,38): error TS7006: Parameter 'id' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(64,42): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(68,42): error TS7006: Parameter 'pid' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(68,47): error TS7006: Parameter 'tracks' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(68,55): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(72,41): error TS7006: Parameter 'id' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(72,71): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(76,51): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/neteaseApi.ts(80,38): error TS7006: Parameter 'cookie' implicitly has an 'any' type.
+app/utils/url.ts(109,50): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/api-keys/[id].delete.ts(45,24): error TS2532: Object is possibly 'undefined'.
+server/api/admin/api-keys/index.get.ts(92,9): error TS7034: Variable 'permissions' implicitly has type 'any[]' in some locations where its type cannot be determined.
+server/api/admin/api-keys/index.get.ts(116,11): error TS7005: Variable 'permissions' implicitly has an 'any[]' type.
+server/api/admin/api-keys/index.get.ts(116,40): error TS7005: Variable 'permissions' implicitly has an 'any[]' type.
+server/api/admin/api-keys/index.get.ts(117,28): error TS7005: Variable 'permissions' implicitly has an 'any[]' type.
+server/api/admin/api-keys/index.get.ts(144,9): error TS7034: Variable 'result' implicitly has type 'any[]' in some locations where its type cannot be determined.
+server/api/admin/api-keys/index.get.ts(184,16): error TS7005: Variable 'result' implicitly has an 'any[]' type.
+server/api/admin/api-keys/index.post.ts(102,24): error TS2532: Object is possibly 'undefined'.
+server/api/admin/api-keys/logs.get.ts(40,7): error TS2322: Type 'Date | undefined' is not assignable to type 'string | undefined'.
+  Type 'Date' is not assignable to type 'string'.
+server/api/admin/api-keys/logs.get.ts(41,7): error TS2322: Type 'Date | undefined' is not assignable to type 'string | undefined'.
+  Type 'Date' is not assignable to type 'string'.
+server/api/admin/api-keys/logs.get.ts(55,7): error TS2322: Type 'Date | undefined' is not assignable to type 'string | undefined'.
+  Type 'Date' is not assignable to type 'string'.
+server/api/admin/api-keys/logs.get.ts(56,7): error TS2322: Type 'Date | undefined' is not assignable to type 'string | undefined'.
+  Type 'Date' is not assignable to type 'string'.
+server/api/admin/backup/clear.post.ts(172,35): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/delete/[filename].delete.ts(67,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/delete/[filename].delete.ts(68,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/download.get.ts(61,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+server/api/admin/backup/download.get.ts(66,11): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/download.get.ts(80,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/download.get.ts(81,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/download/[filename].get.ts(60,40): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+server/api/admin/backup/download/[filename].get.ts(72,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/download/[filename].get.ts(73,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(352,22): error TS2339: Property 'systemSettings' does not exist on type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(377,22): error TS2339: Property 'systemSettings' does not exist on type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(402,12): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(409,33): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(411,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+server/api/admin/backup/export.post.ts(412,41): error TS2345: Argument of type '{ name: any; description: any; recordCount: any; }' is not assignable to parameter of type 'never'.
+server/api/admin/backup/export.post.ts(414,24): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(424,11): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(425,12): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(425,29): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(426,12): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(426,35): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(431,43): error TS2345: Argument of type '{ name: any; description: string; recordCount: number; skipped: boolean; }' is not assignable to parameter of type 'never'.
+server/api/admin/backup/export.post.ts(433,29): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ users: { query: () => Promise<{ notificationSettings: { id: number; createdAt: Date; updatedAt: Date; userId: number; enabled: boolean; songRequestEnabled: boolean; songVotedEnabled: boolean; songPlayedEnabled: boolean; refreshInterval: number; songVotedThreshold: number; }[]; ... 19 more ...; statusChangedBy: num...'.
+server/api/admin/backup/export.post.ts(443,50): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(515,45): error TS18046: 'fsError' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(535,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/export.post.ts(536,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/list.get.ts(42,46): error TS18046: 'mkdirError' is of type 'unknown'.
+server/api/admin/backup/list.get.ts(100,49): error TS18046: 'parseError' is of type 'unknown'.
+server/api/admin/backup/restore-chunk.post.ts(61,57): error TS7006: Parameter 'id' implicitly has an 'any' type.
+server/api/admin/backup/restore-chunk.post.ts(193,19): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+server/api/admin/backup/restore-chunk.post.ts(206,21): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+server/api/admin/backup/restore-chunk.post.ts(240,30): error TS18048: 'createdUser' is possibly 'undefined'.
+server/api/admin/backup/restore-chunk.post.ts(241,15): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+server/api/admin/backup/restore-chunk.post.ts(241,46): error TS18048: 'createdUser' is possibly 'undefined'.
+server/api/admin/backup/restore-chunk.post.ts(485,30): error TS18048: 'createdSong' is possibly 'undefined'.
+server/api/admin/backup/restore-chunk.post.ts(486,15): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+server/api/admin/backup/restore-chunk.post.ts(486,46): error TS18048: 'createdSong' is possibly 'undefined'.
+server/api/admin/backup/restore-chunk.post.ts(946,27): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore-chunk.post.ts(946,38): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(152,53): error TS7006: Parameter 'record' implicitly has an 'any' type.
+server/api/admin/backup/restore.post.ts(263,46): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(263,57): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(323,26): error TS2551: Property '$transaction' does not exist on type 'PostgresJsDatabase<typeof import("F:/WebstormProjects/VoiceHub-tjez/app/drizzle/schema")> & { $client: Sql<{}>; }'. Did you mean 'transaction'?
+server/api/admin/backup/restore.post.ts(324,26): error TS7006: Parameter 'tx' implicitly has an 'any' type.
+server/api/admin/backup/restore.post.ts(366,35): error TS7053: Element implicitly has an 'any' type because expression of type '"role"' can't be used to index type '{}'.
+  Property 'role' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(368,35): error TS7053: Element implicitly has an 'any' type because expression of type '"role"' can't be used to index type '{}'.
+  Property 'role' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(371,33): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(379,31): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(381,31): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(387,38): error TS2339: Property 'password' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(441,79): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(465,31): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(504,35): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(742,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ requesterId: any; preferredPlayTimeId: any; }'.
+  No index signature with a parameter of type 'string' was found on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(747,34): error TS2339: Property 'played' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(751,36): error TS2339: Property 'playedAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(753,36): error TS2339: Property 'playedAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(757,36): error TS2339: Property 'createdAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(759,36): error TS2339: Property 'createdAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(763,36): error TS2339: Property 'updatedAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(765,36): error TS2339: Property 'updatedAt' does not exist on type '{ requesterId: any; preferredPlayTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(818,76): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(871,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(876,38): error TS2339: Property 'enabled' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(932,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(937,38): error TS2339: Property 'isActive' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(945,68): error TS2339: Property 'name' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(951,70): error TS2339: Property 'name' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(1017,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+server/api/admin/backup/restore.post.ts(1117,38): error TS2339: Property 'played' does not exist on type '{ songId: any; playDate: Date; playTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(1122,38): error TS2339: Property 'sequence' does not exist on type '{ songId: any; playDate: Date; playTimeId: any; }'.
+server/api/admin/backup/restore.post.ts(1205,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ userId: any; }'.
+  No index signature with a parameter of type 'string' was found on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1210,50): error TS2339: Property 'enabled' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1213,50): error TS2339: Property 'songRequestEnabled' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1218,50): error TS2339: Property 'songVotedEnabled' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1223,50): error TS2339: Property 'songPlayedEnabled' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1231,52): error TS2339: Property 'refreshInterval' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1234,52): error TS2339: Property 'songVotedThreshold' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1238,50): error TS2339: Property 'createdAt' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1241,50): error TS2339: Property 'updatedAt' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1306,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ userId: any; }'.
+  No index signature with a parameter of type 'string' was found on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1311,42): error TS2339: Property 'read' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1314,42): error TS2339: Property 'createdAt' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(1317,42): error TS2339: Property 'updatedAt' does not exist on type '{ userId: any; }'.
+server/api/admin/backup/restore.post.ts(2044,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2045,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2046,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2047,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2048,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2049,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2050,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2051,19): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2056,21): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2060,23): error TS18046: 'recordError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2078,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(2078,44): error TS2339: Property 'message' does not exist on type '{}'.
+server/api/admin/backup/restore.post.ts(2105,44): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(2105,63): error TS18046: 'tableError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2150,63): error TS2339: Property 'error' does not exist on type 'Simplify<SerializeObject<{ success: boolean; table: string; message: string; data: { table: string; maxId: number; skipped: boolean; currentSequenceValue?: undefined; alreadyCorrect?: undefined; oldSequenceValue?: undefined; newSequenceValue?: undefined; sequenceName?: undefined; }; error?: undefined; }> | ... 4 mor...'.
+  Property 'error' does not exist on type '{ success: boolean; message: string; data: { table: string; skipped: boolean; maxId: number; }; table: string; }'.
+server/api/admin/backup/restore.post.ts(2155,52): error TS18046: 'sequenceError' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2162,28): error TS2339: Property 'sequenceResets' does not exist on type '{ tablesProcessed: number; recordsRestored: number; errors: never[]; warnings: never[]; }'.
+server/api/admin/backup/restore.post.ts(2174,26): error TS2551: Property 'clearAllCaches' does not exist on type 'CacheService'. Did you mean 'clearAllCache'?
+server/api/admin/backup/restore.post.ts(2179,44): error TS2345: Argument of type '"娓呴櫎缂撳瓨澶辫触"' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(2187,46): error TS2345: Argument of type '"SMTP鏈惎鐢ㄦ垨閰嶇疆涓嶅畬鏁达紝SMTP瀹炰緥宸查噸缃?' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(2193,44): error TS2345: Argument of type '"閲嶈浇SMTP閰嶇疆澶辫触"' is not assignable to parameter of type 'never'.
+server/api/admin/backup/restore.post.ts(2200,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/restore.post.ts(2201,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/upload.post.ts(4,24): error TS7016: Could not find a declaration file for module 'formidable'. 'F:/WebstormProjects/VoiceHub-tjez/node_modules/formidable/src/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/formidable` if it exists or add a new declaration (.d.ts) file containing `declare module 'formidable';`
+server/api/admin/backup/upload.post.ts(30,18): error TS7031: Binding element 'mimetype' implicitly has an 'any' type.
+server/api/admin/backup/upload.post.ts(30,28): error TS7031: Binding element 'originalFilename' implicitly has an 'any' type.
+server/api/admin/backup/upload.post.ts(129,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/backup/upload.post.ts(130,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/blacklist/[id].delete.ts(17,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/blacklist/[id].delete.ts(58,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/blacklist/[id].patch.ts(17,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/blacklist/[id].patch.ts(46,18): error TS2339: Property 'isActive' does not exist on type '{}'.
+server/api/admin/blacklist/[id].patch.ts(49,18): error TS2339: Property 'reason' does not exist on type '{}'.
+server/api/admin/blacklist/[id].patch.ts(73,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/blacklist/index.get.ts(26,28): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "type"; tableName: "SongBlacklist"; dataType: "string"; columnType: "PgEnumColumn"; data: "SONG" | "KEYWORD"; driverParam: string; notNull: true; hasDefault: false; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>, right: "SONG" | ... 1 more ... | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"SONG" | "KEYWORD" | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "type"; tableName: "SongBlacklist"; dataType: "string"; columnType: "PgEnumColumn"; data: "SONG" | "KEYWORD"; driverParam: string; notNull: true; hasDefault: false; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "type"; tableName: "SongBlacklist"; dataType: "string"; columnType: "PgEnumColumn"; data: "SONG" | "KEYWORD"; driverParam: string; notNull: true; hasDefault: false; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "type"; tableName: "SongBlacklist"; dataType: "string"; columnType: "PgEnumColumn"; data: "SONG" | "KEYWORD"; driverParam: string; notNull: true; hasDefault: false; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/admin/blacklist/index.get.ts(36,19): error TS2532: Object is possibly 'undefined'.
+server/api/admin/blacklist/index.post.ts(77,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/database/performance.get.ts(17,54): error TS2339: Property 'getPerformanceMetrics' does not exist on type 'DatabaseManager'.
+server/api/admin/database/pool-status.get.ts(17,46): error TS2551: Property 'getConnectionPoolStatus' does not exist on type 'DatabaseManager'. Did you mean 'getConnectionStatus'?
+server/api/admin/database/reset.post.ts(66,47): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/database/reset.post.ts(67,64): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/database/reset.post.ts(201,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+server/api/admin/database/reset.post.ts(236,30): error TS2339: Property 'warnings' does not exist on type '{ tablesCleared: number; recordsDeleted: number; sequencesReset: number; errors: never[]; preservedData: never[]; }'.
+server/api/admin/database/reset.post.ts(236,62): error TS2339: Property 'warnings' does not exist on type '{ tablesCleared: number; recordsDeleted: number; sequencesReset: number; errors: never[]; preservedData: never[]; }'.
+server/api/admin/database/reset.post.ts(237,30): error TS2339: Property 'warnings' does not exist on type '{ tablesCleared: number; recordsDeleted: number; sequencesReset: number; errors: never[]; preservedData: never[]; }'.
+server/api/admin/database/reset.post.ts(243,36): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/database/reset.post.ts(250,19): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/database/reset.post.ts(251,22): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/db-status.get.ts(41,9): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ user: boolean; song: boolean; vote: boolean; schedule: boolean; notification: boolean; }'.
+  No index signature with a parameter of type 'string' was found on type '{ user: boolean; song: boolean; vote: boolean; schedule: boolean; notification: boolean; }'.
+server/api/admin/db-status.get.ts(44,9): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ user: boolean; song: boolean; vote: boolean; schedule: boolean; notification: boolean; }'.
+  No index signature with a parameter of type 'string' was found on type '{ user: boolean; song: boolean; vote: boolean; schedule: boolean; notification: boolean; }'.
+server/api/admin/db-status.get.ts(66,38): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/fix-sequence.post.ts(145,60): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/fix-sequence.post.ts(193,42): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/play-times/[id].ts(217,26): error TS2532: Object is possibly 'undefined'.
+server/api/admin/play-times/[id].ts(223,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule.post.ts(91,23): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule.post.ts(137,13): error TS2322: Type 'Date | undefined' is not assignable to type 'Date'.
+  Type 'undefined' is not assignable to type 'Date'.
+server/api/admin/schedule.post.ts(227,35): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule.post.ts(305,10): error TS2304: Cannot find name 'schedule'.
+server/api/admin/schedule.post.ts(307,37): error TS2304: Cannot find name 'schedule'.
+server/api/admin/schedule/draft.post.ts(170,23): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule/full.get.ts(138,39): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule/full.get.ts(354,26): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(355,23): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(364,21): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(365,21): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(368,23): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(370,23): error TS2538: Type 'undefined' cannot be used as an index type.
+server/api/admin/schedule/full.get.ts(385,44): error TS2571: Object is of type 'unknown'.
+server/api/admin/schedule/full.get.ts(386,42): error TS2571: Object is of type 'unknown'.
+server/api/admin/schedule/publish.post.ts(200,35): error TS2532: Object is possibly 'undefined'.
+server/api/admin/schedule/sequence.post.ts(30,19): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'PgTable<TableConfig>'.
+  Type 'any[]' is missing the following properties from type 'PgTable<TableConfig>': _, $inferSelect, $inferInsert, getSQL
+server/api/admin/schedule/sequence.post.ts(32,31): error TS2339: Property 'id' does not exist on type 'any[]'.
+server/api/admin/songs/delete.post.ts(60,42): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/songs/reject.post.ts(34,9): error TS7034: Variable 'songForNotification' implicitly has type 'any' in some locations where its type cannot be determined.
+server/api/admin/songs/reject.post.ts(66,41): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/songs/reject.post.ts(89,42): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/songs/reject.post.ts(107,52): error TS2339: Property 'requesterId' does not exist on type 'never'.
+server/api/admin/songs/reject.post.ts(110,29): error TS2339: Property 'requesterId' does not exist on type 'never'.
+server/api/admin/songs/reject.post.ts(111,38): error TS2339: Property 'title' does not exist on type 'never'.
+server/api/admin/songs/reject.post.ts(111,73): error TS2339: Property 'artist' does not exist on type 'never'.
+server/api/admin/songs/reject.post.ts(116,38): error TS7005: Variable 'songForNotification' implicitly has an 'any' type.
+server/api/admin/songs/reject.post.ts(143,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/songs/reject.post.ts(150,29): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/stats.get.ts(76,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(82,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(135,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(148,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(161,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(174,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(183,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(192,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(211,16): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(244,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(266,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(327,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats.get.ts(357,48): error TS2345: Argument of type '{ totalSongs: number; totalUsers: number; todaySchedules: number; totalSchedules: number; weeklyRequests: number; songsChange: number; usersChange: number; requestsChange: number; currentSemester: string | null; ... 4 more ...; requestsTrend: { ...; }[]; }' is not assignable to parameter of type 'string'.
+server/api/admin/stats/active-users.get.ts(70,13): error TS7034: Variable 'emptyResult' implicitly has type 'any[]' in some locations where its type cannot be determined.
+server/api/admin/stats/active-users.get.ts(72,56): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+server/api/admin/stats/active-users.get.ts(72,63): error TS7005: Variable 'emptyResult' implicitly has an 'any[]' type.
+server/api/admin/stats/active-users.get.ts(74,14): error TS7005: Variable 'emptyResult' implicitly has an 'any[]' type.
+server/api/admin/stats/active-users.get.ts(100,54): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+server/api/admin/stats/realtime.get.ts(124,18): error TS2532: Object is possibly 'undefined'.
+server/api/admin/stats/trends.get.ts(29,7): error TS2322: Type 'SQL<unknown> | undefined' is not assignable to type 'SQL<unknown>'.
+  Type 'undefined' is not assignable to type 'SQL<unknown>'.
+server/api/admin/stats/user-engagement.get.ts(26,24): error TS2532: Object is possibly 'undefined'.
+server/api/admin/system-settings/index.post.ts(295,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: { id?: number | SQL<unknown> | Placeholder<string, any> | undefined; siteTitle?: string | SQL<unknown> | Placeholder<string, any> | null | undefined; ... 29 more ...; forceBlockAllRequests?: boolean | ... 2 more ... | undefined; }): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, but 'requestTimeLimitation' does not exist in type '{ id?: number | SQL<unknown> | Placeholder<string, any> | undefined; siteTitle?: string | SQL<unknown> | Placeholder<string, any> | null | undefined; siteLogoUrl?: string | ... 3 more ... | undefined; ... 28 more ...; forceBlockAllRequests?: boolean | ... 2 more ... | undefined; }'. Did you mean to write 'enableRequestTimeLimitation'?
+  Overload 2 of 2, '(values: { id?: number | SQL<unknown> | Placeholder<string, any> | undefined; siteTitle?: string | SQL<unknown> | Placeholder<string, any> | null | undefined; ... 29 more ...; forceBlockAllRequests?: boolean | ... 2 more ... | undefined; }[]): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'hideStudentInfo' does not exist in type '{ id?: number | SQL<unknown> | Placeholder<string, any> | undefined; siteTitle?: string | SQL<unknown> | Placeholder<string, any> | null | undefined; siteLogoUrl?: string | ... 3 more ... | undefined; ... 28 more ...; forceBlockAllRequests?: boolean | ... 2 more ... | undefined; }[]'.
+server/api/admin/system-settings/index.post.ts(369,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id].delete.ts(23,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].delete.ts(61,56): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].delete.ts(83,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id].delete.ts(89,35): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id].put.ts(34,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].put.ts(47,9): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(65,9): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(73,22): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(133,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(134,18): error TS2339: Property 'status' does not exist on type '{ name: any; username: any; role: string; grade: any; class: any; }'.
+server/api/admin/users/[id].put.ts(135,18): error TS2339: Property 'statusChangedAt' does not exist on type '{ name: any; username: any; role: string; grade: any; class: any; }'.
+server/api/admin/users/[id].put.ts(136,18): error TS2339: Property 'statusChangedBy' does not exist on type '{ name: any; username: any; role: string; grade: any; class: any; }'.
+server/api/admin/users/[id].put.ts(141,41): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].put.ts(148,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].put.ts(167,30): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(169,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].put.ts(170,20): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/[id].put.ts(182,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id].put.ts(196,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id].put.ts(202,35): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id].ts(83,11): error TS18048: 'existingUser' is possibly 'undefined'.
+server/api/admin/users/[id].ts(91,18): error TS18048: 'existingUser' is possibly 'undefined'.
+server/api/admin/users/[id].ts(99,11): error TS18048: 'existingUser' is possibly 'undefined'.
+server/api/admin/users/[id]/songs.get.ts(263,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id]/status-logs.get.ts(22,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status-logs.get.ts(58,19): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/[id]/status-logs.get.ts(113,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id]/status-logs.get.ts(119,41): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id]/status.put.ts(47,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status.put.ts(60,9): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id]/status.put.ts(68,9): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id]/status.put.ts(76,23): error TS18048: 'targetUser' is possibly 'undefined'.
+server/api/admin/users/[id]/status.put.ts(88,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status.put.ts(92,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status.put.ts(104,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status.put.ts(114,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/admin/users/[id]/status.put.ts(124,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/[id]/status.put.ts(130,37): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-grade-update.post.ts(146,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-status.put.ts(88,11): error TS7034: Variable 'results' implicitly has type 'any[]' in some locations where its type cannot be determined.
+server/api/admin/users/batch-status.put.ts(140,23): error TS7005: Variable 'results' implicitly has an 'any[]' type.
+server/api/admin/users/batch-status.put.ts(148,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-status.put.ts(154,39): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-update.post.ts(50,47): error TS2339: Property 'errors' does not exist on type 'ZodError<{ updates: { userId: number; grade?: string | undefined; class?: string | undefined; username?: string | undefined; }[]; }>'.
+server/api/admin/users/batch-update.post.ts(50,59): error TS7006: Parameter 'e' implicitly has an 'any' type.
+server/api/admin/users/batch-update.post.ts(153,18): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-update.post.ts(194,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/batch-update.post.ts(201,37): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/index.get.ts(32,28): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "status"; tableName: "User"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>, right: "active" | ... 1 more ... | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"active" | "withdrawn" | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "status"; tableName: "User"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "status"; tableName: "User"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "status"; tableName: "User"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/admin/users/index.get.ts(56,19): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/index.get.ts(148,37): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/index.ts(25,28): error TS2551: Property 'lastLoginAt' does not exist on type 'PgTableWithColumns<{ name: "User"; schema: undefined; columns: { id: PgColumn<{ name: "id"; tableName: "User"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; ... 6 more ...; generated: undefined; }, {}, {}>; ... 18 more ...; statusChangedBy: PgColumn<....'. Did you mean 'lastLogin'?
+server/api/admin/users/status-logs.get.ts(25,28): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "new_status"; tableName: "user_status_logs"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>, right: "active" | ... 1 more ... | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"active" | "withdrawn" | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "new_status"; tableName: "user_status_logs"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "new_status"; tableName: "user_status_logs"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "new_status"; tableName: "user_status_logs"; dataType: "string"; columnType: "PgEnumColumn"; data: "active" | "withdrawn"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/admin/users/status-logs.get.ts(65,7): error TS2741: Property 'where' is missing in type 'Omit<import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"user_status_logs", { id: import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "user_status_logs"; dataType: "number"; columnTy...' but required in type 'Omit<import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"user_status_logs", { id: import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "user_status_logs"; dataType: "number"; columnTy...'.
+server/api/admin/users/status-logs.get.ts(92,7): error TS2741: Property 'where' is missing in type 'Omit<import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"user_status_logs", { id: import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "user_status_logs"; dataType: "number"; columnTy...' but required in type 'Omit<import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"user_status_logs", { id: import("F:/WebstormProjects/VoiceHub-tjez/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "user_status_logs"; dataType: "number"; columnTy...'.
+server/api/admin/users/status-logs.get.ts(120,19): error TS2532: Object is possibly 'undefined'.
+server/api/admin/users/status-logs.get.ts(137,14): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "id"; tableName: "User"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>, right: number | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'number | null | undefined' is not assignable to parameter of type 'number | SQLWrapper'.
+      Type 'undefined' is not assignable to type 'number | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<number | null | undefined>, right: number | SQLWrapper | null | undefined): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "User"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; hasRuntimeDefault: false; enumValues: undefined; baseColumn: never; identity: undefined; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<number | null | undefined>'.
+      Type 'PgColumn<{ name: "id"; tableName: "User"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; hasRuntimeDefault: false; enumValues: undefined; baseColumn: never; identity: undefined; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<number | null | undefined>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "User"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; hasRuntimeDefault: false; enumValues: undefined; baseColumn: never; identity: undefined; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/admin/users/status-logs.get.ts(187,9): error TS18046: 'error' is of type 'unknown'.
+server/api/admin/users/status-logs.get.ts(193,39): error TS18046: 'error' is of type 'unknown'.
+server/api/auth/identities.get.ts(22,33): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+server/api/auth/login.post.ts(118,16): error TS2367: This comparison appears to be unintentional because the types '"active"' and '"banned"' have no overlap.
+server/api/auth/verify.get.ts(132,9): error TS18046: 'error' is of type 'unknown'.
+server/api/auth/verify.get.ts(132,47): error TS18046: 'error' is of type 'unknown'.
+server/api/auth/webauthn/login/options.post.ts(9,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/auth/webauthn/login/verify.post.ts(39,33): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+server/api/auth/webauthn/login/verify.post.ts(66,7): error TS2322: Type 'string | undefined' is not assignable to type 'string | string[]'.
+  Type 'undefined' is not assignable to type 'string | string[]'.
+server/api/auth/webauthn/register/options.get.ts(45,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/auth/webauthn/register/options.get.ts(49,5): error TS2322: Type '{ id: string; type: "public-key"; transports: string[] | undefined; }[]' is not assignable to type '{ id: string; transports?: AuthenticatorTransportFuture[] | undefined; }[]'.
+  Type '{ id: string; type: "public-key"; transports: string[] | undefined; }' is not assignable to type '{ id: string; transports?: AuthenticatorTransportFuture[] | undefined; }'.
+    Types of property 'transports' are incompatible.
+      Type 'string[] | undefined' is not assignable to type 'AuthenticatorTransportFuture[] | undefined'.
+        Type 'string[]' is not assignable to type 'AuthenticatorTransportFuture[]'.
+          Type 'string' is not assignable to type 'AuthenticatorTransportFuture'.
+server/api/auth/webauthn/rename.post.ts(28,7): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>, right: number | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/auth/webauthn/rename.post.ts(44,14): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>, right: number | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "id"; tableName: "UserIdentity"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/bilibili/search.get.ts(58,18): error TS2532: Object is possibly 'undefined'.
+server/api/bilibili/search.get.ts(58,35): error TS2532: Object is possibly 'undefined'.
+server/api/bilibili/search.get.ts(60,17): error TS2532: Object is possibly 'undefined'.
+server/api/meow/bind.post.ts(185,9): error TS18046: 'error' is of type 'unknown'.
+server/api/meow/unbind.post.ts(55,9): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(38,11): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(38,42): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(38,68): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(39,74): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(67,11): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(67,42): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(67,68): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(68,78): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(95,11): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(95,42): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(95,68): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(96,74): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(168,15): error TS2339: Property 'code' does not exist on type 'Error'.
+server/api/music/websocket.ts(168,46): error TS2339: Property 'code' does not exist on type 'Error'.
+server/api/music/websocket.ts(177,15): error TS2339: Property 'code' does not exist on type 'Error'.
+server/api/music/websocket.ts(177,46): error TS2339: Property 'code' does not exist on type 'Error'.
+server/api/music/websocket.ts(205,11): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(205,42): error TS18046: 'error' is of type 'unknown'.
+server/api/music/websocket.ts(206,75): error TS18046: 'error' is of type 'unknown'.
+server/api/notifications/clear-all.delete.ts(22,21): error TS2339: Property 'rowCount' does not exist on type 'RowList<never[]>'.
+server/api/notifications/index.ts(78,24): error TS2532: Object is possibly 'undefined'.
+server/api/notifications/index.ts(79,23): error TS2532: Object is possibly 'undefined'.
+server/api/notifications/index.ts(81,26): error TS2532: Object is possibly 'undefined'.
+server/api/notifications/index.ts(81,49): error TS2532: Object is possibly 'undefined'.
+server/api/notifications/meow/send-verification.post.ts(60,9): error TS18046: 'error' is of type 'unknown'.
+server/api/notifications/meow/test.post.ts(81,9): error TS18046: 'error' is of type 'unknown'.
+server/api/notifications/settings.post.ts(4,43): error TS2307: Cannot find module '~/types' or its corresponding type declarations.
+server/api/open/schedules.get.ts(247,26): error TS2532: Object is possibly 'undefined'.
+server/api/open/songs.get.ts(132,19): error TS2532: Object is possibly 'undefined'.
+server/api/open/songs.get.ts(283,23): error TS2339: Property 'playUrl' does not exist on type '{ id: number; title: string; artist: string; played: boolean; playedAt: Date | null; semester: string | null; createdAt: Date; updatedAt: Date; cover: string | null; musicPlatform: string | null; musicId: string | null; preferredPlayTimeId: number | null; requester: { ...; } | null; }'.
+server/api/open/songs.get.ts(340,16): error TS2304: Cannot find name 'songsWithDetails'.
+server/api/open/songs.get.ts(352,57): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+server/api/open/songs.get.ts(354,68): error TS2304: Cannot find name 'songsWithDetails'.
+server/api/progress/events.ts(91,27): error TS2339: Property 'user' does not exist on type 'PostgresJsDatabase<typeof import("F:/WebstormProjects/VoiceHub-tjez/app/drizzle/schema")> & { $client: Sql<{}>; }'.
+server/api/proxy/image.get.ts(39,9): error TS2454: Variable 'lastError' is used before being assigned.
+server/api/site-config.get.ts(85,7): error TS2322: Type '{ id: number; siteTitle: string | null; siteLogoUrl: string | null; schoolLogoHomeUrl: string | null; schoolLogoPrintUrl: string | null; siteDescription: string | null; submissionGuidelines: string | null; ... 24 more ...; forceBlockAllRequests: boolean; } | undefined' is not assignable to type '{ id: number; createdAt: Date; updatedAt: Date; enablePlayTimeSelection: boolean; siteTitle: string | null; siteLogoUrl: string | null; schoolLogoHomeUrl: string | null; ... 24 more ...; recommendationMaxLength: number; } | null'.
+  Type 'undefined' is not assignable to type '{ id: number; createdAt: Date; updatedAt: Date; enablePlayTimeSelection: boolean; siteTitle: string | null; siteLogoUrl: string | null; schoolLogoHomeUrl: string | null; ... 24 more ...; recommendationMaxLength: number; } | null'.
+server/api/songs/[id]/update.put.ts(34,29): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+server/api/songs/[id]/update.put.ts(95,20): error TS2339: Property 'requesterId' does not exist on type '{ title: any; artist: any; semester: any; musicPlatform: any; musicId: any; cover: any; playUrl: any; }'.
+server/api/songs/[id]/update.put.ts(95,34): error TS2532: Object is possibly 'undefined'.
+server/api/songs/[id]/update.put.ts(148,29): error TS18048: 'newCollab' is possibly 'undefined'.
+server/api/songs/[id]/update.put.ts(214,9): error TS18046: 'error' is of type 'unknown'.
+server/api/songs/[id]/update.put.ts(220,22): error TS18046: 'error' is of type 'unknown'.
+server/api/songs/add.post.ts(77,62): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "requesterId"; tableName: "Song"; dataType: "number"; columnType: "PgInteger"; data: number; driverParam: string | number; notNull: true; hasDefault: false; isPrimaryKey: false; ... 5 more ...; generated: undefined; }, {}, {}>, right: number | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'null' is not assignable to parameter of type 'number | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<null>, right: SQLWrapper | null): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "requesterId"; tableName: "Song"; dataType: "number"; columnType: "PgInteger"; data: number; driverParam: string | number; notNull: true; hasDefault: false; isPrimaryKey: false; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<null>'.
+      Type 'PgColumn<{ name: "requesterId"; tableName: "Song"; dataType: "number"; columnType: "PgInteger"; data: number; driverParam: string | number; notNull: true; hasDefault: false; isPrimaryKey: false; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<null>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "requesterId"; tableName: "Song"; dataType: "number"; columnType: "PgInteger"; data: number; driverParam: string | number; notNull: true; hasDefault: false; isPrimaryKey: false; isAutoincrement: false; ... 4 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+server/api/songs/add.post.ts(93,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: { title: string | SQL<unknown> | Placeholder<string, any>; artist: string | SQL<unknown> | Placeholder<string, any>; requesterId: number | SQL<unknown> | Placeholder<...>; ... 12 more ...; recommendation?: string | ... 3 more ... | undefined; }): PgInsertBase<...>', gave the following error.
+    Type 'number | null' is not assignable to type 'number | SQL<unknown> | Placeholder<string, any>'.
+      Type 'null' is not assignable to type 'number | SQL<unknown> | Placeholder<string, any>'.
+  Overload 2 of 2, '(values: { title: string | SQL<unknown> | Placeholder<string, any>; artist: string | SQL<unknown> | Placeholder<string, any>; requesterId: number | SQL<unknown> | Placeholder<...>; ... 12 more ...; recommendation?: string | ... 3 more ... | undefined; }[]): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'title' does not exist in type '{ title: string | SQL<unknown> | Placeholder<string, any>; artist: string | SQL<unknown> | Placeholder<string, any>; requesterId: number | SQL<unknown> | Placeholder<...>; ... 12 more ...; recommendation?: string | ... 3 more ... | undefined; }[]'.
+server/api/songs/add.post.ts(109,9): error TS18048: 'newSong' is possibly 'undefined'.
+server/api/songs/add.post.ts(117,29): error TS18048: 'newSong' is possibly 'undefined'.
+server/api/songs/add.post.ts(143,9): error TS18046: 'error' is of type 'unknown'.
+server/api/songs/add.post.ts(149,22): error TS18046: 'error' is of type 'unknown'.
+server/api/songs/collaborators/reply.post.ts(82,9): error TS18046: 'error' is of type 'unknown'.
+server/api/songs/count.get.ts(29,7): error TS2740: Type 'Omit<PgSelectBase<"Song", { count: SQL<number>; }, "partial", Record<"Song", "not-null">, false, "where", { count: number; }[], { count: DrizzleTypeError<"You cannot reference this field without assigning it an alias first - use `.as(<alias>)`">; }>, "where">' is missing the following properties from type 'PgSelectBase<"Song", { count: SQL<number>; }, "partial", Record<"Song", "not-null">, false, never, { count: number; }[], { count: DrizzleTypeError<"You cannot reference this field without assigning it an alias first - use `.as(<alias>)`">; }>': config, joinsNotNullableMap, tableName, isPartialSelect, and 6 more.
+server/api/songs/index.get.ts(16,25): error TS1484: 'MaskableSong' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+server/api/songs/index.get.ts(16,39): error TS1484: 'MaskableUser' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+server/api/songs/index.get.ts(210,19): error TS2532: Object is possibly 'undefined'.
+server/api/songs/index.get.ts(600,26): error TS2341: Property 'setCache' is private and only accessible within class 'CacheService'.
+server/api/songs/replay.post.ts(61,9): error TS18048: 'existingRequest' is possibly 'undefined'.
+server/api/songs/replay.post.ts(65,53): error TS18048: 'existingRequest' is possibly 'undefined'.
+server/api/songs/replay.post.ts(83,42): error TS18048: 'existingRequest' is possibly 'undefined'.
+server/api/songs/submission-status.get.ts(79,24): error TS18048: 'systemSettingsData' is possibly 'undefined'.
+server/api/songs/submission-status.get.ts(80,25): error TS18048: 'systemSettingsData' is possibly 'undefined'.
+server/api/songs/submission-status.get.ts(81,26): error TS18048: 'systemSettingsData' is possibly 'undefined'.
+server/api/songs/vote.post.ts(137,25): error TS2532: Object is possibly 'undefined'.
+server/api/songs/vote.post.ts(182,25): error TS2532: Object is possibly 'undefined'.
+server/api/songs/withdraw.post.ts(94,71): error TS18049: 'collaboratorRecord' is possibly 'null' or 'undefined'.
+server/api/songs/withdraw.post.ts(98,23): error TS18049: 'collaboratorRecord' is possibly 'null' or 'undefined'.
+server/api/songs/withdraw.post.ts(171,38): error TS18046: 'error' is of type 'unknown'.
+server/api/system/reconnect.post.ts(10,46): error TS2551: Property 'getConnectionPoolStatus' does not exist on type 'DatabaseManager'. Did you mean 'getConnectionStatus'?
+server/api/system/reconnect.post.ts(12,26): error TS2339: Property 'connected' does not exist on type '{ status: string; activeConnections: number; serverlessMode: boolean; autoSuspend: boolean; }'.
+server/api/system/reconnect.post.ts(35,30): error TS18046: 'error' is of type 'unknown'.
+server/api/system/reconnect.post.ts(36,14): error TS18046: 'error' is of type 'unknown'.
+server/api/system/status.get.ts(8,46): error TS2551: Property 'getConnectionPoolStatus' does not exist on type 'DatabaseManager'. Did you mean 'getConnectionStatus'?
+server/api/system/status.get.ts(11,35): error TS2339: Property 'connected' does not exist on type '{ status: string; activeConnections: number; serverlessMode: boolean; autoSuspend: boolean; }'.
+server/api/system/status.get.ts(12,30): error TS2339: Property 'connected' does not exist on type '{ status: string; activeConnections: number; serverlessMode: boolean; autoSuspend: boolean; }'.
+server/api/system/status.get.ts(12,58): error TS2339: Property 'error' does not exist on type '{ status: string; activeConnections: number; serverlessMode: boolean; autoSuspend: boolean; }'.
+server/api/system/status.get.ts(42,14): error TS18046: 'error' is of type 'unknown'.
+server/api/system/status.get.ts(46,16): error TS18046: 'error' is of type 'unknown'.
+server/api/user/2fa/generate.post.ts(3,20): error TS7016: Could not find a declaration file for module 'qrcode'. 'F:/WebstormProjects/VoiceHub-tjez/node_modules/qrcode/lib/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/qrcode` if it exists or add a new declaration (.d.ts) file containing `declare module 'qrcode';`
+server/api/user/email/bind.post.ts(41,36): error TS2532: Object is possibly 'undefined'.
+server/api/user/email/resend-verification.post.ts(50,74): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+server/api/user/email/send-code.post.ts(65,30): error TS2532: Object is possibly 'undefined'.
+server/api/user/email/unbind.post.ts(31,9): error TS2561: Object literal may only specify known properties, but 'emailVerifiedAt' does not exist in type '{ password?: string | SQL<unknown> | PgColumn<ColumnBaseConfig<ColumnDataType, string>, {}, {}> | undefined; username?: string | SQL<...> | PgColumn<...> | undefined; ... 17 more ...; statusChangedBy?: number | ... 3 more ... | undefined; }'. Did you mean to write 'emailVerified'?
+server/api/user/year-review.get.ts(35,34): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(49,35): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(68,52): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(87,56): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(100,31): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(117,30): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(139,20): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(140,21): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(141,20): error TS2532: Object is possibly 'undefined'.
+server/api/user/year-review.get.ts(142,24): error TS2532: Object is possibly 'undefined'.
+server/api/users/search.get.ts(59,24): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+server/api/users/social-accounts.get.ts(42,22): error TS2339: Property 'meow' does not exist on type '{}'.
+server/api/users/social-accounts.get.ts(52,9): error TS18046: 'error' is of type 'unknown'.
+server/api/users/social-accounts/meow.delete.ts(46,9): error TS18046: 'error' is of type 'unknown'.
+server/api/users/social-accounts/meow.post.ts(79,9): error TS18046: 'error' is of type 'unknown'.
+server/services/notificationService.ts(685,9): error TS2554: Expected 3-5 arguments, but got 6.
+server/utils/database-health.ts(91,14): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+server/utils/database-health.ts(91,62): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+server/utils/database-health.ts(133,15): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+server/utils/database-health.ts(133,34): error TS2365: Operator '+' cannot be applied to types '{}' and '{}'.
+server/utils/database-manager.ts(56,44): error TS2339: Property 'status' does not exist on type '{ isConnected: boolean; maxConnections: number; idleTimeout: number | undefined; connectTimeout: number; }'.
+server/utils/database-manager.ts(147,34): error TS2339: Property 'status' does not exist on type '{ isConnected: boolean; maxConnections: number; idleTimeout: number | undefined; connectTimeout: number; }'.
+server/utils/log-manager.ts(335,54): error TS2339: Property 'rowCount' does not exist on type 'RowList<never[]>'.
+server/utils/open-api-cache.ts(72,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+server/utils/submissionLimit.ts(68,10): error TS18048: 'result' is possibly 'undefined'.
+
+ ERROR  Process exited with non-zero status (2)
+
+    at G._waitForOutput (/F:/WebstormProjects/VoiceHub-tjez/node_modules/tinyexec/dist/main.js:574:92)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.run (/F:/WebstormProjects/VoiceHub-tjez/node_modules/@nuxt/cli/dist/typecheck-C8wVgBzd.mjs:66:3)
+    at async runCommand (/F:/WebstormProjects/VoiceHub-tjez/node_modules/@nuxt/cli/node_modules/citty/dist/index.mjs:188:47)
+    at async runCommand (/F:/WebstormProjects/VoiceHub-tjez/node_modules/@nuxt/cli/node_modules/citty/dist/index.mjs:185:21)
+    at async runMain (/F:/WebstormProjects/VoiceHub-tjez/node_modules/@nuxt/cli/node_modules/citty/dist/index.mjs:285:10) 
+
+
