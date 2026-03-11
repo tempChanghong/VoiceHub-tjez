@@ -15,7 +15,8 @@ import { and, count, desc, eq, inArray } from 'drizzle-orm'
 import { cacheService } from '~~/server/services/cacheService'
 import { executeRedisCommand, isRedisReady } from '../../utils/redis'
 import { formatDateTime } from '~/utils/timeUtils'
-import { maskPublicScheduleData, PublicScheduleItem } from '../../utils/studentMask'
+import type { PublicScheduleItem } from '../../utils/studentMask'
+import { maskPublicScheduleData } from '../../utils/studentMask'
 
 import { verifyUserAuth } from '../../utils/auth'
 
@@ -151,7 +152,7 @@ export default defineEventHandler(async (event) => {
         }
       })
       .from(schedules)
-      .leftJoin(songs, eq(schedules.songId, songs.id))
+      .innerJoin(songs, eq(schedules.songId, songs.id))
       .leftJoin(users, eq(songs.requesterId, users.id))
       .leftJoin(playTimes, eq(schedules.playTimeId, playTimes.id))
       .where(eq(schedules.isDraft, false)) // 只查询已发布的排期

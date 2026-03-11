@@ -599,9 +599,10 @@ const preloadSong = async (song) => {
 
   try {
     const url = await getMusicUrlForDownload(song, selectedQuality.value)
+    const proxyUrl = `/api/admin/schedule/proxy-download?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(song.title + '.tmp')}`
 
     // 使用 fetch 获取并追踪下载进度
-    const response = await fetch(url)
+    const response = await fetch(proxyUrl)
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
     const contentLength = response.headers.get('content-length')
@@ -755,7 +756,8 @@ const getMusicUrlForDownload = async (song, quality, retryCount = 0) => {
 
 // 通用的音频下载函数
 const fetchAudioWithProgress = async (audioUrl, songId, songTitle) => {
-  const response = await fetch(audioUrl)
+  const proxyUrl = `/api/admin/schedule/proxy-download?url=${encodeURIComponent(audioUrl)}&filename=${encodeURIComponent(songTitle + '.tmp')}`
+  const response = await fetch(proxyUrl)
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
   const total = parseInt(response.headers.get('content-length') || '0')
@@ -782,8 +784,9 @@ const fetchAudioWithProgress = async (audioUrl, songId, songTitle) => {
 }
 
 // 获取 Blob 数据
-const downloadAsBlob = async (url) => {
-  const response = await fetch(url)
+const downloadAsBlob = async (url, filename = 'download.tmp') => {
+  const proxyUrl = `/api/admin/schedule/proxy-download?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`
+  const response = await fetch(proxyUrl)
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`)
   }

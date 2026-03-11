@@ -14,10 +14,6 @@ app/components/Admin/RequestTimeManager.vue(575,61): error TS7006: Parameter 's'
 app/components/Admin/RequestTimeManager.vue(576,56): error TS7006: Parameter 'acc' implicitly has an 'any' type.
 app/components/Admin/RequestTimeManager.vue(576,61): error TS7006: Parameter 's' implicitly has an 'any' type.
 app/components/Admin/RequestTimeManager.vue(784,6): error TS7006: Parameter 'pt' implicitly has an 'any' type.
-app/components/Admin/ScheduleDownloadModal.vue(111,37): error TS2307: Cannot find module '~/composables/useBilibiliMusicUrl' or its corresponding type declarations.
-app/components/Admin/ScheduleDownloadModal.vue(250,13): error TS2339: Property 'success' does not exist on type '{}'.
-app/components/Admin/ScheduleDownloadModal.vue(253,13): error TS2339: Property 'error' does not exist on type '{}'.
-app/components/Admin/ScheduleDownloadModal.vue(261,13): error TS2339: Property 'warning' does not exist on type '{}'.
 app/components/Auth/LoginForm.vue(238,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 app/components/Auth/LoginForm.vue(239,9): error TS2322: Type 'string[] | undefined' is not assignable to type 'string[]'.
@@ -878,24 +874,6 @@ server/api/songs/index.get.ts(16,25): error TS1484: 'MaskableSong' is a type and
 server/api/songs/index.get.ts(16,39): error TS1484: 'MaskableUser' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
 server/api/songs/index.get.ts(210,19): error TS2532: Object is possibly 'undefined'.
 server/api/songs/index.get.ts(600,26): error TS2341: Property 'setCache' is private and only accessible within class 'CacheService'.
-server/api/songs/public.get.ts(18,34): error TS1484: 'PublicScheduleItem' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-server/api/songs/public.get.ts(193,46): error TS18047: 's.song' is possibly 'null'.
-server/api/songs/public.get.ts(335,50): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(345,61): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(346,56): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(378,15): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(379,18): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(380,19): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(385,37): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(386,19): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(387,18): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(388,26): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(389,20): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(390,20): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(391,27): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(392,21): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(393,24): error TS18047: 'schedule.song' is possibly 'null'.
-server/api/songs/public.get.ts(393,65): error TS18047: 'schedule.song' is possibly 'null'.
 server/api/songs/replay.post.ts(61,9): error TS18048: 'existingRequest' is possibly 'undefined'.
 server/api/songs/replay.post.ts(65,53): error TS18048: 'existingRequest' is possibly 'undefined'.
 server/api/songs/replay.post.ts(83,42): error TS18048: 'existingRequest' is possibly 'undefined'.

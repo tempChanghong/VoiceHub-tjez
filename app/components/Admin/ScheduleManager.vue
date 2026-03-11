@@ -465,6 +465,17 @@
                 </button>
                 <button
                   :disabled="localScheduledSongs.length === 0"
+                  class="p-2 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 text-zinc-500 hover:text-emerald-400 rounded-xl transition-all group relative disabled:opacity-50 disabled:cursor-not-allowed"
+                  @click="openBatchDownloadDialog"
+                >
+                  <Archive class="w-3.5 h-3.5" />
+                  <span
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-zinc-800 text-[9px] text-zinc-300 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-zinc-700"
+                    >导出音频</span
+                  >
+                </button>
+                <button
+                  :disabled="localScheduledSongs.length === 0"
                   class="p-2 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 text-zinc-500 hover:text-emerald-500 rounded-xl transition-all group relative disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="markAllAsPlayed"
                 >
@@ -670,6 +681,13 @@
           <Download class="w-5 h-5" />
         </button>
         <button
+          title="导出音频文件"
+          class="p-3 bg-zinc-900 border border-zinc-800 text-emerald-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+          @click="openBatchDownloadDialog"
+        >
+          <Archive class="w-5 h-5" />
+        </button>
+        <button
           class="p-3 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
           @click="saveDraft"
         >
@@ -719,6 +737,14 @@
     :show="showDownloadDialog"
     :songs="localScheduledSongs"
     @close="showDownloadDialog = false"
+  />
+
+  <!-- 批量下载对话框 -->
+  <ScheduleDownloadModal
+    :show="showBatchDownloadDialog"
+    :date="selectedDate"
+    :schedules="localScheduledSongs"
+    @close="showBatchDownloadDialog = false"
   />
 
   <!-- 重播申请详情弹窗 -->
@@ -818,9 +844,11 @@ import {
   Plus,
   Minus,
   CircleDot,
-  ExternalLink
+  ExternalLink,
+  Archive
 } from 'lucide-vue-next'
 import SongDownloadDialog from './SongDownloadDialog.vue'
+import ScheduleDownloadModal from './ScheduleDownloadModal.vue'
 import ConfirmDialog from '../UI/ConfirmDialog.vue'
 import Pagination from '~/components/UI/Common/Pagination.vue'
 import CustomSelect from '~/components/UI/Common/CustomSelect.vue'
@@ -855,6 +883,12 @@ const confirmAction = ref(null)
 const showDownloadDialog = ref(false)
 const openDownloadDialog = () => {
   showDownloadDialog.value = true
+}
+
+// 批量下载相关
+const showBatchDownloadDialog = ref(false)
+const openBatchDownloadDialog = () => {
+  showBatchDownloadDialog.value = true
 }
 
 // 重播申请弹窗相关
