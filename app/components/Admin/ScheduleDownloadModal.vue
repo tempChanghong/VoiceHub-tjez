@@ -176,9 +176,10 @@ const getExtension = (song: SongInfo) => {
 }
 
 const getPlayUrl = async (song: SongInfo): Promise<string> => {
-  const url = await getMusicUrl(song.musicPlatform || '', song.musicId || '', song.playUrl || '', { quality: 5 })
+  // 传 undefined 作为第三个参数（原playUrl），强制获取最新的播放直链，防过期
+  const url = await getMusicUrl(song.musicPlatform || '', song.musicId || '', undefined, { quality: 5 })
   if (url) return url
-  throw new Error('未能获取播放直链')
+  throw new Error('未能获取最新的播放直链')
 }
 
 const startBatchDownload = async () => {

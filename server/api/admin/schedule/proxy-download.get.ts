@@ -29,21 +29,14 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch<ArrayBuffer>(url, {
-      responseType: 'arrayBuffer',
-      headers,
-      onResponseError({ response }) {
-        throw createError({
-          statusCode: response.status || 500,
-          message: `Upstream responded with ${response.status}`
-        })
-      }
+    const response = await globalThis.fetch(url, {
+      headers
     })
 
-    if (!response || response.byteLength === 0) {
+    if (!response.ok) {
       throw createError({
-        statusCode: 500,
-        message: 'Empty response received from upstream'
+        statusCode: response.status,
+        message: `Upstream responded with ${response.status}`
       })
     }
 
@@ -54,7 +47,8 @@ export default defineEventHandler(async (event) => {
     }
     setResponseHeader(event, 'Content-Type', 'application/octet-stream')
 
-    return response
+    // 直接流式返回 ReadableStream
+    return response.body
   } catch (error: unknown) {
     console.error('Proxy download error:', error)
     
