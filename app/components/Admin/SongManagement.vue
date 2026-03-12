@@ -643,8 +643,8 @@
                   v-if="showEditModal"
                   v-model="editForm.musicPlatform"
                   :options="[
-                    { label: '网易云音乐', value: 'netease' },
                     { label: 'QQ音乐', value: 'tencent' },
+                    { label: '网易云音乐', value: 'netease' },
                     { label: '哔哩哔哩', value: 'bilibili' }
                   ]"
                   placeholder="选择平台"
@@ -653,8 +653,8 @@
                   v-else
                   v-model="addForm.musicPlatform"
                   :options="[
-                    { label: '网易云音乐', value: 'netease' },
                     { label: 'QQ音乐', value: 'tencent' },
+                    { label: '网易云音乐', value: 'netease' },
                     { label: '哔哩哔哩', value: 'bilibili' }
                   ]"
                   placeholder="选择平台"
@@ -895,7 +895,8 @@ const editForm = ref({
   musicPlatform: '',
   musicId: '',
   cover: '',
-  playUrl: ''
+  playUrl: '',
+  recommendation: ''
 })
 
 // 添加歌曲相关
@@ -910,7 +911,8 @@ const addForm = ref({
   musicPlatform: '',
   musicId: '',
   cover: '',
-  playUrl: ''
+  playUrl: '',
+  recommendation: ''
 })
 
 // URL验证状态
@@ -1318,7 +1320,8 @@ const editSong = (song) => {
     musicPlatform: song.musicPlatform || '',
     musicId: song.musicId || '',
     cover: song.cover || '',
-    playUrl: song.playUrl || ''
+    playUrl: song.playUrl || '',
+    recommendation: song.recommendation || ''
   }
 
   if (song.requester_name) {
@@ -1374,7 +1377,8 @@ const saveEditSong = async () => {
       musicPlatform: editForm.value.musicPlatform || null,
       musicId: editForm.value.musicId || null,
       cover: editForm.value.cover || null,
-      playUrl: editForm.value.playUrl || null
+      playUrl: editForm.value.playUrl || null,
+      recommendation: editForm.value.recommendation || null
     })
 
     await refreshSongs()
@@ -1406,7 +1410,8 @@ const cancelEditSong = () => {
     musicPlatform: '',
     musicId: '',
     cover: '',
-    playUrl: ''
+    playUrl: '',
+    recommendation: ''
   }
   editCoverValidation.value = { valid: true, error: '', validating: false }
   editPlayUrlValidation.value = { valid: true, error: '', validating: false }
@@ -1423,7 +1428,8 @@ const openAddSongModal = () => {
     semester: selectedSemester.value !== 'all' ? selectedSemester.value : '',
     musicPlatform: '',
     musicId: '',
-    cover: ''
+    cover: '',
+    recommendation: ''
   }
   showAddSongModal.value = true
 }
@@ -1477,7 +1483,8 @@ const saveAddSong = async () => {
       musicPlatform: addForm.value.musicPlatform || null,
       musicId: addForm.value.musicId || null,
       cover: addForm.value.cover || null,
-      playUrl: addForm.value.playUrl || null
+      playUrl: addForm.value.playUrl || null,
+      recommendation: addForm.value.recommendation || null
     })
 
     await refreshSongs()
@@ -1491,7 +1498,8 @@ const saveAddSong = async () => {
       musicPlatform: '',
       musicId: '',
       cover: '',
-      playUrl: ''
+      playUrl: '',
+      recommendation: ''
     }
     clearSelectedUser()
 
@@ -1520,7 +1528,8 @@ const cancelAddSong = () => {
     musicPlatform: '',
     musicId: '',
     cover: '',
-    playUrl: ''
+    playUrl: '',
+    recommendation: ''
   }
   addCoverValidation.value = { valid: true, error: '', validating: false }
   addPlayUrlValidation.value = { valid: true, error: '', validating: false }

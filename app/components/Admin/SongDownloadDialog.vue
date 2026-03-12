@@ -24,6 +24,14 @@
 
           <!-- 内容区域 -->
           <div class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+            <!-- 警告提示 -->
+            <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2 text-amber-500">
+              <AlertTriangle class="w-4 h-4 shrink-0 mt-0.5" />
+              <p class="text-[11px] font-bold leading-relaxed">
+                <span class="text-amber-400">注意：</span>网易云音乐的付费歌曲必须登录有相关下载权限的账号才能下载，否则可能造成下载歌曲不完整、下载不成功等错误。
+              </p>
+            </div>
+
             <!-- 音质选择 -->
             <section class="space-y-3">
               <label class="text-[10px] font-black uppercase text-zinc-600 tracking-[0.2em] px-1"

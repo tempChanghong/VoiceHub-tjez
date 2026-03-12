@@ -206,18 +206,18 @@
           <div class="platform-selection-container">
             <div class="platform-selection">
               <button
-                :class="['platform-btn', { active: platform === 'netease' }]"
-                type="button"
-                @click="switchPlatform('netease')"
-              >
-                网易云音乐
-              </button>
-              <button
                 :class="['platform-btn', { active: platform === 'tencent' }]"
                 type="button"
                 @click="switchPlatform('tencent')"
               >
                 QQ音乐
+              </button>
+              <button
+                :class="['platform-btn', { active: platform === 'netease' }]"
+                type="button"
+                @click="switchPlatform('netease')"
+              >
+                网易云音乐
               </button>
               <button
                 :class="['platform-btn', { active: platform === 'bilibili' }]"
@@ -1050,7 +1050,7 @@ const showImportSemesterBtn = computed(() => semesters.value && semesters.value.
 
 const title = ref('')
 const artist = ref('')
-const platform = ref('netease') // 默认使用网易云音乐
+const platform = ref('tencent') // 默认使用QQ音乐
 const preferredPlayTimeId = ref('')
 const error = ref('')
 const success = ref('')
