@@ -3,7 +3,7 @@ import { sendProxy } from 'h3'
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const path = event.context.params?.path || ''
-  const baseUrl = 'https://api.voicehub.lao-shui.top'
+  const baseUrl = 'https://ncmapi.zcy.life'
   const targetUrl = `${baseUrl}/${path}`
 
   try {

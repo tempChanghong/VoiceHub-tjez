@@ -529,6 +529,24 @@
 
             <div class="space-y-2">
               <label class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1"
+                >推荐语 (可选)</label
+              >
+              <textarea
+                v-if="showEditModal"
+                v-model="editForm.recommendation"
+                placeholder="输入推荐语，例如：这首歌的旋律很优美..."
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-zinc-200 focus:outline-none focus:border-blue-500/30 min-h-[80px] resize-none transition-all"
+              />
+              <textarea
+                v-else
+                v-model="addForm.recommendation"
+                placeholder="输入推荐语，例如：这首歌的旋律很优美..."
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-zinc-200 focus:outline-none focus:border-blue-500/30 min-h-[80px] resize-none transition-all"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1"
                 >投稿人</label
               >
               <div class="relative user-search-container">
