@@ -133,7 +133,7 @@ const emit = defineEmits<{
   (e: 'login-success', data: { cookie: string; user: any }): void
 }>()
 
-const BASE_URL = 'https://api.voicehub.lao-shui.top'
+const BASE_URL = '/api/netease'
 
 const qrImg = ref('')
 const loading = ref(false)

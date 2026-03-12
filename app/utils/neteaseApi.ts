@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.voicehub.lao-shui.top'
+const BASE_URL = '/api/netease'
 
 export function normalizeNeteaseResponse(data) {
   if (!data || typeof data !== 'object') {

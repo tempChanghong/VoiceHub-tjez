@@ -406,7 +406,7 @@ const uploadToNetease = async (audioBlob: Blob, filename: string) => {
   const fileSize = audioBlob.size
   const cookie = getNeteaseCookie()
 
-  const baseApiUrl = 'https://api.voicehub.lao-shui.top'
+  const baseApiUrl = '/api/netease'
 
   // 获取文件扩展名
   const ext = filename.split('.').pop()?.toLowerCase() || 'mp3'
