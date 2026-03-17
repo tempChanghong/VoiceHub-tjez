@@ -175,8 +175,8 @@
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
 
-[36m鈩?[39m [32m鉁?built in 19.27s[39m
-[32m鉁?[39m Client built in 19280ms
+[36m鈩?[39m [32m鉁?built in 20.06s[39m
+[32m鉁?[39m Client built in 20072ms
 [36m鈩?[39m Building server...
 [36m鈩?[39m [36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
 [36m鈩?[39m transforming...
@@ -187,129 +187,129 @@
 (!) F:/WebstormProjects/VoiceHub-tjez/app/composables/useAudioQuality.ts is dynamically imported by F:/WebstormProjects/VoiceHub-tjez/app/composables/useMusicSources.ts, F:/WebstormProjects/VoiceHub-tjez/app/composables/useMusicSources.ts, F:/WebstormProjects/VoiceHub-tjez/app/composables/useMusicSources.ts but also statically imported by F:/WebstormProjects/VoiceHub-tjez/app/components/Songs/NeteaseUploadDialog.vue?vue&type=script&setup=true&lang.ts, F:/WebstormProjects/VoiceHub-tjez/app/components/Songs/RequestForm.vue, F:/WebstormProjects/VoiceHub-tjez/app/components/UI/AudioPlayer.vue, F:/WebstormProjects/VoiceHub-tjez/app/composables/useAudioPlayerControl.ts, F:/WebstormProjects/VoiceHub-tjez/app/composables/useAudioPlayerEnhanced.ts, F:/WebstormProjects/VoiceHub-tjez/app/utils/musicUrl.ts, dynamic import will not move module into another chunk.
 
 
-[36m鈩?[39m [32m鉁?built in 7.28s[39m
-[32m鉁?[39m Server built in 7340ms
+[36m鈩?[39m [32m鉁?built in 7.80s[39m
+[32m鉁?[39m Server built in 7875ms
 [90m[[90mnitro[90m][39m [32m鉁?[39m Generated public [36m.output/public[39m
 [90m[[90mnitro[90m][39m [36m鈩?[39m Building Nuxt Nitro server (preset: [36mnode-server[39m, compatibility date: [36m2026-01-30[39m)
-(node:23288) [DEP0155] DeprecationWarning: Use of deprecated trailing slash pattern mapping "./" in the "exports" field module resolution of the package at F:\WebstormProjects\VoiceHub-tjez\node_modules\@vue\shared\package.json imported from F:\WebstormProjects\VoiceHub-tjez\node_modules\@nuxt\nitro-server\dist\runtime\templates\error-500.mjs. Mapping specifiers ending in "/" is no longer supported.
+(node:6860) [DEP0155] DeprecationWarning: Use of deprecated trailing slash pattern mapping "./" in the "exports" field module resolution of the package at F:\WebstormProjects\VoiceHub-tjez\node_modules\@vue\shared\package.json imported from F:\WebstormProjects\VoiceHub-tjez\node_modules\@nuxt\nitro-server\dist\runtime\templates\error-500.mjs. Mapping specifiers ending in "/" is no longer supported.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:23288) [DEP0155] DeprecationWarning: Use of deprecated trailing slash pattern mapping "./" in the "exports" field module resolution of the package at F:\WebstormProjects\VoiceHub-tjez\node_modules\tslib\package.json imported from F:\WebstormProjects\VoiceHub-tjez\node_modules\@peculiar\asn1-schema\build\cjs\index.js. Mapping specifiers ending in "/" is no longer supported.
+(node:6860) [DEP0155] DeprecationWarning: Use of deprecated trailing slash pattern mapping "./" in the "exports" field module resolution of the package at F:\WebstormProjects\VoiceHub-tjez\node_modules\tslib\package.json imported from F:\WebstormProjects\VoiceHub-tjez\node_modules\@peculiar\x509\build\x509.cjs.js. Mapping specifiers ending in "/" is no longer supported.
 
-[nitro]  ERROR  RollupError: Could not resolve "../../../services/securityService" from "server/api/admin/risk-control/ips/[ip].delete.ts"
+[nitro]  ERROR  RollupError: Could not resolve "../../../../services/securityService" from "server/api/admin/risk-control/ips.post.ts"
 
 
 undefined
 
-Error [RollupError]: Could not resolve "../../../services/securityService" from "server/api/admin/risk-control/ips/[ip].delete.ts"
+Error [RollupError]: Could not resolve "../../../../services/securityService" from "server/api/admin/risk-control/ips.post.ts"
     at getRollupError (file:///F:/WebstormProjects/VoiceHub-tjez/node_modules/rollup/dist/es/shared/parseAst.js:402:41)
     at error (file:///F:/WebstormProjects/VoiceHub-tjez/node_modules/rollup/dist/es/shared/parseAst.js:398:42)
     at ModuleLoader.handleInvalidResolvedId (file:///F:/WebstormProjects/VoiceHub-tjez/node_modules/rollup/dist/es/shared/node-entry.js:21710:24)
     at file:///F:/WebstormProjects/VoiceHub-tjez/node_modules/rollup/dist/es/shared/node-entry.js:21670:26 {
   code: 'UNRESOLVED_IMPORT',
-  exporter: '../../../services/securityService',
-  id: 'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\risk-control\\ips\\[ip].delete.ts',
+  exporter: '../../../../services/securityService',
+  id: 'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\risk-control\\ips.post.ts',
   watchFiles: [
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\presets\\node\\runtime\\node-server.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\destr\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\h3\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\adapters\\node.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.By9qWDAI.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.D9ehKjSh.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.CipVM6lf.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\destr\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.DfCzGthR.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.D9ehKjSh.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.By9qWDAI.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\crossws\\dist\\shared\\crossws.CipVM6lf.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\radix3\\dist\\index.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\cookie-es\\dist\\index.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\ufo\\dist\\index.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\uncrypto\\dist\\crypto.node.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\defu\\dist\\defu.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\ufo\\dist\\index.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\cookie-es\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\node-mock-http\\dist\\index.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\uncrypto\\dist\\crypto.node.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\iron-webcrypto\\dist\\index.js',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\index.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\storage.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\meta.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\config.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\plugin.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\app.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\storage.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\route-rules.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\renderer.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\context.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\database.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\meta.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\cache.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\renderer.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\task.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\route-rules.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\database.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\cache.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\error\\utils.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.lambda.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.azure.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.lambda.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\shutdown.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\unstorage\\dist\\index.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.azure.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\unstorage\\drivers\\fs-lite.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.env.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\unstorage\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\klona\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\hookable\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\ofetch\\dist\\node.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\utils.env.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\unctx\\dist\\index.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\db0\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\croner\\dist\\croner.js',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\std-env\\dist\\index.mjs',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\db0\\dist\\index.mjs',
     'F:\\WebstormProjects\\VoiceHub-tjez\\node_modules\\nitropack\\dist\\runtime\\internal\\hash.mjs',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\middleware\\00-ip-check.global.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\plugins\\error-handler.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\middleware\\auth.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\middleware\\00-ip-check.global.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\middleware\\api-auth.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\site-config.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\fix-sequence.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\activities.get.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\schedule.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\db-status.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\fix-sequence.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\admin\\stats.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\bind.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\identities.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\unbind.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\login.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\change-password.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\bind.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\set-initial-password.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\logout.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\meow\\bind.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\verify.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\bilibili\\search.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\meow\\unbind.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\login.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\music\\websocket.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\blacklist\\check.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\change-password.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\music\\state.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\bilibili\\playurl.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\index.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\netease\\[...path].ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\clear-all.delete.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\verify.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\auth\\unbind.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\meow\\bind.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\music\\state.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\blacklist\\check.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\meow\\unbind.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\[id].delete.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\settings.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\bilibili\\search.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\clear-all.delete.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\settings.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\play-times\\index.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\read-all.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\open\\songs.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\request-times\\index.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\index.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\notifications\\settings.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\open\\schedules.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\progress\\events.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\progress\\id.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\proxy\\image.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\index.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\add.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\replay.delete.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\request.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\replay.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\public.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\submission-status.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\vote.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\system\\status.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\system\\location.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\count.get.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\withdraw.post.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\semesters\\options.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\netease\\[...path].ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\semesters\\current.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\submission-status.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\progress\\id.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\import.post.ts',
-    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\system\\reconnect.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\vote.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\proxy\\image.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\play-times\\index.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\add.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\progress\\events.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\replay.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\replay.delete.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\index.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\users\\search.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\system\\location.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\public.get.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\request.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\withdraw.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\songs\\count.get.ts',
     'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\user\\year-review.get.ts',
-    ... 242 more items
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\system\\reconnect.post.ts',
+    'F:\\WebstormProjects\\VoiceHub-tjez\\server\\api\\request-times\\index.ts',
+    ... 178 more items
   ]
 } 
 

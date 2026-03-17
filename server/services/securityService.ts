@@ -214,47 +214,6 @@ function blockIP(ip: string, reason: string): void {
   )
 }
 
-/**
- * 手动将IP加入黑名单
- */
-export function manualBanIP(ip: string, reason: string, durationMinutes: number = SECURITY_CONFIG.IP_BLOCK_DURATION_MINUTES): void {
-  const now = new Date()
-  const blockedUntil = new Date(
-    now.getTime() + durationMinutes * 60 * 1000
-  )
-
-  ipBlacklist.set(ip, {
-    blockedUntil,
-    reason,
-    blockedTime: now
-  })
-
-  console.log(
-    `Admin: IP ${ip} 已被手动加入黑名单，限制时长 ${durationMinutes} 分钟，原因：${reason}`
-  )
-}
-
-/**
- * 解除IP黑名单
- */
-export function unbanIP(ip: string): boolean {
-  if (ipBlacklist.has(ip)) {
-    ipBlacklist.delete(ip)
-    console.log(`Admin: IP ${ip} 已被手动移除黑名单`)
-    return true
-  }
-  return false
-}
-
-export function getBannedIPs() {
-  cleanupExpiredLocks()
-  return Array.from(ipBlacklist.entries()).map(([ip, info]) => ({
-    ip,
-    ...info
-  }))
-}
-
-
 export function blockUser(userId: number, minutes: number = RISK_CONTROL.USER_BLOCK_MINUTES): void {
   const until = new Date(Date.now() + minutes * 60 * 1000)
   userBlockUntil.set(userId, until)
