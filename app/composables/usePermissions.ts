@@ -22,7 +22,7 @@ export const usePermissions = () => {
 
     // 管理员可以访问的页面
     if (role === 'ADMIN') {
-      return ['overview', 'schedule', 'print', 'songs', 'users', 'data-analysis'].includes(page)
+      return ['overview', 'schedule', 'print', 'songs', 'users', 'data-analysis', 'risk-control'].includes(page)
     }
 
     // 歌曲管理员可以访问的页面
@@ -53,12 +53,13 @@ export const usePermissions = () => {
           'request-times',
           'semesters',
           'blacklist',
+          'risk-control',
           'site-config',
           'database',
           'api-keys'
         ]
       case 'ADMIN':
-        return ['overview', 'schedule', 'print', 'songs', 'users', 'data-analysis']
+        return ['overview', 'schedule', 'print', 'songs', 'users', 'data-analysis', 'risk-control']
       case 'SONG_ADMIN':
         return ['schedule', 'print', 'songs']
       default:
