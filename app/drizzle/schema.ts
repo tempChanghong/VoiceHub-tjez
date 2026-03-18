@@ -156,10 +156,10 @@ export const systemSettings = pgTable('SystemSettings', {
   requireRecommendation: boolean('requireRecommendation').default(false).notNull(),
   recommendationMinLength: integer('recommendationMinLength').default(50).notNull(),
   recommendationMaxLength: integer('recommendationMaxLength').default(100).notNull(),
-  // 动态风控规则配置
-  riskWindowMinutes: integer('riskWindowMinutes').default(10).notNull(),
-  riskMaxAttempts: integer('riskMaxAttempts').default(4).notNull(),
-  riskBanHours: integer('riskBanHours').default(24).notNull(),
+  // 风控设置
+  riskWindowMinutes: integer('riskWindowMinutes').notNull().default(10),
+  riskMaxAttempts: integer('riskMaxAttempts').notNull().default(4),
+  riskBanHours: integer('riskBanHours').notNull().default(168),
 });
 
 // 歌曲黑名单表

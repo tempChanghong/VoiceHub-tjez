@@ -357,7 +357,7 @@
               >
               <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-700 uppercase">小时</span>
             </div>
-            <p class="text-[10px] text-zinc-600 mt-1 px-1">触发封禁后自动封禁的时长，默认 24 小时（null = 永久）。</p>
+            <p class="text-[10px] text-zinc-600 mt-1 px-1">触发封禁后自动封禁的时长，默认 168 小时（null = 永久）。</p>
           </div>
         </div>
       </section>
@@ -420,7 +420,7 @@ const formData = ref({
   // 风控配置
   riskWindowMinutes: 10,
   riskMaxAttempts: 4,
-  riskBanHours: 24
+  riskBanHours: 168
 })
 
 const originalData = ref({})
@@ -479,7 +479,7 @@ const loadConfig = async () => {
       hideStudentInfo: data.hideStudentInfo ?? true,
       riskWindowMinutes: data.riskWindowMinutes ?? 10,
       riskMaxAttempts: data.riskMaxAttempts ?? 4,
-      riskBanHours: data.riskBanHours ?? 24
+      riskBanHours: data.riskBanHours ?? 168
     }
 
     originalData.value = JSON.parse(JSON.stringify(formData.value))

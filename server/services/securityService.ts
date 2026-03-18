@@ -268,7 +268,7 @@ async function getRiskConfig(): Promise<{
   } catch (err) {
     console.error('[RiskControl] 读取风控配置失败，使用默认值:', err)
   }
-  return { riskWindowMinutes: 10, riskMaxAttempts: 4, riskBanHours: 24 }
+  return { riskWindowMinutes: 10, riskMaxAttempts: 4, riskBanHours: 168 }
 }
 
 /**
