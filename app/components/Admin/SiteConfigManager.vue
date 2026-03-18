@@ -305,6 +305,62 @@
           </div>
         </div>
       </section>
+
+      <!-- IP 风控规则配置 -->
+      <section :class="cardClass">
+        <h3
+          class="text-sm font-black text-zinc-100 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-800 pb-4"
+        >
+          <ShieldAlert :size="16" class="text-red-500" /> IP 风控规则
+        </h3>
+        <div class="space-y-4">
+          <p class="text-[10px] text-zinc-500 leading-relaxed">
+            以下参数用于控制数据库持久化风控引擎的拦截阈值。修改后立即生效（下次检测时读取）。
+          </p>
+
+          <div>
+            <label :class="labelClass">IP 风控时间窗口（分钟）</label>
+            <div class="relative">
+              <input
+                v-model.number="formData.riskWindowMinutes"
+                type="number"
+                min="1"
+                :class="inputClass"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-700 uppercase">分钟</span>
+            </div>
+            <p class="text-[10px] text-zinc-600 mt-1 px-1">统计同一 IP 登录不同账号的时间窗口，默认 10 分钟。</p>
+          </div>
+
+          <div>
+            <label :class="labelClass">触发封禁的异常登录账户数</label>
+            <div class="relative">
+              <input
+                v-model.number="formData.riskMaxAttempts"
+                type="number"
+                min="2"
+                :class="inputClass"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-700 uppercase">个账号</span>
+            </div>
+            <p class="text-[10px] text-zinc-600 mt-1 px-1">同一 IP 在时间窗口内尝试的不同账号数达到此值则自动封禁，默认 4。</p>
+          </div>
+
+          <div>
+            <label :class="labelClass">自动封禁时长（小时）</label>
+            <div class="relative">
+              <input
+                v-model.number="formData.riskBanHours"
+                type="number"
+                min="1"
+                :class="inputClass"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-700 uppercase">小时</span>
+            </div>
+            <p class="text-[10px] text-zinc-600 mt-1 px-1">触发封禁后自动封禁的时长，默认 24 小时（null = 永久）。</p>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -316,6 +372,7 @@ import {
   FileText,
   Settings2,
   Shield,
+  ShieldAlert,
   Save,
   RotateCcw,
   CheckCircle2,
@@ -355,11 +412,15 @@ const formData = ref({
   recommendationMinLength: 50,
   recommendationMaxLength: 100,
   enableSubmissionLimit: false,
-  dailySubmissionLimit: 5,
-  weeklySubmissionLimit: null,
-  monthlySubmissionLimit: null,
+  dailySubmissionLimit: 5 as number | null,
+  weeklySubmissionLimit: null as number | null,
+  monthlySubmissionLimit: null as number | null,
   showBlacklistKeywords: false,
-  hideStudentInfo: true
+  hideStudentInfo: true,
+  // 风控配置
+  riskWindowMinutes: 10,
+  riskMaxAttempts: 4,
+  riskBanHours: 24
 })
 
 const originalData = ref({})
@@ -415,7 +476,10 @@ const loadConfig = async () => {
       weeklySubmissionLimit: data.weeklySubmissionLimit ?? null,
       monthlySubmissionLimit: data.monthlySubmissionLimit ?? null,
       showBlacklistKeywords: !!data.showBlacklistKeywords,
-      hideStudentInfo: data.hideStudentInfo ?? true
+      hideStudentInfo: data.hideStudentInfo ?? true,
+      riskWindowMinutes: data.riskWindowMinutes ?? 10,
+      riskMaxAttempts: data.riskMaxAttempts ?? 4,
+      riskBanHours: data.riskBanHours ?? 24
     }
 
     originalData.value = JSON.parse(JSON.stringify(formData.value))

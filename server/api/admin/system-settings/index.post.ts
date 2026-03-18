@@ -270,6 +270,28 @@ export default defineEventHandler(async (event) => {
       updateData.smtpFromName = body.smtpFromName
     }
 
+    // ── 风控动态配置 ──
+    if (body.riskWindowMinutes !== undefined) {
+      if (!Number.isInteger(body.riskWindowMinutes) || body.riskWindowMinutes < 1) {
+        throw createError({ statusCode: 400, message: 'riskWindowMinutes 必须是正整数' })
+      }
+      updateData.riskWindowMinutes = body.riskWindowMinutes
+    }
+
+    if (body.riskMaxAttempts !== undefined) {
+      if (!Number.isInteger(body.riskMaxAttempts) || body.riskMaxAttempts < 2) {
+        throw createError({ statusCode: 400, message: 'riskMaxAttempts 必须是 >= 2 的整数' })
+      }
+      updateData.riskMaxAttempts = body.riskMaxAttempts
+    }
+
+    if (body.riskBanHours !== undefined) {
+      if (!Number.isInteger(body.riskBanHours) || body.riskBanHours < 1) {
+        throw createError({ statusCode: 400, message: 'riskBanHours 必须是正整数' })
+      }
+      updateData.riskBanHours = body.riskBanHours
+    }
+
     // 验证每日、每周和每月限额三选一逻辑
     const limitSettings = [
       body.dailySubmissionLimit,

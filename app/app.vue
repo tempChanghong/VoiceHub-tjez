@@ -1,5 +1,8 @@
 <template>
   <div class="app" data-theme="dark" data-color-scheme="custom">
+    <!-- IP 封禁强制警告弹窗（全局，无关闭按钮） -->
+    <UIIPBannedModal />
+
     <!-- 全局通知容器组件 -->
     <LazyUINotificationContainer ref="notificationContainer" />
 
@@ -180,6 +183,26 @@ onMounted(async () => {
 
   // 初始化鸿蒙系统控制事件监听
   setupHarmonyOSListeners()
+
+  // 全局 fetch 拦截：检测 IP_BANNED 响应
+  const ipBanned = useState('ipBanned', () => false)
+  const nuxtApp = useNuxtApp()
+
+  // 监听 Vue 错误（$fetch 报错将通过此路径传播）
+  nuxtApp.hook('vue:error', (err) => {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'statusCode' in err &&
+      err.statusCode === 403 &&
+      (
+        ('statusMessage' in err && err.statusMessage === 'IP_BANNED') ||
+        ('data' in err && err.data && typeof err.data === 'object' && 'error' in err.data && err.data.error === 'IP_BANNED')
+      )
+    ) {
+      ipBanned.value = true
+    }
+  })
 })
 
 // 使用计算属性确保安全地访问auth对象

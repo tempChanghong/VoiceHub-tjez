@@ -151,6 +151,14 @@
               <LazyAdminBlacklistManager />
             </div>
 
+            <!-- IP 安全管理 -->
+            <div
+              v-if="activeTab === 'ip-security' && permissions.canAccessPage('ip-security')"
+              class="animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <LazyAdminIpBlacklistManager />
+            </div>
+
             <!-- 站点配置 -->
             <div
               v-if="activeTab === 'site-config' && permissions.canAccessPage('site-config')"
@@ -236,6 +244,7 @@ const getPageTitle = () => {
     'request-times': '投稿管理',
     semesters: '学期管理',
     blacklist: '黑名单管理',
+    'ip-security': 'IP 安全管理',
     'site-config': '站点配置',
     database: '数据库操作'
   }

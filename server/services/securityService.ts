@@ -1,33 +1,30 @@
 import { createSystemNotification } from './notificationService'
 import { sendMeowNotificationToUser } from './meowNotificationService'
 import { db } from '~/drizzle/db'
-import { users } from '~/drizzle/schema'
-import { eq } from 'drizzle-orm'
+import { users, loginLogs, ipBlacklists, systemSettings } from '~/drizzle/schema'
+import { eq, sql, gte, and, or, isNull, countDistinct } from 'drizzle-orm'
+import { invalidateIpCache } from '~~/server/utils/ipCache'
 
+// ─────────────────────────────────────────────
 // 账户锁定信息接口
+// ─────────────────────────────────────────────
 interface AccountLockInfo {
   failedAttempts: number
   lockedUntil: Date | null
   lastAttemptTime: Date
 }
 
-// IP监控信息接口
-interface IPMonitorInfo {
-  attemptedAccounts: Set<string>
-  firstAttemptTime: Date
-  lastAttemptTime: Date
-}
-
-// IP黑名单信息接口
+// IP黑名单信息接口（内存层，保持向后compat）
 interface IPBlockInfo {
   blockedUntil: Date
   reason: string
   blockedTime: Date
 }
 
-// 内存存储
+// ─────────────────────────────────────────────
+// 内存存储（保留原有内存逻辑）
+// ─────────────────────────────────────────────
 const accountLocks = new Map<string, AccountLockInfo>()
-const ipMonitor = new Map<string, IPMonitorInfo>()
 const ipBlacklist = new Map<string, IPBlockInfo>()
 const accountIpSwitchMonitor = new Map<
   string,
@@ -42,17 +39,17 @@ const userVoteStats = new Map<
   { emaPerMin: number; lastUpdate: number; windowTimestamps: number[] }
 >()
 
-// 通知限流存储，记录最近发送的通知，避免重复发送
+// 通知限流存储
 const notificationRateLimit = new Map<string, Date>()
-const NOTIFICATION_RATE_LIMIT_MINUTES = 5 // 同一类型通知5分钟内只发送一次
+const NOTIFICATION_RATE_LIMIT_MINUTES = 5
 
+// ─────────────────────────────────────────────
 // 配置常量
+// ─────────────────────────────────────────────
 const SECURITY_CONFIG = {
   MAX_FAILED_ATTEMPTS: 5,
   LOCK_DURATION_MINUTES: 10,
-  IP_MONITOR_WINDOW_MINUTES: 10,
-  IP_MAX_DIFFERENT_ACCOUNTS: 3,
-  IP_BLOCK_DURATION_MINUTES: 10
+  IP_BLOCK_DURATION_MINUTES: 10 // 内存层封禁时长（旧逻辑）
 }
 
 const RISK_CONTROL = {
@@ -70,43 +67,29 @@ const RISK_CONTROL = {
   SONG_IP_MIN_SAMPLE: 8
 }
 
-/**
- * 清理过期的锁定记录
- */
+// ─────────────────────────────────────────────
+// 清理过期的锁定记录
+// ─────────────────────────────────────────────
 function cleanupExpiredLocks() {
   const now = new Date()
 
-  // 清理过期的账户锁定
   for (const [username, lockInfo] of accountLocks.entries()) {
     if (lockInfo.lockedUntil && lockInfo.lockedUntil <= now) {
       accountLocks.delete(username)
     }
   }
 
-  // 清理过期的IP监控记录
-  for (const [ip, monitorInfo] of ipMonitor.entries()) {
-    const windowStart = new Date(
-      now.getTime() - SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES * 60 * 1000
-    )
-    if (monitorInfo.firstAttemptTime < windowStart) {
-      ipMonitor.delete(ip)
-    }
-  }
-
-  // 清理过期的IP黑名单记录
   for (const [ip, blockInfo] of ipBlacklist.entries()) {
     if (blockInfo.blockedUntil <= now) {
       ipBlacklist.delete(ip)
-      console.log(`IP ${ip} 已从黑名单中移除`)
+      console.log(`IP ${ip} 已从内存黑名单中移除`)
     }
   }
 
   for (const [username, monitor] of accountIpSwitchMonitor.entries()) {
     const cutoff = Date.now() - RISK_CONTROL.IP_SWITCH_WINDOW_MS
     for (const [ip, ts] of monitor.ipMap.entries()) {
-      if (ts < cutoff) {
-        monitor.ipMap.delete(ip)
-      }
+      if (ts < cutoff) monitor.ipMap.delete(ip)
     }
     if (monitor.ipMap.size === 0) {
       accountIpSwitchMonitor.delete(username)
@@ -132,88 +115,56 @@ function cleanupExpiredLocks() {
   }
 }
 
-/**
- * 检查账户是否被锁定
- */
+// ─────────────────────────────────────────────
+// 账户锁定相关（原有逻辑保留）
+// ─────────────────────────────────────────────
 export function isAccountLocked(username: string): boolean {
   cleanupExpiredLocks()
-
   const lockInfo = accountLocks.get(username)
-  if (!lockInfo || !lockInfo.lockedUntil) {
-    return false
-  }
-
+  if (!lockInfo || !lockInfo.lockedUntil) return false
   return lockInfo.lockedUntil > new Date()
 }
 
-/**
- * 获取账户锁定剩余时间（分钟）
- */
 export function getAccountLockRemainingTime(username: string): number {
   const lockInfo = accountLocks.get(username)
-  if (!lockInfo || !lockInfo.lockedUntil) {
-    return 0
-  }
-
+  if (!lockInfo || !lockInfo.lockedUntil) return 0
   const now = new Date()
-  if (lockInfo.lockedUntil <= now) {
-    return 0
-  }
-
+  if (lockInfo.lockedUntil <= now) return 0
   return Math.ceil((lockInfo.lockedUntil.getTime() - now.getTime()) / (1000 * 60))
 }
 
-/**
- * 检查IP是否被限制
- */
+// ─────────────────────────────────────────────
+// 内存层 IP 黑名单（原有逻辑，保持向后compat）
+// ─────────────────────────────────────────────
 export function isIPBlocked(ip: string): boolean {
   cleanupExpiredLocks()
-
   const blockInfo = ipBlacklist.get(ip)
-  if (!blockInfo) {
-    return false
-  }
-
+  if (!blockInfo) return false
   return blockInfo.blockedUntil > new Date()
 }
 
-/**
- * 获取IP限制剩余时间（分钟）
- */
 export function getIPBlockRemainingTime(ip: string): number {
   const blockInfo = ipBlacklist.get(ip)
-  if (!blockInfo) {
-    return 0
-  }
-
+  if (!blockInfo) return 0
   const now = new Date()
-  if (blockInfo.blockedUntil <= now) {
-    return 0
-  }
-
+  if (blockInfo.blockedUntil <= now) return 0
   return Math.ceil((blockInfo.blockedUntil.getTime() - now.getTime()) / (1000 * 60))
 }
 
-/**
- * 将IP加入黑名单
- */
 function blockIP(ip: string, reason: string): void {
   const now = new Date()
   const blockedUntil = new Date(
     now.getTime() + SECURITY_CONFIG.IP_BLOCK_DURATION_MINUTES * 60 * 1000
   )
-
-  ipBlacklist.set(ip, {
-    blockedUntil,
-    reason,
-    blockedTime: now
-  })
-
+  ipBlacklist.set(ip, { blockedUntil, reason, blockedTime: now })
   console.log(
-    `IP ${ip} 已被加入黑名单，限制时长 ${SECURITY_CONFIG.IP_BLOCK_DURATION_MINUTES} 分钟，原因：${reason}`
+    `IP ${ip} 已被加入内存黑名单 ${SECURITY_CONFIG.IP_BLOCK_DURATION_MINUTES} 分钟，原因：${reason}`
   )
 }
 
+// ─────────────────────────────────────────────
+// 用户封禁
+// ─────────────────────────────────────────────
 export function blockUser(userId: number, minutes: number = RISK_CONTROL.USER_BLOCK_MINUTES): void {
   const until = new Date(Date.now() + minutes * 60 * 1000)
   userBlockUntil.set(userId, until)
@@ -233,27 +184,21 @@ export function getUserBlockRemainingTime(userId: number): number {
   return Math.ceil((until.getTime() - now) / (1000 * 60))
 }
 
-/**
- * 记录登录失败
- */
+// ─────────────────────────────────────────────
+// 登录记录
+// ─────────────────────────────────────────────
 export function recordLoginFailure(username: string, ip: string): void {
   const now = new Date()
 
-  // 记录账户失败尝试
   let lockInfo = accountLocks.get(username)
   if (!lockInfo) {
-    lockInfo = {
-      failedAttempts: 0,
-      lockedUntil: null,
-      lastAttemptTime: now
-    }
+    lockInfo = { failedAttempts: 0, lockedUntil: null, lastAttemptTime: now }
     accountLocks.set(username, lockInfo)
   }
 
   lockInfo.failedAttempts++
   lockInfo.lastAttemptTime = now
 
-  // 检查是否需要锁定账户
   if (lockInfo.failedAttempts >= SECURITY_CONFIG.MAX_FAILED_ATTEMPTS) {
     lockInfo.lockedUntil = new Date(
       now.getTime() + SECURITY_CONFIG.LOCK_DURATION_MINUTES * 60 * 1000
@@ -262,19 +207,10 @@ export function recordLoginFailure(username: string, ip: string): void {
       `账户 ${username} 因连续 ${SECURITY_CONFIG.MAX_FAILED_ATTEMPTS} 次登录失败被锁定 ${SECURITY_CONFIG.LOCK_DURATION_MINUTES} 分钟`
     )
   }
-
-  // 记录IP监控信息
-  recordIPAttempt(ip, username)
 }
 
-/**
- * 记录成功登录（清除失败记录）
- */
-export function recordLoginSuccess(username: string, ip: string): void {
+export function recordLoginSuccess(username: string, _ip: string): void {
   accountLocks.delete(username)
-
-  // 记录IP监控信息（成功登录也需要监控）
-  recordIPAttempt(ip, username)
 }
 
 export function recordAccountIpLogin(username: string, ip: string): boolean {
@@ -297,115 +233,182 @@ export function recordAccountIpLogin(username: string, ip: string): boolean {
   return exceeded
 }
 
+// ─────────────────────────────────────────────
+// ★ 新增：数据库持久化风控逻辑
+// ─────────────────────────────────────────────
+
 /**
- * 记录IP登录尝试
+ * 记录登录尝试到数据库（fire-and-forget，不阻塞登录流程）
  */
-function recordIPAttempt(ip: string, username: string): void {
-  const now = new Date()
-  const windowStart = new Date(
-    now.getTime() - SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES * 60 * 1000
-  )
-
-  let monitorInfo = ipMonitor.get(ip)
-  if (!monitorInfo) {
-    monitorInfo = {
-      attemptedAccounts: new Set<string>(),
-      firstAttemptTime: now,
-      lastAttemptTime: now
-    }
-    ipMonitor.set(ip, monitorInfo)
-  }
-
-  // 如果监控窗口已过期，重置记录
-  if (monitorInfo.firstAttemptTime < windowStart) {
-    monitorInfo.attemptedAccounts.clear()
-    monitorInfo.firstAttemptTime = now
-  }
-
-  monitorInfo.attemptedAccounts.add(username)
-  monitorInfo.lastAttemptTime = now
-
-  // 检查是否触发异常行为警报
-  if (monitorInfo.attemptedAccounts.size > SECURITY_CONFIG.IP_MAX_DIFFERENT_ACCOUNTS) {
-    triggerSecurityAlert(ip, Array.from(monitorInfo.attemptedAccounts))
-  }
+export function recordLoginAttempt(ip: string, username: string): void {
+  db.insert(loginLogs)
+    .values({ ip, username })
+    .catch((err) => console.error('[RiskControl] 写入 loginLogs 失败:', err))
 }
 
 /**
- * 触发安全警报
+ * 动态读取系统风控配置
  */
-async function triggerSecurityAlert(ip: string, attemptedAccounts: string[]): Promise<void> {
+async function getRiskConfig(): Promise<{
+  riskWindowMinutes: number
+  riskMaxAttempts: number
+  riskBanHours: number
+}> {
+  try {
+    const result = await db
+      .select({
+        riskWindowMinutes: systemSettings.riskWindowMinutes,
+        riskMaxAttempts: systemSettings.riskMaxAttempts,
+        riskBanHours: systemSettings.riskBanHours
+      })
+      .from(systemSettings)
+      .limit(1)
+
+    if (result[0]) return result[0]
+  } catch (err) {
+    console.error('[RiskControl] 读取风控配置失败，使用默认值:', err)
+  }
+  return { riskWindowMinutes: 10, riskMaxAttempts: 4, riskBanHours: 24 }
+}
+
+/**
+ * 检查 IP 风险并自动封禁
+ * - 查询 loginLogs 中该 IP 在时间窗口内尝试过的不同 username 数量
+ * - 若 >= riskMaxAttempts：写入 ip_blacklists、通知管理员、清除缓存
+ */
+export async function checkIpRisk(ip: string): Promise<{ blocked: boolean }> {
+  try {
+    const { riskWindowMinutes, riskMaxAttempts, riskBanHours } = await getRiskConfig()
+
+    // 已被数据库封禁则直接返回（避免重复处理）
+    const now = new Date()
+    const alreadyBanned = await db
+      .select({ ip: ipBlacklists.ip })
+      .from(ipBlacklists)
+      .where(
+        and(
+          eq(ipBlacklists.ip, ip),
+          or(isNull(ipBlacklists.expiresAt), gte(ipBlacklists.expiresAt, now))
+        )
+      )
+      .limit(1)
+
+    if (alreadyBanned.length > 0) return { blocked: true }
+
+    // 统计时间窗口内的不同账号数
+    const windowStart = new Date(now.getTime() - riskWindowMinutes * 60 * 1000)
+
+    const [countResult] = await db
+      .select({ distinctCount: countDistinct(loginLogs.username) })
+      .from(loginLogs)
+      .where(and(eq(loginLogs.ip, ip), gte(loginLogs.createdAt, windowStart)))
+
+    const distinctCount = countResult?.distinctCount ?? 0
+
+    if (distinctCount >= riskMaxAttempts) {
+      // 查出涉及的账号列表（用于通知）
+      const involvedRows = await db
+        .selectDistinct({ username: loginLogs.username })
+        .from(loginLogs)
+        .where(and(eq(loginLogs.ip, ip), gte(loginLogs.createdAt, windowStart)))
+
+      const involvedUsernames = involvedRows.map((r) => r.username)
+
+      const expiresAt = new Date(now.getTime() + riskBanHours * 60 * 60 * 1000)
+
+      // 写入数据库黑名单（upsert：已存在则更新过期时间）
+      await db
+        .insert(ipBlacklists)
+        .values({
+          ip,
+          reason: `频繁尝试登录多个账号（${riskWindowMinutes}分钟内尝试${distinctCount}个账号）`,
+          bannedAt: now,
+          expiresAt
+        })
+        .onConflictDoUpdate({
+          target: ipBlacklists.ip,
+          set: {
+            reason: sql`EXCLUDED.reason`,
+            bannedAt: sql`EXCLUDED.banned_at`,
+            expiresAt: sql`EXCLUDED.expires_at`
+          }
+        })
+
+      // 同步写入内存层，使 isIPBlocked() 立即生效
+      const blockedUntil = new Date(
+        now.getTime() + SECURITY_CONFIG.IP_BLOCK_DURATION_MINUTES * 60 * 1000
+      )
+      ipBlacklist.set(ip, {
+        blockedUntil,
+        reason: `频繁尝试登录多个账号`,
+        blockedTime: now
+      })
+
+      // 清除中间件内存缓存，使新封禁立即对所有请求生效
+      invalidateIpCache(ip)
+
+      // 向超级管理员发送通知
+      triggerRiskControlAlert(ip, distinctCount, involvedUsernames, riskWindowMinutes).catch(
+        (err) => console.error('[RiskControl] 发送通知失败:', err)
+      )
+
+      console.log(
+        `[RiskControl] IP ${ip} 已被封禁 ${riskBanHours}h，原因：${riskWindowMinutes}分钟内尝试 ${distinctCount} 个账号`
+      )
+
+      return { blocked: true }
+    }
+
+    return { blocked: false }
+  } catch (err) {
+    console.error('[RiskControl] checkIpRisk 出错:', err)
+    return { blocked: false } // 出错时放行，避免影响正常业务
+  }
+}
+
+// ─────────────────────────────────────────────
+// 风控拦截通知（向管理员发送）
+// ─────────────────────────────────────────────
+async function triggerRiskControlAlert(
+  ip: string,
+  count: number,
+  attemptedAccounts: string[],
+  windowMinutes: number
+): Promise<void> {
   try {
     const now = new Date()
-    const alertTitle = '安全警报：检测到异常登录行为'
-    const alertContent = `
-检测时间：${now.toLocaleString('zh-CN')}
+    const alertTitle = '安全警报：检测到异常登录行为（IP 风控）'
+    const alertContent = `检测时间：${now.toLocaleString('zh-CN')}
 异常IP：${ip}
-时间窗口：${SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES}分钟内
-尝试登录账户数：${attemptedAccounts.length}
+时间窗口：${windowMinutes}分钟内
+尝试登录账户数：${count}
 涉及账户：${attemptedAccounts.join(', ')}
 
-建议立即检查该IP的登录活动并采取必要的安全措施。
-    `.trim()
+建议立即检查该IP的登录活动并采取必要的安全措施。`
 
-    // Meow通知内容，包含完整的涉及账户信息
-    const meowAlertContent = `
-检测时间：${now.toLocaleString('zh-CN')}
-异常IP：${ip}
-时间窗口：${SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES}分钟内
-尝试登录账户数：${attemptedAccounts.length}
-涉及账户：${attemptedAccounts.join(', ')}
+    console.log(`[RiskControl] 安全警报：IP ${ip} 在 ${windowMinutes} 分钟内尝试登录 ${count} 个不同账户`)
 
-建议立即检查该IP的登录活动并采取必要的安全措施。
-    `.trim()
-
-    console.log(
-      `安全警报：IP ${ip} 在 ${SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES} 分钟内尝试登录 ${attemptedAccounts.length} 个不同账户`
-    )
-
-    // 将触发警报的IP加入黑名单
-    blockIP(
-      ip,
-      `异常登录行为：${SECURITY_CONFIG.IP_MONITOR_WINDOW_MINUTES}分钟内尝试登录${attemptedAccounts.length}个不同账户`
-    )
-
-    // 获取所有超级管理员
     const superAdmins = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        meowNickname: users.meowNickname
-      })
+      .select({ id: users.id, name: users.name, meowNickname: users.meowNickname })
       .from(users)
       .where(eq(users.role, 'SUPER_ADMIN'))
 
-    // 向所有超级管理员发送站内信
     for (const admin of superAdmins) {
       try {
         await createSystemNotification(admin.id, alertTitle, alertContent)
-        console.log(`已向超级管理员 ${admin.name} 发送安全警报站内信`)
-
-        // 如果管理员绑定了Meow推送，同时发送推送通知
         if (admin.meowNickname) {
-          const success = await sendMeowNotificationToUser(admin.id, alertTitle, meowAlertContent)
-
-          if (success) {
-            console.log(`已向超级管理员 ${admin.name} 发送Meow推送警报`)
-          } else {
-            console.log(`向超级管理员 ${admin.name} 发送Meow推送警报失败`)
-          }
+          await sendMeowNotificationToUser(admin.id, alertTitle, alertContent)
         }
-      } catch (error) {
-        console.error(`向超级管理员 ${admin.name} 发送安全警报失败:`, error)
+      } catch (e) {
+        console.error(`向管理员 ${admin.name} 发送风控通知失败:`, e)
       }
     }
-
-    // 重置该IP的监控记录，避免重复警报
-    ipMonitor.delete(ip)
   } catch (error) {
-    console.error('触发安全警报时发生错误:', error)
+    console.error('[RiskControl] triggerRiskControlAlert 出错:', error)
   }
 }
+
+// triggerSecurityAlert removed: replaced by checkIpRisk DB-backed logic
 
 async function triggerAccountIpSwitchAlert(username: string, ips: string[]): Promise<void> {
   try {
@@ -417,28 +420,30 @@ async function triggerAccountIpSwitchAlert(username: string, ips: string[]): Pro
 涉及IP数：${ips.length}
 
 建议立即检查该账号的登录活动并采取必要的安全措施。`
-    const meowAlertContent = alertContent
+
     const superAdmins = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        meowNickname: users.meowNickname
-      })
+      .select({ id: users.id, name: users.name, meowNickname: users.meowNickname })
       .from(users)
       .where(eq(users.role, 'SUPER_ADMIN'))
+
     for (const admin of superAdmins) {
       try {
         await createSystemNotification(admin.id, alertTitle, alertContent)
         if (admin.meowNickname) {
-          await sendMeowNotificationToUser(admin.id, alertTitle, meowAlertContent)
+          await sendMeowNotificationToUser(admin.id, alertTitle, alertContent)
         }
-      } catch {}
+      } catch (e) {
+        console.error(`[RiskControl] 向管理员 ${admin.name} 发送账号IP切换警报失败:`, e)
+      }
     }
   } catch (error) {
     console.error('触发账号IP切换警报时发生错误:', error)
   }
 }
 
+// ─────────────────────────────────────────────
+// 歌曲投票风控
+// ─────────────────────────────────────────────
 function ipBucketOf(ip: string): string {
   const parts = ip.split('.')
   if (parts.length === 4) return `${parts[0]}.${parts[1]}.${parts[2]}`
@@ -459,7 +464,7 @@ export function getSongProtectRemainingSeconds(songId: number): number {
   return Math.ceil((until.getTime() - now) / 1000)
 }
 
-export function recordSongVote(songId: number, ip: string, userId: number): boolean {
+export function recordSongVote(songId: number, ip: string, _userId: number): boolean {
   const now = Date.now()
   const arr = songVoteWindow.get(songId) || []
   const cutoff = now - RISK_CONTROL.SONG_VOTE_PROTECT_WINDOW_MS
@@ -486,31 +491,24 @@ export function recordUserVoteActivity(userId: number, songTitle?: string): { an
     userVoteStats.set(userId, stats)
   }
 
-  // 更新时间窗口，保留最近10分钟的投票记录
   const cutoff = now - 10 * 60 * 1000
   stats.windowTimestamps = stats.windowTimestamps.filter((t) => t >= cutoff)
   stats.windowTimestamps.push(now)
 
-  // 计算当前10分钟窗口内的平均速率，而不仅仅是两次投票的间隔
-  // 如果只有一个投票记录，无法计算速率（时间跨度为0），且单个投票不构成"速率"，直接视为0
   let currentRate = 0
   if (stats.windowTimestamps.length > 1) {
     const windowDurationMin = Math.max(1e-6, (now - Math.min(...stats.windowTimestamps)) / 60000)
     currentRate = stats.windowTimestamps.length / windowDurationMin
   }
 
-  // 调整EMA_ALPHA值为0.1，使EMA更平滑，减少短期波动影响
   const smoothedEmaAlpha = 0.1
   stats.emaPerMin = smoothedEmaAlpha * currentRate + (1 - smoothedEmaAlpha) * stats.emaPerMin
   stats.lastUpdate = now
 
-  // 动态调整阈值：基础阈值 + EMA的动态倍数
-  // 当EMA较低时，使用较高倍数；当EMA较高时，使用较低倍数，避免误报
-  const baseThreshold = 5 // 基础阈值：每分钟5票
-  const dynamicMultiplier = Math.max(2, 5 - Math.min(3, stats.emaPerMin / 100)) // 动态倍数：2-5倍
+  const baseThreshold = 5
+  const dynamicMultiplier = Math.max(2, 5 - Math.min(3, stats.emaPerMin / 100))
   const threshold = Math.max(baseThreshold, stats.emaPerMin * dynamicMultiplier)
 
-  // 只有当当前速率显著超过阈值（1.5倍）时，才触发异常
   const anomaly = currentRate > threshold * 1.5
   if (anomaly) triggerVoteAnomalyAlert(userId, stats.emaPerMin, currentRate, songTitle)
   return { anomaly }
@@ -531,36 +529,32 @@ async function triggerSongVoteBurstAlert(
 主导IP段：${top ? `${top[0]}.* (${top[1]})` : '无'}
 
 已启动临时保护，暂停投票10分钟。`
-    const meowAlertContent = alertContent
+
     const superAdmins = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        meowNickname: users.meowNickname
-      })
+      .select({ id: users.id, name: users.name, meowNickname: users.meowNickname })
       .from(users)
       .where(eq(users.role, 'SUPER_ADMIN'))
+
     for (const admin of superAdmins) {
       try {
         await createSystemNotification(admin.id, alertTitle, alertContent)
         if (admin.meowNickname) {
-          await sendMeowNotificationToUser(admin.id, alertTitle, meowAlertContent)
+          await sendMeowNotificationToUser(admin.id, alertTitle, alertContent)
         }
-      } catch {}
+      } catch (e) {
+        console.error(`[RiskControl] 发送歌曲投票激增警报失败:`, e)
+      }
     }
   } catch (error) {
     console.error('触发歌曲投票激增警报时发生错误:', error)
   }
 }
 
-// 检查通知是否可以发送（限流控制）
+// 通知限流
 function canSendNotification(key: string): boolean {
   const now = new Date()
   const lastSent = notificationRateLimit.get(key)
-  if (
-    lastSent &&
-    now.getTime() - lastSent.getTime() < NOTIFICATION_RATE_LIMIT_MINUTES * 60 * 1000
-  ) {
+  if (lastSent && now.getTime() - lastSent.getTime() < NOTIFICATION_RATE_LIMIT_MINUTES * 60 * 1000) {
     return false
   }
   notificationRateLimit.set(key, now)
@@ -576,8 +570,8 @@ interface AnomalyEvent {
 }
 
 const pendingAnomalies: AnomalyEvent[] = []
-let anomalyAggregationTimer: NodeJS.Timeout | null = null
-const ANOMALY_AGGREGATION_WINDOW_MS = 60 * 1000 // 1分钟聚合窗口
+let anomalyAggregationTimer: ReturnType<typeof setTimeout> | null = null
+const ANOMALY_AGGREGATION_WINDOW_MS = 60 * 1000
 
 async function flushAnomalyAggregation() {
   if (pendingAnomalies.length === 0) {
@@ -587,14 +581,12 @@ async function flushAnomalyAggregation() {
 
   try {
     const count = pendingAnomalies.length
-    // 统计涉及的歌曲
     const songStats = new Map<string, number>()
     pendingAnomalies.forEach((e) => {
       const title = e.songTitle || '未知歌曲'
       songStats.set(title, (songStats.get(title) || 0) + 1)
     })
 
-    // 按次数排序，取前5
     const topSongs = Array.from(songStats.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -603,19 +595,14 @@ async function flushAnomalyAggregation() {
 
     const alertTitle = '风险告警：检测到多名用户异常投票（汇总）'
     const alertContent = `在过去 1 分钟内，除已通知的用户外，还检测到 ${count} 名用户存在异常投票行为。
-        
+
 涉及主要歌曲：
 ${topSongs}
 
 请关注后台日志或进行相关处理。`
 
-    const meowAlertContent = alertContent
     const superAdmins = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        meowNickname: users.meowNickname
-      })
+      .select({ id: users.id, name: users.name, meowNickname: users.meowNickname })
       .from(users)
       .where(eq(users.role, 'SUPER_ADMIN'))
 
@@ -623,14 +610,15 @@ ${topSongs}
       try {
         await createSystemNotification(admin.id, alertTitle, alertContent)
         if (admin.meowNickname) {
-          await sendMeowNotificationToUser(admin.id, alertTitle, meowAlertContent)
+          await sendMeowNotificationToUser(admin.id, alertTitle, alertContent)
         }
-      } catch {}
+      } catch (e) {
+        console.error(`[RiskControl] 发送投票汇总通知失败:`, e)
+      }
     }
   } catch (error) {
     console.error('发送异常投票汇总通知失败:', error)
   } finally {
-    // 清空队列和定时器
     pendingAnomalies.length = 0
     anomalyAggregationTimer = null
   }
@@ -643,66 +631,56 @@ async function triggerVoteAnomalyAlert(
   songTitle?: string
 ): Promise<void> {
   try {
-    // 通知限流，同一用户的投票异常通知5分钟内只发送一次
     const notificationKey = `vote_anomaly_${userId}`
-    if (!canSendNotification(notificationKey)) {
-      return
-    }
+    if (!canSendNotification(notificationKey)) return
 
-    // 如果正在聚合窗口期，则加入缓冲区
     if (anomalyAggregationTimer) {
-      pendingAnomalies.push({
-        userId,
-        ema,
-        rate,
-        songTitle,
-        time: new Date()
-      })
+      pendingAnomalies.push({ userId, ema, rate, songTitle, time: new Date() })
       return
     }
 
-    // 否则，立即发送第一条，并开启聚合窗口
     const now = new Date()
     const alertTitle = '风险告警：检测到异常投票速率'
-    const alertContent = `检测时间：${now.toLocaleString('zh-CN')}\n用户ID：${userId}\nEMA基线：${ema.toFixed(2)} 次/分钟\n当前速率：${rate.toFixed(2)} 次/分钟\n${songTitle ? `涉及歌曲：${songTitle}\n` : ''}\n提示：该用户的投票行为异常，已触发限流机制。`
-    const meowAlertContent = alertContent
+    const alertContent = `检测时间：${now.toLocaleString('zh-CN')}
+用户ID：${userId}
+EMA基线：${ema.toFixed(2)} 次/分钟
+当前速率：${rate.toFixed(2)} 次/分钟
+${songTitle ? `涉及歌曲：${songTitle}\n` : ''}
+提示：该用户的投票行为异常，已触发限流机制。`
+
     const superAdmins = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        meowNickname: users.meowNickname
-      })
+      .select({ id: users.id, name: users.name, meowNickname: users.meowNickname })
       .from(users)
       .where(eq(users.role, 'SUPER_ADMIN'))
+
     for (const admin of superAdmins) {
       try {
         await createSystemNotification(admin.id, alertTitle, alertContent)
         if (admin.meowNickname) {
-          await sendMeowNotificationToUser(admin.id, alertTitle, meowAlertContent)
+          await sendMeowNotificationToUser(admin.id, alertTitle, alertContent)
         }
-      } catch {}
+      } catch (e) {
+        console.error(`[RiskControl] 发送投票异常警报失败:`, e)
+      }
     }
 
-    // 启动聚合定时器
     anomalyAggregationTimer = setTimeout(flushAnomalyAggregation, ANOMALY_AGGREGATION_WINDOW_MS)
   } catch (error) {
     console.error('触发投票异常警报时发生错误:', error)
   }
 }
 
-/**
- * 获取安全统计信息
- */
+// ─────────────────────────────────────────────
+// 安全统计
+// ─────────────────────────────────────────────
 export function getSecurityStats() {
   cleanupExpiredLocks()
-
   return {
     lockedAccounts: accountLocks.size,
-    monitoredIPs: ipMonitor.size,
     blockedIPs: ipBlacklist.size,
     config: SECURITY_CONFIG
   }
 }
 
-// 定期清理过期记录（每5分钟执行一次）
+// 定期清理（每5分钟）
 setInterval(cleanupExpiredLocks, 5 * 60 * 1000)

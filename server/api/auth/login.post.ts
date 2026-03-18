@@ -10,7 +10,9 @@ import {
   recordLoginSuccess,
   recordAccountIpLogin,
   blockUser,
-  getUserBlockRemainingTime
+  getUserBlockRemainingTime,
+  recordLoginAttempt,
+  checkIpRisk
 } from '../../services/securityService'
 import { getBeijingTime } from '~/utils/timeUtils'
 import { getClientIP } from '~~/server/utils/ip-utils'
@@ -21,6 +23,21 @@ export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
     const clientIp = getClientIP(event)
+
+    // ─── 风控拦截（必须在所有逻辑之前执行）───
+    // 1. 异步记录本次登录尝试（fire-and-forget，不阻塞）
+    recordLoginAttempt(clientIp, body.username || 'unknown')
+
+    // 2. 检查 IP 是否已被数据库黑名单封禁，或触发新封禁阈值
+    const { blocked } = await checkIpRisk(clientIp)
+    if (blocked) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'IP_BANNED',
+        message: '您的设备存在异常行为，已被系统封禁'
+      })
+    }
+    // ────────────────────────────────────────
 
     if (!body.username || !body.password) {
       throw createError({

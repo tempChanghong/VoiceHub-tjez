@@ -156,6 +156,10 @@ export const systemSettings = pgTable('SystemSettings', {
   requireRecommendation: boolean('requireRecommendation').default(false).notNull(),
   recommendationMinLength: integer('recommendationMinLength').default(50).notNull(),
   recommendationMaxLength: integer('recommendationMaxLength').default(100).notNull(),
+  // 动态风控规则配置
+  riskWindowMinutes: integer('riskWindowMinutes').default(10).notNull(),
+  riskMaxAttempts: integer('riskMaxAttempts').default(4).notNull(),
+  riskBanHours: integer('riskBanHours').default(24).notNull(),
 });
 
 // 歌曲黑名单表
@@ -451,6 +455,23 @@ export const emailTemplates = pgTable('EmailTemplate', {
   updatedByUserId: integer('updatedByUserId'),
 });
 
+// 登录尝试日志表（用于风控分析）
+export const loginLogs = pgTable('login_logs', {
+  id: serial('id').primaryKey(),
+  ip: varchar('ip', { length: 45 }).notNull(),
+  username: varchar('username', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// IP 黑名单表（持久化封禁记录）
+export const ipBlacklists = pgTable('ip_blacklists', {
+  id: serial('id').primaryKey(),
+  ip: varchar('ip', { length: 45 }).notNull().unique(),
+  reason: varchar('reason', { length: 500 }).notNull(),
+  bannedAt: timestamp('banned_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at'), // null = 永久封禁
+});
+
 // 导出所有表的类型
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -487,7 +508,12 @@ export type NewCollaborationLog = typeof collaborationLogs.$inferInsert;
 export type SongReplayRequest = typeof songReplayRequests.$inferSelect;
 export type NewSongReplayRequest = typeof songReplayRequests.$inferInsert;
 export type EmailTemplate = typeof emailTemplates.$inferSelect;
-export type NewEmailTemplate = typeof emailTemplates.$inferInsert;export type RequestTime = typeof requestTimes.$inferSelect;
+export type NewEmailTemplate = typeof emailTemplates.$inferInsert;
+export type RequestTime = typeof requestTimes.$inferSelect;
 export type NewRequestTime = typeof requestTimes.$inferInsert;
 export type UserIdentity = typeof userIdentities.$inferSelect;
 export type NewUserIdentity = typeof userIdentities.$inferInsert;
+export type LoginLog = typeof loginLogs.$inferSelect;
+export type NewLoginLog = typeof loginLogs.$inferInsert;
+export type IpBlacklist = typeof ipBlacklists.$inferSelect;
+export type NewIpBlacklist = typeof ipBlacklists.$inferInsert;
