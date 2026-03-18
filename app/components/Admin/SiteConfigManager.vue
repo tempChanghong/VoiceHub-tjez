@@ -412,9 +412,9 @@ const formData = ref({
   recommendationMinLength: 50,
   recommendationMaxLength: 100,
   enableSubmissionLimit: false,
-  dailySubmissionLimit: 5 as number | null,
-  weeklySubmissionLimit: null as number | null,
-  monthlySubmissionLimit: null as number | null,
+  dailySubmissionLimit: 5,
+  weeklySubmissionLimit: null,
+  monthlySubmissionLimit: null,
   showBlacklistKeywords: false,
   hideStudentInfo: true,
   // 风控配置
