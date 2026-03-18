@@ -22,11 +22,13 @@ export default defineEventHandler(async (event) => {
   // 1. 查内存缓存
   const cachedStatus = getCachedIpStatus(ip)
   if (cachedStatus !== null) {
-    if (cachedStatus) {
+    if (cachedStatus.banned) {
       setResponseStatus(event, 403)
       return {
         error: 'IP_BANNED',
-        message: '您的 IP 存在异常行为，已被临时封禁。'
+        message: '🚨 检测到您的设备恶意尝试登录他人账户，已触发系统安全机制，您的 IP 已被封禁。',
+        reason: cachedStatus.reason,
+        expiresAt: cachedStatus.expiresAt
       }
     }
     return // 缓存命中且未封禁，直接放行
@@ -36,7 +38,11 @@ export default defineEventHandler(async (event) => {
   try {
     const now = new Date()
     const record = await db
-      .select({ ip: ipBlacklists.ip })
+      .select({ 
+        ip: ipBlacklists.ip,
+        reason: ipBlacklists.reason,
+        expiresAt: ipBlacklists.expiresAt
+       })
       .from(ipBlacklists)
       .where(
         and(
@@ -47,13 +53,21 @@ export default defineEventHandler(async (event) => {
       .limit(1)
 
     const banned = record.length > 0
-    setCachedIpStatus(ip, banned)
+    const banData = banned ? record[0] : null
+    
+    setCachedIpStatus(ip, { 
+      banned, 
+      reason: banData?.reason, 
+      expiresAt: banData?.expiresAt 
+    })
 
     if (banned) {
       setResponseStatus(event, 403)
       return {
         error: 'IP_BANNED',
-        message: '您的 IP 存在异常行为，已被临时封禁。'
+        message: '🚨 检测到您的设备恶意尝试登录他人账户，已触发系统安全机制，您的 IP 已被封禁。',
+        reason: banData?.reason,
+        expiresAt: banData?.expiresAt
       }
     }
   } catch (err) {

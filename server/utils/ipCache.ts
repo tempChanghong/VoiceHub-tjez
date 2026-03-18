@@ -4,8 +4,13 @@
  * TTL: 1 分钟自动过期刷新
  */
 
-interface CacheEntry {
+export interface IpBanState {
   banned: boolean
+  reason?: string | null
+  expiresAt?: Date | null
+}
+
+interface CacheEntry extends IpBanState {
   cachedAt: number
 }
 
@@ -16,23 +21,27 @@ const ipBlockCache = new Map<string, CacheEntry>()
 
 /**
  * 从缓存中读取 IP 封禁状态
- * @returns banned 状态，或 null（缓存未命中/已过期）
+ * @returns 封禁状态对象，或 null（缓存未命中/已过期）
  */
-export function getCachedIpStatus(ip: string): boolean | null {
+export function getCachedIpStatus(ip: string): IpBanState | null {
   const entry = ipBlockCache.get(ip)
   if (!entry) return null
   if (Date.now() - entry.cachedAt > CACHE_TTL_MS) {
     ipBlockCache.delete(ip)
     return null
   }
-  return entry.banned
+  return {
+    banned: entry.banned,
+    reason: entry.reason,
+    expiresAt: entry.expiresAt
+  }
 }
 
 /**
  * 写入缓存
  */
-export function setCachedIpStatus(ip: string, banned: boolean): void {
-  ipBlockCache.set(ip, { banned, cachedAt: Date.now() })
+export function setCachedIpStatus(ip: string, state: IpBanState): void {
+  ipBlockCache.set(ip, { ...state, cachedAt: Date.now() })
 }
 
 /**

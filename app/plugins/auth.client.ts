@@ -35,6 +35,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (isBanned) {
           nuxtApp.runWithContext(() => {
             useState('ipBanned').value = true
+            if (data?.reason) useState('ipBanReason').value = data.reason
+            if (data?.expiresAt) useState('ipBanExpiresAt').value = data.expiresAt
           })
         }
       } catch (e) {}
@@ -95,6 +97,8 @@ export default defineNuxtPlugin((nuxtApp) => {
             if (isBanned) {
               nuxtApp.runWithContext(() => {
                 useState('ipBanned').value = true
+                if (error?.data?.reason) useState('ipBanReason').value = error.data.reason
+                if (error?.data?.expiresAt) useState('ipBanExpiresAt').value = error.data.expiresAt
               })
               // 此处抛出 error 依然会让前端的 catch 继续执行，但状态已全局触发
             }

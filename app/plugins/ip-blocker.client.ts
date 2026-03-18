@@ -22,6 +22,8 @@ export default defineNuxtPlugin((nuxtApp) => {
           if (isBanned) {
             nuxtApp.runWithContext(() => {
               useState('ipBanned').value = true
+              if (data?.reason) useState('ipBanReason').value = data.reason
+              if (data?.expiresAt) useState('ipBanExpiresAt').value = data.expiresAt
             })
           }
         }

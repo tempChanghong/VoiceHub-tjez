@@ -39,13 +39,26 @@
 
           <!-- 内容正文 -->
           <div
-            class="w-full bg-red-950/30 border border-red-500/20 rounded-xl p-5 text-left space-y-3"
+            class="w-full bg-red-950/30 border border-red-500/20 rounded-xl p-5 text-left space-y-4"
           >
-            <p class="text-sm text-zinc-300 leading-relaxed">
-              🚨 检测到您的设备恶意尝试登录他人账户，已触发系统安全机制，您的 IP 已被临时封禁。
+            <p class="text-sm font-medium text-zinc-100 leading-relaxed text-center">
+              🚨 检测到您的设备恶意尝试登录他人账户，已触发系统安全机制，您的 IP 已被封禁。
             </p>
-            <p class="text-sm text-zinc-300 leading-relaxed">
-              请立即停止违规行为，并联系广播站站长申请解封。
+            
+            <!-- 详情框 -->
+            <div v-if="ipBanReason" class="bg-black/40 rounded-lg p-3 space-y-2 border border-red-500/10">
+              <div class="flex items-start justify-between">
+                <span class="text-xs text-zinc-500 font-medium whitespace-nowrap mr-4">封禁理由</span>
+                <span class="text-xs text-red-400 font-bold text-right">{{ ipBanReason }}</span>
+              </div>
+              <div class="flex items-start justify-between">
+                <span class="text-xs text-zinc-500 font-medium whitespace-nowrap mr-4">解封时间</span>
+                <span class="text-xs text-zinc-300 font-medium text-right">{{ formattedExpiresAt }}</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed text-center">
+              请立即停止违规行为，并等待封禁期结束后再行使用功能。如被永久封禁，则请自省。
             </p>
           </div>
 
@@ -71,8 +84,17 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ShieldAlert, AlertTriangle } from 'lucide-vue-next'
+import dayjs from 'dayjs'
 
 // 读取全局封禁状态
 const ipBanned = useState<boolean>('ipBanned', () => false)
+const ipBanReason = useState<string | null>('ipBanReason', () => null)
+const ipBanExpiresAt = useState<string | null>('ipBanExpiresAt', () => null)
+
+const formattedExpiresAt = computed(() => {
+  if (!ipBanExpiresAt.value) return '永久封禁'
+  return dayjs(ipBanExpiresAt.value).format('YYYY-MM-DD HH:mm:ss')
+})
 </script>
