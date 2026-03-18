@@ -20,6 +20,27 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const response = await originalFetch(input, init)
 
+    // --- 新增：全局拦截 403 风控封禁 ---
+    if (response.status === 403) {
+      try {
+        const cloned = response.clone()
+        const data = await cloned.json()
+        const isBanned =
+          response.statusText === 'IP_BANNED' ||
+          data?.error === 'IP_BANNED' ||
+          data?.statusMessage === 'IP_BANNED' ||
+          data?.message?.includes('IP_BANNED') ||
+          data?.message?.includes('封禁')
+          
+        if (isBanned) {
+          nuxtApp.runWithContext(() => {
+            useState('ipBanned').value = true
+          })
+        }
+      } catch (e) {}
+    }
+    // -----------------------------------
+
     // 检查是否为401错误
     if (response.status === 401) {
       const currentPath = window.location.pathname
@@ -62,6 +83,23 @@ export default defineNuxtPlugin((nuxtApp) => {
         try {
           return await originalUseFetch(request, options)
         } catch (error: any) {
+          // --- 新增：全局拦截 403 风控封禁 ---
+          if (error?.status === 403 || error?.statusCode === 403) {
+            const isBanned =
+              error?.statusMessage === 'IP_BANNED' ||
+              error?.data?.error === 'IP_BANNED' ||
+              error?.data?.statusMessage === 'IP_BANNED' ||
+              error?.message?.includes('IP_BANNED') ||
+              error?.data?.message?.includes('封禁')
+            
+            if (isBanned) {
+              nuxtApp.runWithContext(() => {
+                useState('ipBanned').value = true
+              })
+              // 此处抛出 error 依然会让前端的 catch 继续执行，但状态已全局触发
+            }
+          }
+          // -----------------------------------
           // 检查是否为401错误
           if (error?.status === 401 || error?.statusCode === 401) {
             const currentPath = window.location.pathname
