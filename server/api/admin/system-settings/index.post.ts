@@ -1,6 +1,8 @@
 import { db } from '~/drizzle/db'
 import { systemSettings } from '~/drizzle/schema'
 import { eq } from 'drizzle-orm'
+import { SMTP_PASSWORD_MASK, SECRET_FIELD_MASK, maskSystemSettingsSecrets } from './secretMask'
+import { SYSTEM_SETTINGS_DEFAULTS } from '../../../utils/system-settings-defaults'
 
 export default defineEventHandler(async (event) => {
   // 检查用户认证和权限
@@ -196,6 +198,26 @@ export default defineEventHandler(async (event) => {
       updateData.enableReplayRequests = body.enableReplayRequests
     }
 
+    if (body.enableCollaborativeSubmission !== undefined) {
+      if (typeof body.enableCollaborativeSubmission !== 'boolean') {
+        throw createError({
+          statusCode: 400,
+          message: 'enableCollaborativeSubmission 必须是布尔值'
+        })
+      }
+      updateData.enableCollaborativeSubmission = body.enableCollaborativeSubmission
+    }
+
+    if (body.enableSubmissionRemarks !== undefined) {
+      if (typeof body.enableSubmissionRemarks !== 'boolean') {
+        throw createError({
+          statusCode: 400,
+          message: 'enableSubmissionRemarks 必须是布尔值'
+        })
+      }
+      updateData.enableSubmissionRemarks = body.enableSubmissionRemarks
+    }
+
     if (body.enableRequestTimeLimitation !== undefined) {
       if (typeof body.enableRequestTimeLimitation !== 'boolean') {
         throw createError({
@@ -258,7 +280,7 @@ export default defineEventHandler(async (event) => {
       updateData.smtpUsername = body.smtpUsername
     }
 
-    if (body.smtpPassword !== undefined && body.smtpPassword !== '****************') {
+    if (body.smtpPassword !== undefined && body.smtpPassword !== SMTP_PASSWORD_MASK) {
       updateData.smtpPassword = body.smtpPassword
     }
 
@@ -384,7 +406,7 @@ export default defineEventHandler(async (event) => {
       console.warn('[SMTP] SMTP配置重载失败:', smtpError)
     }
 
-    return settings
+    return maskSystemSettingsSecrets(settings)
   } catch (error) {
     console.error('更新系统设置失败:', error)
 
@@ -398,3 +420,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

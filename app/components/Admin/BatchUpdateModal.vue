@@ -41,7 +41,7 @@
 
         <div class="flex-1 overflow-y-auto p-8 pt-6 custom-scrollbar space-y-8">
           <!-- 更新方式选择 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <label
               :class="[
                 'relative flex flex-col p-5 rounded-xl border-2 transition-all cursor-pointer group',
@@ -111,11 +111,46 @@
                 >通过 Excel 文件精确匹配并批量修改学生信息</span
               >
             </label>
+
+            <label
+              :class="[
+                'relative flex flex-col p-5 rounded-xl border-2 transition-all cursor-pointer group',
+                updateType === 'status-batch'
+                  ? 'bg-amber-500/5 border-amber-500/50 ring-4 ring-amber-500/10'
+                  : 'bg-zinc-950 border-zinc-800 hover:border-zinc-700'
+              ]"
+            >
+              <input v-model="updateType" type="radio" value="status-batch" class="sr-only" >
+              <div class="flex items-center justify-between mb-3">
+                <div
+                  :class="[
+                    'w-10 h-10 rounded-lg flex items-center justify-center transition-colors',
+                    updateType === 'status-batch'
+                      ? 'bg-amber-500 text-white'
+                      : 'bg-zinc-800 text-zinc-500 group-hover:text-zinc-300'
+                  ]"
+                >
+                  <ShieldAlert :size="18" />
+                </div>
+                <div
+                  v-if="updateType === 'status-batch'"
+                  class="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center"
+                >
+                  <Check :size="12" class="text-white" />
+                </div>
+              </div>
+              <span class="text-sm font-black text-zinc-200 uppercase tracking-widest"
+                >设置账户状态</span
+              >
+              <span class="text-[10px] text-zinc-500 mt-1 font-medium leading-relaxed"
+                >批量设置选中学生的账户状态</span
+              >
+            </label>
           </div>
 
-          <!-- 仅更新年级面板 -->
+          <!-- 学生选择面板 (年级更新和状态更新共用) -->
           <div
-            v-if="updateType === 'grade-only'"
+            v-if="['grade-only', 'status-batch'].includes(updateType)"
             class="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300"
           >
             <div class="p-6 bg-zinc-950/50 border border-zinc-800/50 rounded-xl space-y-6">
@@ -203,7 +238,8 @@
               </div>
             </div>
 
-            <div class="p-6 bg-purple-500/5 border border-purple-500/20 rounded-xl space-y-6">
+            <!-- 目标年级设置 -->
+            <div v-if="updateType === 'grade-only'" class="p-6 bg-purple-500/5 border border-purple-500/20 rounded-xl space-y-6">
               <div
                 class="flex items-center gap-2 text-xs font-black text-purple-400 uppercase tracking-widest"
               >
@@ -238,6 +274,39 @@
                   >
                   <span class="text-xs font-bold text-zinc-300">保持原有班级不变</span>
                 </label>
+              </div>
+            </div>
+
+            <!-- 目标状态设置 -->
+            <div v-if="updateType === 'status-batch'" class="p-6 bg-amber-500/5 border border-amber-500/20 rounded-xl space-y-6">
+              <div class="flex items-center gap-2 text-xs font-black text-amber-400 uppercase tracking-widest">
+                <Save :size="14" />
+                目标状态设置
+              </div>
+              <div class="grid grid-cols-1 gap-6">
+                <div class="space-y-2">
+                  <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">选择账户状态</label>
+                  <CustomSelect
+                    v-model="targetStatus"
+                    :options="statusOptions"
+                    label-key="label"
+                    value-key="value"
+                    placeholder="请选择目标状态"
+                    class-name="w-full"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">变更原因说明</label>
+                  <div class="relative group">
+                    <MessageSquare class="absolute left-4 top-3 text-zinc-700 group-focus-within:text-amber-500 transition-colors" :size="16" />
+                    <textarea
+                      v-model="statusReason"
+                      rows="2"
+                      placeholder="例如: 2025届学生统一毕业"
+                      class="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-11 pr-4 py-3 text-xs focus:outline-none focus:border-amber-500/30 transition-all text-zinc-200 resize-none"
+                    ></textarea>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -439,6 +508,23 @@
             <AlertCircle :size="16" />
             {{ error }}
           </div>
+
+          <!-- 进度条 -->
+          <div
+            v-if="updateType === 'excel-batch' && updateProgressText"
+            class="p-5 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-emerald-400 uppercase tracking-widest">{{ updateProgressText }}</span>
+              <span class="text-xs font-black text-emerald-400">{{ updateProgress }}%</span>
+            </div>
+            <div class="h-2 bg-zinc-900 rounded-full overflow-hidden">
+              <div
+                class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-300 ease-out rounded-full"
+                :style="{ width: updateProgress + '%' }"
+              />
+            </div>
+          </div>
         </div>
 
         <!-- 底部按钮 -->
@@ -455,7 +541,9 @@
               'flex-[2] px-6 py-4 text-white text-xs font-black rounded-2xl transition-all uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg active:scale-95',
               updateType === 'excel-batch'
                 ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/20'
-                : 'bg-purple-600 hover:bg-purple-500 shadow-purple-900/20'
+                : updateType === 'status-batch'
+                  ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-900/20'
+                  : 'bg-purple-600 hover:bg-purple-500 shadow-purple-900/20'
             ]"
             @click="performUpdate"
           >
@@ -486,7 +574,9 @@ import {
   Info,
   AlertCircle,
   RefreshCw,
-  CheckCircle2
+  CheckCircle2,
+  ShieldAlert,
+  MessageSquare
 } from 'lucide-vue-next'
 
 import CustomSelect from '~/components/UI/Common/CustomSelect.vue'
@@ -510,10 +600,26 @@ const selectedUserIds = ref([])
 const targetGrade = ref('')
 const keepClass = ref(true)
 
+// 状态批量更新相关
+const targetStatus = ref('')
+const statusReason = ref('')
+
+const statusOptions = [
+  { label: '正常访问', value: 'active' },
+  { label: '限制访问 (毕业生)', value: 'graduate' },
+  { label: '限制访问 (退学)', value: 'withdrawn' }
+]
+
 // Excel批量更新相关
 const isDragOver = ref(false)
 const excelPreviewData = ref([])
 const fileInput = ref(null)
+
+// 批量更新进度
+const updateProgress = ref(0)
+const updateProgressText = ref('')
+const updateTotalBatches = ref(0)
+const updateCurrentBatch = ref(0)
 
 // 所有用户的年级班级信息
 const allGrades = ref([])
@@ -583,6 +689,8 @@ const canUpdate = computed(() => {
     return selectedUserIds.value.length > 0 && targetGrade.value.trim()
   } else if (updateType.value === 'excel-batch') {
     return excelPreviewData.value.length > 0 && excelPreviewData.value.some((row) => !row.error)
+  } else if (updateType.value === 'status-batch') {
+    return selectedUserIds.value.length > 0 && targetStatus.value && statusReason.value.trim()
   }
   return false
 })
@@ -745,7 +853,20 @@ const loadXLSX = async () => {
   })
 }
 
-const downloadTemplate = () => {
+const downloadTemplate = async () => {
+  if (typeof window.XLSX === 'undefined') {
+    try {
+      await loadXLSX()
+    } catch (err) {
+      if (window.$showNotification) {
+        window.$showNotification('Excel处理库加载失败，请刷新页面后重试', 'error')
+      } else {
+        alert('Excel处理库加载失败，请刷新页面后重试')
+      }
+      return
+    }
+  }
+
   const templateData = [
     { 用户名: 'student001', 姓名: '张三', 年级: '2025', 班级: '1班', 新用户名: 'new_student001' },
     { 用户名: 'student002', 姓名: '李四', 年级: '2025', 班级: '2班', 新用户名: '' }
@@ -764,12 +885,23 @@ const performUpdate = async () => {
 
     if (updateType.value === 'grade-only') {
       await performGradeUpdate()
+      emit('update-success')
+      emit('close')
     } else if (updateType.value === 'excel-batch') {
       await performExcelUpdate()
+      excelPreviewData.value = []
+      emit('update-success')
+      // 等待 3 秒让用户看到进度条完成状态
+      setTimeout(() => {
+        if (updateProgressText.value) {
+          emit('close')
+        }
+      }, 3000)
+    } else if (updateType.value === 'status-batch') {
+      await performStatusUpdate()
+      emit('update-success')
+      emit('close')
     }
-
-    emit('update-success')
-    emit('close')
   } catch (err) {
     console.error('批量更新失败:', err)
     error.value = '批量更新失败: ' + err.message
@@ -801,10 +933,20 @@ const performExcelUpdate = async () => {
     throw new Error('没有有效的更新数据')
   }
 
-  // 分批更新，避免请求过大
+  updateProgress.value = 0
+  updateTotalBatches.value = Math.ceil(validUpdates.length / 50)
+  updateCurrentBatch.value = 0
+
   const batchSize = 50
+  let totalUpdated = 0
+  let totalFailed = 0
+
   for (let i = 0; i < validUpdates.length; i += batchSize) {
     const batch = validUpdates.slice(i, i + batchSize)
+    updateCurrentBatch.value = Math.floor(i / batchSize) + 1
+    updateProgressText.value = `正在更新：正在处理第 ${updateCurrentBatch.value} / ${updateTotalBatches.value} 批数据...`
+    updateProgress.value = Math.round((updateCurrentBatch.value / updateTotalBatches.value) * 100)
+
     const updates = batch.map((row) => ({
       userId: row.userId,
       grade: row.newGrade ? String(row.newGrade).trim() : undefined,
@@ -812,11 +954,41 @@ const performExcelUpdate = async () => {
       username: row.newUsername ? String(row.newUsername).trim() : undefined
     }))
 
-    await $fetch('/api/admin/users/batch-update', {
-      method: 'POST',
-      body: { updates },
-      ...auth.getAuthConfig()
-    })
+    try {
+      const result = await $fetch('/api/admin/users/batch-update', {
+        method: 'POST',
+        body: { updates },
+        ...auth.getAuthConfig()
+      })
+      if (result && result.data && result.data.summary) {
+        totalUpdated += result.data.summary.success || 0
+        totalFailed += result.data.summary.failed || 0
+      } else {
+        totalUpdated += batch.length
+      }
+    } catch (err) {
+      console.error(`第 ${updateCurrentBatch.value} 批更新失败:`, err)
+      totalFailed += batch.length
+    }
+  }
+
+  updateProgressText.value = `更新完成：成功 ${totalUpdated} 个，失败 ${totalFailed} 个`
+  updateProgress.value = 100
+}
+
+const performStatusUpdate = async () => {
+  const response = await $fetch('/api/admin/users/batch-status', {
+    method: 'PUT',
+    body: {
+      userIds: selectedUserIds.value,
+      status: targetStatus.value,
+      reason: statusReason.value.trim()
+    },
+    ...auth.getAuthConfig()
+  })
+
+  if (!response.success) {
+    throw new Error(response.message || '批量更新状态失败')
   }
 }
 
@@ -857,7 +1029,13 @@ watch(
       // 重置状态
       selectedUserIds.value = []
       excelPreviewData.value = []
+      targetStatus.value = ''
+      statusReason.value = ''
       error.value = ''
+      updateProgress.value = 0
+      updateProgressText.value = ''
+      updateTotalBatches.value = 0
+      updateCurrentBatch.value = 0
     }
   }
 )

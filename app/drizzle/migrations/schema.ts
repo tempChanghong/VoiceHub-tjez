@@ -273,3 +273,10 @@ export const userIdentity = pgTable("UserIdentity", {
 		}).onDelete("cascade"),
 	unique("UserIdentity_provider_providerUserId_unique").on(table.provider, table.providerUserId),
 ]);
+
+export const drizzleMigrations = pgTable("__drizzle_migrations__", {
+	id: serial().primaryKey().notNull(),
+	hash: text().notNull(),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	createdAt: bigint("created_at", { mode: "number" }),
+});

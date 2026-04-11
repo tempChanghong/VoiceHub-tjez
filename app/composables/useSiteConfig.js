@@ -17,7 +17,13 @@ const siteConfig = ref({
   schoolLogoPrintUrl: '',
   siteDescription: '',
   submissionGuidelines: '',
-  icpNumber: ''
+  icpNumber: '',
+  gonganNumber: '',
+  githubOAuthEnabled: false,
+  casdoorOAuthEnabled: false,
+  googleOAuthEnabled: false,
+  customOAuthEnabled: false,
+  customOAuthDisplayName: ''
 })
 
 const isLoaded = ref(false)
@@ -51,7 +57,16 @@ export const useSiteConfig = () => {
         siteDescription: '校园广播站点歌系统 - 让你的声音被听见',
         submissionGuidelines: defaultSubmissionGuidelines,
         icpNumber: '',
-        enableReplayRequests: false
+        gonganNumber: '',
+        enableReplayRequests: false,
+        enableCollaborativeSubmission: true,
+        enableSubmissionRemarks: false,
+        allowOAuthRegistration: false,
+        githubOAuthEnabled: false,
+        casdoorOAuthEnabled: false,
+        googleOAuthEnabled: false,
+        customOAuthEnabled: false,
+        customOAuthDisplayName: ''
       }
       isLoaded.value = true
     } finally {
@@ -71,12 +86,46 @@ export const useSiteConfig = () => {
     () => siteConfig.value.submissionGuidelines || defaultSubmissionGuidelines
   )
   const icp = computed(() => siteConfig.value.icpNumber || '')
+  const gonganNumber = computed(() => siteConfig.value.gonganNumber || '')
+  const showBeianIcon = computed(() => siteConfig.value.showBeianIcon || false)
   const enableReplayRequests = computed(() => siteConfig.value.enableReplayRequests || false)
+  const enableCollaborativeSubmission = computed(
+    () => siteConfig.value.enableCollaborativeSubmission !== false
+  )
+  const enableSubmissionRemarks = computed(() => siteConfig.value.enableSubmissionRemarks === true)
+  const allowOAuthRegistration = computed(() => siteConfig.value.allowOAuthRegistration === true)
   const enableRecommendation = computed(() => siteConfig.value.enableRecommendation || false)
   const requireRecommendation = computed(() => siteConfig.value.requireRecommendation || false)
   const recommendationMinLength = computed(() => siteConfig.value.recommendationMinLength ?? 50)
   const recommendationMaxLength = computed(() => siteConfig.value.recommendationMaxLength ?? 100)
   const smtpEnabled = computed(() => !!siteConfig.value.smtpEnabled)
+  
+  const oauth = computed(() => ({
+    github: !!siteConfig.value.githubOAuthEnabled,
+    casdoor: !!siteConfig.value.casdoorOAuthEnabled,
+    google: !!siteConfig.value.googleOAuthEnabled,
+    oauth2: !!siteConfig.value.customOAuthEnabled
+  }))
+
+  const oauthProviders = computed(() => {
+    const providers = []
+    if (siteConfig.value.githubOAuthEnabled) {
+      providers.push({ key: 'github', name: 'GitHub' })
+    }
+    if (siteConfig.value.casdoorOAuthEnabled) {
+      providers.push({ key: 'casdoor', name: 'Casdoor' })
+    }
+    if (siteConfig.value.googleOAuthEnabled) {
+      providers.push({ key: 'google', name: 'Google' })
+    }
+    if (siteConfig.value.customOAuthEnabled) {
+      providers.push({
+        key: 'oauth2',
+        name: siteConfig.value.customOAuthDisplayName || '第三方 OAuth'
+      })
+    }
+    return providers
+  })
 
   // 初始化配置（仅在客户端执行）
   const initSiteConfig = async () => {
@@ -102,12 +151,19 @@ export const useSiteConfig = () => {
     description,
     guidelines,
     icp,
+    gonganNumber,
+    showBeianIcon,
     enableReplayRequests,
+    enableCollaborativeSubmission,
+    enableSubmissionRemarks,
+    allowOAuthRegistration,
     enableRecommendation,
     requireRecommendation,
     recommendationMinLength,
     recommendationMaxLength,
     smtpEnabled,
+    oauth,
+    oauthProviders,
     fetchSiteConfig,
     initSiteConfig,
     refreshSiteConfig

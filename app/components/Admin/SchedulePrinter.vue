@@ -80,6 +80,37 @@
               </div>
             </div>
 
+            <!-- 排版样式 -->
+            <div class="space-y-2">
+              <label class="text-[11px] font-black uppercase text-zinc-600 tracking-wider"
+                >排版样式</label
+              >
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  :class="[
+                    'py-2 rounded-lg text-sm font-bold transition-all',
+                    settings.layoutStyle === 'classic'
+                      ? 'border border-blue-500/30 bg-blue-600/10 text-blue-400 shadow-sm'
+                      : 'border border-zinc-800 bg-zinc-950 text-zinc-500 hover:text-zinc-300'
+                  ]"
+                  @click="selectClassicLayout"
+                >
+                  经典列表
+                </button>
+                <button
+                  :class="[
+                    'py-2 rounded-lg text-sm font-bold transition-all',
+                    settings.layoutStyle === 'table'
+                      ? 'border border-blue-500/30 bg-blue-600/10 text-blue-400 shadow-sm'
+                      : 'border border-zinc-800 bg-zinc-950 text-zinc-500 hover:text-zinc-300'
+                  ]"
+                  @click="selectTableLayout"
+                >
+                  表格排布
+                </button>
+              </div>
+            </div>
+
             <!-- 日期范围 -->
             <div class="space-y-2">
               <label class="text-[11px] font-black uppercase text-zinc-600 tracking-wider"
@@ -249,7 +280,7 @@
                 </div>
 
                 <!-- 排期内容 -->
-                <div class="schedule-content">
+                <div class="schedule-content" :class="`layout-${settings.layoutStyle}`">
                   <!-- 无数据提示 -->
                   <div v-if="filteredSchedules.length === 0" class="no-data-message">
                     <div class="no-data-icon">
@@ -265,7 +296,8 @@
                     <p v-else>当前日期范围内没有排期数据，请调整日期范围或检查排期设置。</p>
                   </div>
 
-                  <div class="grouped-content">
+                  <!-- 只有在非表格排布时才按日期分组 -->
+                  <div v-if="settings.layoutStyle !== 'table'" class="grouped-content">
                     <div
                       v-for="(dateGroup, date) in groupedSchedules"
                       :key="date"
@@ -290,6 +322,8 @@
                               >({{ playTimeData.schedules.length }}首)</span
                             >
                           </h4>
+                          
+                          <!-- 经典排布 -->
                           <div class="schedule-list">
                             <div
                               v-for="schedule in playTimeData.schedules"
@@ -313,6 +347,10 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <!-- 如果是表格排布，显示单一的大表格 -->
+                  <div v-else-if="filteredSchedules.length > 0" class="schedule-table-wrapper">
+                    <ScheduleTablePrint :grouped-schedules="groupedSchedules" :settings="settings" />
                   </div>
                 </div>
 
@@ -358,6 +396,11 @@ import CustomSelect from '~/components/UI/Common/CustomSelect.vue'
 
 // 导入子组件
 import ScheduleItemPrint from './ScheduleItemPrint.vue'
+import ScheduleTablePrint from './ScheduleTablePrint.vue'
+
+// 学期管理
+import { useSemesters } from '~/composables/useSemesters'
+const { currentSemester, fetchCurrentSemester } = useSemesters()
 
 
 // 权限检查
@@ -384,6 +427,7 @@ const previewContent = ref(null)
 const settings = ref({
   paperSize: 'A4',
   orientation: 'portrait',
+  layoutStyle: 'classic',
   startDate: '',
   endDate: '',
   showCover: false,
@@ -394,7 +438,8 @@ const settings = ref({
   showSequence: true,
   showPlayTime: true,
   showRecommendation: false,
-  remark: ''
+  remark: '',
+  currentSemester: ''
 })
 
 const paperSizeOptions = [
@@ -420,6 +465,17 @@ const contentOptions = [
   { key: 'showSequence', label: '播放顺序' },
   { key: 'showRecommendation', label: '推荐语 (作为介绍参考)' }
 ]
+
+const paperWidths = {
+  A4: { portrait: 800, landscape: 1132 },
+  A3: { portrait: 1132, landscape: 1600 },
+  Letter: { portrait: 800, landscape: 1034 },
+  Legal: { portrait: 800, landscape: 1318 }
+}
+
+const getPaperWidth = (paperSize, orientation) => {
+  return paperWidths[paperSize]?.[orientation] || paperWidths.A4.portrait
+}
 
 // 计算属性
 const itemsPerPage = computed(() => {
@@ -557,6 +613,18 @@ const formatPlayTimeDisplay = (playTime) => {
   }
 
   return displayText
+}
+
+// 选择经典排版时自动切换为纵向
+const selectClassicLayout = () => {
+  settings.value.layoutStyle = 'classic'
+  settings.value.orientation = 'portrait'
+}
+
+// 选择表格排版时自动切换为横向
+const selectTableLayout = () => {
+  settings.value.layoutStyle = 'table'
+  settings.value.orientation = 'landscape'
 }
 
 // 获取播出时段的排序权重
@@ -732,18 +800,17 @@ const exportPDFForPrint = async (action = 'print') => {
   const pdfWidth = pdf.internal.pageSize.getWidth()
   const pdfHeight = pdf.internal.pageSize.getHeight()
 
-  // 计算容器尺寸 (使用 A4 纸比例的像素值，确保清晰度)
-  // A4 @ 96dpi approx 794x1123. Use 2x for better quality?
-  // No, let's match standard pixel width for A4 usually used in web (794px).
-  // The scale factor will be handled by toPng pixelRatio.
-  const containerWidth = settings.value.paperSize === 'A4' ? 794 : 1123
+  // 计算容器尺寸，与 generateAndDownloadImage 保持一致
+  const s = settings.value
+  const containerWidth = getPaperWidth(s.paperSize, s.orientation)
+
   // 保持宽高比
   const ratio = pdfHeight / pdfWidth
   const containerHeight = Math.floor(containerWidth * ratio)
 
   // 创建分页容器（模拟单页纸张）
   const pageContainer = document.createElement('div')
-  pageContainer.className = 'print-page' // 复用样式类
+  pageContainer.className = `print-page orientation-${settings.value.orientation}`
   pageContainer.style.cssText = `
     position: fixed;
     left: 0;
@@ -752,7 +819,7 @@ const exportPDFForPrint = async (action = 'print') => {
     height: ${containerHeight}px;
     background: white;
     color: black;
-    padding: 40px; 
+    padding: 40px;
     box-sizing: border-box;
     z-index: -9999;
     overflow: hidden;
@@ -776,6 +843,19 @@ const exportPDFForPrint = async (action = 'print') => {
     if (!sourceContent) {
       throw new Error('排期内容结构不符合分页要求')
     }
+
+    const scopeAttributeNames = originalPrintPage
+      .getAttributeNames()
+      .filter((name) => name.startsWith('data-v-'))
+
+    const applyScopeAttributes = (el) => {
+      scopeAttributeNames.forEach((name) => {
+        el.setAttribute(name, '')
+      })
+      return el
+    }
+
+    applyScopeAttributes(pageContainer)
 
     // 辅助：渲染当前页并添加到PDF
     const renderPage = async (isFirst) => {
@@ -807,6 +887,7 @@ const exportPDFForPrint = async (action = 'print') => {
 
     // 辅助：重置页面容器（添加页眉页脚）
     let currentContentWrapper = null
+    let currentGroupedContent = null
 
     const resetPageContainer = () => {
       pageContainer.innerHTML = ''
@@ -819,12 +900,23 @@ const exportPDFForPrint = async (action = 'print') => {
       }
 
       // 创建内容区域
-      const cw = document.createElement('div')
-      cw.className = 'schedule-content'
+      const cw = applyScopeAttributes(document.createElement('div'))
+      cw.className = `schedule-content layout-${settings.value.layoutStyle}`
+
       cw.style.margin = '0'
       cw.style.padding = '0'
       pageContainer.appendChild(cw)
       currentContentWrapper = cw
+
+      const sourceGrouped = sourceContent?.querySelector('.grouped-content')
+      if (sourceGrouped) {
+        const gw = applyScopeAttributes(document.createElement('div'))
+        gw.className = sourceGrouped.className
+        cw.appendChild(gw)
+        currentGroupedContent = gw
+      } else {
+        currentGroupedContent = cw
+      }
 
       // 添加 Footer (绝对定位到底部)
       if (sourceFooter) {
@@ -853,115 +945,171 @@ const exportPDFForPrint = async (action = 'print') => {
     // 递归处理节点
     // 策略：我们手动遍历主要结构，因为结构是已知的
     const dateGroups = sourceContent.querySelectorAll('.date-group')
+    const directTableWrapper = sourceContent.querySelector('.schedule-table-wrapper')
 
-    for (const group of dateGroups) {
-      // 1. 克隆 Date Group 容器和标题
-      const groupClone = group.cloneNode(false) // shallow
-      const groupTitle = group.querySelector('.group-title').cloneNode(true)
-      groupClone.appendChild(groupTitle)
+    if (dateGroups.length > 0) {
+      for (const group of dateGroups) {
+        // 1. 克隆 Date Group 容器和标题
+        const groupClone = group.cloneNode(false) // shallow
+        const groupTitle = group.querySelector('.group-title').cloneNode(true)
+        groupClone.appendChild(groupTitle)
 
-      currentContentWrapper.appendChild(groupClone)
+        currentGroupedContent.appendChild(groupClone)
 
-      // 检查标题是否溢出（极少见）
-      if (checkOverflow()) {
-        currentContentWrapper.removeChild(groupClone)
-        await renderPage(isFirstPage)
-        isFirstPage = false
-        resetPageContainer()
-        currentContentWrapper.appendChild(groupClone)
-      }
+        // 检查标题是否溢出（极少见）
+        if (checkOverflow()) {
+          currentGroupedContent.removeChild(groupClone)
+          await renderPage(isFirstPage)
+          isFirstPage = false
+          resetPageContainer()
+          currentGroupedContent.appendChild(groupClone)
+        }
 
-      // 2. 遍历 Date Group 的子元素 (Playtime Groups 或 Schedule List)
-      const children = Array.from(group.children).filter(
-        (el) => !el.classList.contains('group-title')
-      )
+        // 2. 遍历 Date Group 的子元素 (Playtime Groups 或 Schedule List)
+        const children = Array.from(group.children).filter(
+          (el) => !el.classList.contains('group-title')
+        )
 
-      for (const child of children) {
-        if (child.classList.contains('playtime-groups')) {
-          // 处理时段组
-          const ptWrapper = document.createElement('div')
-          ptWrapper.className = 'playtime-groups'
-          groupClone.appendChild(ptWrapper)
+        for (const child of children) {
+          if (child.classList.contains('playtime-groups')) {
+            // 处理时段组
+            const ptWrapper = applyScopeAttributes(document.createElement('div'))
+            ptWrapper.className = 'playtime-groups'
+            groupClone.appendChild(ptWrapper)
 
-          const ptGroups = child.querySelectorAll('.playtime-group')
-          for (const ptGroup of ptGroups) {
-            const ptGroupClone = ptGroup.cloneNode(false)
-            const ptTitle = ptGroup.querySelector('.playtime-title').cloneNode(true)
-            ptGroupClone.appendChild(ptTitle)
-            ptWrapper.appendChild(ptGroupClone)
+            const ptGroups = child.querySelectorAll('.playtime-group')
+            for (const ptGroup of ptGroups) {
+              const ptGroupClone = ptGroup.cloneNode(false)
+              const ptTitle = ptGroup.querySelector('.playtime-title').cloneNode(true)
+              ptGroupClone.appendChild(ptTitle)
+              ptWrapper.appendChild(ptGroupClone)
 
-            const listWrapper = document.createElement('div')
+              const sourceList = ptGroup.querySelector('.schedule-list')
+
+              if (sourceList) {
+                const listWrapper = applyScopeAttributes(document.createElement('div'))
+                listWrapper.className = 'schedule-list'
+                ptGroupClone.appendChild(listWrapper)
+
+                let currentPtListWrapper = listWrapper
+
+                // 遍历排期项
+                const items = sourceList.querySelectorAll('.schedule-item')
+                for (const item of items) {
+                  const itemClone = item.cloneNode(true)
+                  currentPtListWrapper.appendChild(itemClone)
+
+                  if (checkOverflow()) {
+                    currentPtListWrapper.removeChild(itemClone)
+                    await renderPage(isFirstPage)
+                    isFirstPage = false
+                    resetPageContainer()
+
+                    // 在新页面重建路径
+                    const newGroup = group.cloneNode(false)
+                    newGroup.appendChild(group.querySelector('.group-title').cloneNode(true))
+                    currentGroupedContent.appendChild(newGroup)
+
+                    const newPtWrapper = applyScopeAttributes(document.createElement('div'))
+                    newPtWrapper.className = 'playtime-groups'
+                    newGroup.appendChild(newPtWrapper)
+
+                    const newPtGroup = ptGroup.cloneNode(false)
+                    newPtGroup.appendChild(ptGroup.querySelector('.playtime-title').cloneNode(true))
+                    newPtWrapper.appendChild(newPtGroup)
+
+                    const newListWrapper = applyScopeAttributes(document.createElement('div'))
+                    newListWrapper.className = 'schedule-list'
+                    newPtGroup.appendChild(newListWrapper)
+
+                    // 添加项
+                    newListWrapper.appendChild(itemClone)
+                    currentPtListWrapper = newListWrapper
+                  }
+                }
+              }
+            }
+          } else if (child.classList.contains('schedule-list')) {
+            // 处理直接列表
+            const listWrapper = applyScopeAttributes(document.createElement('div'))
             listWrapper.className = 'schedule-list'
-            ptGroupClone.appendChild(listWrapper)
+            groupClone.appendChild(listWrapper)
 
-            let currentPtListWrapper = listWrapper
+            // 我们需要一个可变的引用
+            let currentListWrapper = listWrapper
 
-            // 遍历排期项
-            const items = ptGroup.querySelectorAll('.schedule-item')
+            const items = child.querySelectorAll('.schedule-item')
             for (const item of items) {
               const itemClone = item.cloneNode(true)
-              currentPtListWrapper.appendChild(itemClone)
+              currentListWrapper.appendChild(itemClone)
 
               if (checkOverflow()) {
-                currentPtListWrapper.removeChild(itemClone)
+                currentListWrapper.removeChild(itemClone)
                 await renderPage(isFirstPage)
                 isFirstPage = false
                 resetPageContainer()
 
-                // 在新页面重建路径
+                // 重建路径
                 const newGroup = group.cloneNode(false)
                 newGroup.appendChild(group.querySelector('.group-title').cloneNode(true))
-                currentContentWrapper.appendChild(newGroup)
+                currentGroupedContent.appendChild(newGroup)
 
-                const newPtWrapper = document.createElement('div')
-                newPtWrapper.className = 'playtime-groups'
-                newGroup.appendChild(newPtWrapper)
-
-                const newPtGroup = ptGroup.cloneNode(false)
-                newPtGroup.appendChild(ptGroup.querySelector('.playtime-title').cloneNode(true))
-                newPtWrapper.appendChild(newPtGroup)
-
-                const newListWrapper = document.createElement('div')
+                const newListWrapper = applyScopeAttributes(document.createElement('div'))
                 newListWrapper.className = 'schedule-list'
-                newPtGroup.appendChild(newListWrapper)
+                newGroup.appendChild(newListWrapper)
 
-                // 添加项
                 newListWrapper.appendChild(itemClone)
-                currentPtListWrapper = newListWrapper
+                currentListWrapper = newListWrapper
               }
             }
           }
-        } else if (child.classList.contains('schedule-list')) {
-          // 处理直接列表
-          const listWrapper = document.createElement('div')
-          listWrapper.className = 'schedule-list'
-          groupClone.appendChild(listWrapper)
+        }
+      }
+    } else if (directTableWrapper) {
+      // 处理顶层表格（timetable）
+      const tableWrapper = applyScopeAttributes(document.createElement('div'))
+      tableWrapper.className = 'schedule-table-wrapper'
+      currentContentWrapper.appendChild(tableWrapper)
 
-          // 我们需要一个可变的引用
-          let currentListWrapper = listWrapper
+      const sourceTable = directTableWrapper.querySelector('.schedule-timetable')
+      if (sourceTable) {
+        const tableClone = sourceTable.cloneNode(false)
+        tableWrapper.appendChild(tableClone)
 
-          const items = child.querySelectorAll('.schedule-item')
-          for (const item of items) {
-            const itemClone = item.cloneNode(true)
-            currentListWrapper.appendChild(itemClone)
+        const thead = sourceTable.querySelector('thead')
+        if (thead) tableClone.appendChild(thead.cloneNode(true))
+
+        const tbodies = sourceTable.querySelectorAll('tbody')
+        for (const sourceTbody of tbodies) {
+          const tbodyClone = applyScopeAttributes(document.createElement('tbody'))
+          tableClone.appendChild(tbodyClone)
+          let currentTbody = tbodyClone
+
+          const rows = sourceTbody.querySelectorAll('tr')
+          for (const row of rows) {
+            const rowClone = row.cloneNode(true)
+            currentTbody.appendChild(rowClone)
 
             if (checkOverflow()) {
-              currentListWrapper.removeChild(itemClone)
+              currentTbody.removeChild(rowClone)
               await renderPage(isFirstPage)
               isFirstPage = false
               resetPageContainer()
 
               // 重建路径
-              const newGroup = group.cloneNode(false)
-              newGroup.appendChild(group.querySelector('.group-title').cloneNode(true))
-              currentContentWrapper.appendChild(newGroup)
+              const newTableWrapper = applyScopeAttributes(document.createElement('div'))
+              newTableWrapper.className = 'schedule-table-wrapper'
+              currentContentWrapper.appendChild(newTableWrapper)
 
-              const newListWrapper = document.createElement('div')
-              newListWrapper.className = 'schedule-list'
-              newGroup.appendChild(newListWrapper)
+              const newTable = sourceTable.cloneNode(false)
+              newTableWrapper.appendChild(newTable)
+              if (thead) newTable.appendChild(thead.cloneNode(true))
 
-              newListWrapper.appendChild(itemClone)
-              currentListWrapper = newListWrapper
+              const newTbody = applyScopeAttributes(document.createElement('tbody'))
+              newTable.appendChild(newTbody)
+
+              newTbody.appendChild(rowClone)
+              currentTbody = newTbody
             }
           }
         }
@@ -1073,18 +1221,8 @@ const preprocessImages = async (element) => {
 
 const generateAndDownloadImage = async (sourceElement, filename, preProcessCallback = null) => {
   // 根据设置计算固定宽度，而不是依赖 offsetWidth (在移动端可能受屏幕宽度限制而不准确)
-  let targetWidth = 800 // 默认为 A4 Portrait 宽度
   const s = settings.value
-
-  if (s.paperSize === 'A4') {
-    targetWidth = s.orientation === 'landscape' ? 1132 : 800
-  } else if (s.paperSize === 'A3') {
-    targetWidth = s.orientation === 'landscape' ? 1600 : 1132
-  } else if (s.paperSize === 'Letter') {
-    targetWidth = s.orientation === 'landscape' ? 1034 : 800
-  } else if (s.paperSize === 'Legal') {
-    targetWidth = s.orientation === 'landscape' ? 1318 : 800
-  }
+  const targetWidth = getPaperWidth(s.paperSize, s.orientation)
 
   const imageContainer = document.createElement('div')
   imageContainer.style.cssText = `
@@ -1098,11 +1236,19 @@ const generateAndDownloadImage = async (sourceElement, filename, preProcessCallb
       width: ${targetWidth}px;
       padding: 40px;
       box-sizing: border-box;
-      height: auto; 
+      height: auto;
       pointer-events: none;
     `
 
   const clonedPage = sourceElement.cloneNode(true)
+
+  // 强制应用当前的横竖排样式，防止因为源节点（可能是响应式的）没有这个类名
+  clonedPage.classList.add(`orientation-${s.orientation}`)
+
+  const scheduleContent = clonedPage.querySelector('.schedule-content')
+  if (scheduleContent) {
+    scheduleContent.className = `schedule-content layout-${s.layoutStyle}`
+  }
 
   // 使用 setProperty 避免覆盖其他重要样式
   clonedPage.style.setProperty('background', 'white', 'important')
@@ -1331,7 +1477,9 @@ const exportImage = async () => {
 }
 
 // 生命周期
-onMounted(() => {
+onMounted(async () => {
+  await fetchCurrentSemester()
+  settings.value.currentSemester = currentSemester.value?.name
   loadSchedules()
 })
 
@@ -1444,6 +1592,7 @@ watch(
   text-align: center;
   padding: 60px 20px;
   color: #666;
+  column-span: all;
 }
 
 .no-data-icon {
@@ -1473,10 +1622,14 @@ watch(
   margin: 0 auto;
 }
 
+.date-group {
+  margin-bottom: 24px;
+}
+
 .group-title {
   font-size: 16px;
   font-weight: bold;
-  margin: 24px 0 12px 0;
+  margin: 0 0 12px 0;
   padding: 8px 12px;
   border-bottom: 2px solid #ddd;
   background: #f8f9fa;
@@ -1507,10 +1660,14 @@ watch(
   margin-left: 20px;
 }
 
+.playtime-group {
+  margin-bottom: 16px;
+}
+
 .playtime-title {
   font-size: 14px;
   font-weight: bold;
-  margin: 16px 0 8px 0;
+  margin: 0 0 8px 0;
   padding: 6px 10px;
   background: #f0f8ff;
   border-left: 3px solid #2196f3;
@@ -1526,6 +1683,10 @@ watch(
 }
 
 .schedule-list {
+  margin-bottom: 24px;
+}
+
+.schedule-table-wrapper {
   margin-bottom: 24px;
 }
 
@@ -1609,7 +1770,7 @@ watch(
   justify-content: space-between;
 }
 
-.orientation-landscape .schedule-content {
+.orientation-landscape .schedule-content.layout-classic {
   columns: 2;
   column-gap: 32px;
 }

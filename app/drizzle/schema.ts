@@ -3,7 +3,7 @@ import {relations} from 'drizzle-orm';
 
 // 枚举定义
 export const blacklistTypeEnum = pgEnum('BlacklistType', ['SONG', 'KEYWORD']);
-export const userStatusEnum = pgEnum('user_status', ['active', 'withdrawn']);
+export const userStatusEnum = pgEnum('user_status', ['active', 'withdrawn', 'graduate']);
 export const collaboratorStatusEnum = pgEnum('collaborator_status', ['PENDING', 'ACCEPTED', 'REJECTED']);
 export const replayRequestStatusEnum = pgEnum('replay_request_status', ['PENDING', 'FULFILLED', 'REJECTED']);
 
@@ -59,6 +59,8 @@ export const songs = pgTable('Song', {
   playUrl: text('playUrl'),
   musicPlatform: text('musicPlatform'),
   musicId: text('musicId'),
+  submissionNote: text('submissionNote'),
+  submissionNotePublic: boolean('submissionNotePublic').default(false).notNull(),
   hitRequestId: integer(),
   recommendation: text('recommendation'),
 });
@@ -134,6 +136,8 @@ export const systemSettings = pgTable('SystemSettings', {
   siteDescription: text('siteDescription'),
   submissionGuidelines: text('submissionGuidelines'),
   icpNumber: text('icpNumber'),
+  gonganNumber: text('gonganNumber'),
+  showBeianIcon: boolean('showBeianIcon').default(false).notNull(),
   enableSubmissionLimit: boolean('enableSubmissionLimit').default(false).notNull(),
   dailySubmissionLimit: integer('dailySubmissionLimit'),
   weeklySubmissionLimit: integer('weeklySubmissionLimit'),
@@ -156,6 +160,41 @@ export const systemSettings = pgTable('SystemSettings', {
   requireRecommendation: boolean('requireRecommendation').default(false).notNull(),
   recommendationMinLength: integer('recommendationMinLength').default(50).notNull(),
   recommendationMaxLength: integer('recommendationMaxLength').default(100).notNull(),
+  enableCollaborativeSubmission: boolean('enableCollaborativeSubmission').default(true).notNull(),
+  enableSubmissionRemarks: boolean('enableSubmissionRemarks').default(false).notNull(),
+  // OAuth 配置
+  allowOAuthRegistration: boolean('allowOAuthRegistration').default(false).notNull(),
+  oauthRedirectUri: text('oauthRedirectUri'),
+  oauthStateSecret: text('oauthStateSecret'),
+  oauthProviders: text('oauthProviders').default('[]'),
+  // GitHub OAuth
+  githubOAuthEnabled: boolean('githubOAuthEnabled').default(false).notNull(),
+  githubClientId: text('githubClientId'),
+  githubClientSecret: text('githubClientSecret'),
+  // Casdoor OAuth
+  casdoorOAuthEnabled: boolean('casdoorOAuthEnabled').default(false).notNull(),
+  casdoorServerUrl: text('casdoorServerUrl'),
+  casdoorClientId: text('casdoorClientId'),
+  casdoorClientSecret: text('casdoorClientSecret'),
+  casdoorOrganizationName: text('casdoorOrganizationName'),
+  // Google OAuth
+  googleOAuthEnabled: boolean('googleOAuthEnabled').default(false).notNull(),
+  googleClientId: text('googleClientId'),
+  googleClientSecret: text('googleClientSecret'),
+  // Custom OAuth2
+  customOAuthEnabled: boolean('customOAuthEnabled').default(false).notNull(),
+  customOAuthDisplayName: text('customOAuthDisplayName'),
+  customOAuthAuthorizeUrl: text('customOAuthAuthorizeUrl'),
+  customOAuthTokenUrl: text('customOAuthTokenUrl'),
+  customOAuthUserInfoUrl: text('customOAuthUserInfoUrl'),
+  customOAuthScope: text('customOAuthScope'),
+  customOAuthClientId: text('customOAuthClientId'),
+  customOAuthClientSecret: text('customOAuthClientSecret'),
+  customOAuthUserIdField: text('customOAuthUserIdField'),
+  customOAuthUsernameField: text('customOAuthUsernameField'),
+  customOAuthNameField: text('customOAuthNameField'),
+  customOAuthEmailField: text('customOAuthEmailField'),
+  customOAuthAvatarField: text('customOAuthAvatarField'),
   // 风控设置
   riskWindowMinutes: integer('riskWindowMinutes').notNull().default(10),
   riskMaxAttempts: integer('riskMaxAttempts').notNull().default(4),

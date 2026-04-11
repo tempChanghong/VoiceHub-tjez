@@ -61,13 +61,27 @@
           <div>
             <label :class="labelClass">备案号 (ICP)</label>
             <input
-              v-model="formData.icpNumber"
+              v-model="formData.gonganNumber"
               type="text"
-              placeholder="请输入备案号"
+              placeholder="请输入公安备案号 (如：陕公网安备 61011302001964 号)"
               :class="inputClass"
             >
           </div>
-
+          <div class="pt-2">
+            <div
+              class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+            >
+              <div>
+                <p class="text-xs font-bold text-zinc-200">显示备案图标</p>
+                <p class="text-[10px] text-zinc-500 mt-0.5">在公安联网备案号前显示备案图标</p>
+              </div>
+              <input
+                v-model="formData.showBeianIcon"
+                type="checkbox"
+                class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
+              >
+            </div>
+          </div>
           <div>
             <label :class="labelClass">站点描述</label>
             <textarea
@@ -81,22 +95,7 @@
       </section>
 
 
-      <!-- 投稿须知 -->
-      <section
-        class="lg:col-span-2 bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 space-y-6"
-      >
-        <h3
-          class="text-sm font-black text-zinc-100 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-800 pb-4"
-        >
-          <FileText :size="16" class="text-emerald-500" /> 投稿须知
-        </h3>
-        <textarea
-          v-model="formData.submissionGuidelines"
-          :rows="6"
-          placeholder="请输入投稿须知内容"
-          :class="[inputClass, 'font-mono text-xs leading-relaxed min-h-[150px]']"
-        />
-      </section>
+
 
       <!-- 投稿逻辑设置 -->
       <section :class="cardClass">
@@ -106,6 +105,34 @@
           <Settings2 :size="16" class="text-amber-500" /> 投稿逻辑设置
         </h3>
         <div class="space-y-6">
+          <div
+            class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+          >
+            <div>
+              <p class="text-xs font-bold text-zinc-200">启用联合投稿</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">允许用户添加联合投稿人并发起协作投稿</p>
+            </div>
+            <input
+              v-model="formData.enableCollaborativeSubmission"
+              type="checkbox"
+              class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
+            >
+          </div>
+
+          <div
+            class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
+          >
+            <div>
+              <p class="text-xs font-bold text-zinc-200">启用投稿备注留言</p>
+              <p class="text-[10px] text-zinc-500 mt-0.5">允许用户在投稿时附加公开或仅管理员可见的备注</p>
+            </div>
+            <input
+              v-model="formData.enableSubmissionRemarks"
+              type="checkbox"
+              class="w-5 h-5 rounded border-zinc-800 bg-zinc-900 accent-blue-600 cursor-pointer"
+            >
+          </div>
+
           <div
             class="flex items-center justify-between p-3 bg-zinc-950/50 border border-zinc-800 rounded-xl"
           >
@@ -361,6 +388,26 @@
           </div>
         </div>
       </section>
+
+      <!-- 投稿须知 -->
+      <section
+        class="lg:col-span-2 bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 space-y-6"
+      >
+        <h3
+          class="text-sm font-black text-zinc-100 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-800 pb-4"
+        >
+          <FileText :size="16" class="text-emerald-500" /> 投稿须知
+        </h3>
+        <textarea
+          v-model="formData.submissionGuidelines"
+          :rows="6"
+          placeholder="请输入投稿须知内容"
+          :class="[inputClass, 'font-mono text-xs leading-relaxed min-h-[150px]']"
+        />
+      </section>
+
+      <!-- OAuth 第三方登录配置 -->
+      <OAuthConfigManager v-model="formData" class="lg:col-span-2" />
     </div>
   </div>
 </template>
@@ -379,6 +426,7 @@ import {
   AlertCircle
 } from 'lucide-vue-next'
 import { useToast } from '~/composables/useToast'
+import OAuthConfigManager from './OAuthConfigManager.vue'
 
 const { showToast: showNotification } = useToast()
 
@@ -402,10 +450,14 @@ const defaultSubmissionGuidelines = `1. 投稿时无需加入书名号
 8. 最终解释权归广播站所有`
 
 const formData = ref({
-    siteTitle: '',
+  siteTitle: '',
   siteDescription: '',
   submissionGuidelines: '',
   icpNumber: '',
+  gonganNumber: '',
+  showBeianIcon: false,
+  enableCollaborativeSubmission: true,
+  enableSubmissionRemarks: false,
   enableReplayRequests: false,
   enableRecommendation: false,
   requireRecommendation: false,
@@ -417,6 +469,33 @@ const formData = ref({
   monthlySubmissionLimit: null,
   showBlacklistKeywords: false,
   hideStudentInfo: true,
+  allowOAuthRegistration: false,
+  oauthRedirectUri: '',
+  oauthStateSecret: '',
+  githubOAuthEnabled: false,
+  githubClientId: '',
+  githubClientSecret: '',
+  casdoorOAuthEnabled: false,
+  casdoorServerUrl: '',
+  casdoorClientId: '',
+  casdoorClientSecret: '',
+  casdoorOrganizationName: '',
+  googleOAuthEnabled: false,
+  googleClientId: '',
+  googleClientSecret: '',
+  customOAuthEnabled: false,
+  customOAuthDisplayName: '',
+  customOAuthAuthorizeUrl: '',
+  customOAuthTokenUrl: '',
+  customOAuthUserInfoUrl: '',
+  customOAuthScope: '',
+  customOAuthClientId: '',
+  customOAuthClientSecret: '',
+  customOAuthUserIdField: '',
+  customOAuthUsernameField: '',
+  customOAuthNameField: '',
+  customOAuthEmailField: '',
+  customOAuthAvatarField: '',
   // 风控配置
   riskWindowMinutes: 10,
   riskMaxAttempts: 4,
@@ -466,6 +545,10 @@ const loadConfig = async () => {
       siteDescription: data.siteDescription || '',
       submissionGuidelines: data.submissionGuidelines || defaultSubmissionGuidelines,
       icpNumber: data.icpNumber || '',
+      gonganNumber: data.gonganNumber || '',
+      showBeianIcon: !!data.showBeianIcon,
+      enableCollaborativeSubmission: data.enableCollaborativeSubmission !== false,
+      enableSubmissionRemarks: !!data.enableSubmissionRemarks,
       enableReplayRequests: !!data.enableReplayRequests,
       enableRecommendation: !!data.enableRecommendation,
       requireRecommendation: !!data.requireRecommendation,
@@ -477,6 +560,33 @@ const loadConfig = async () => {
       monthlySubmissionLimit: data.monthlySubmissionLimit ?? null,
       showBlacklistKeywords: !!data.showBlacklistKeywords,
       hideStudentInfo: data.hideStudentInfo ?? true,
+      allowOAuthRegistration: !!data.allowOAuthRegistration,
+      oauthRedirectUri: data.oauthRedirectUri || '',
+      oauthStateSecret: data.oauthStateSecret || '',
+      githubOAuthEnabled: !!data.githubOAuthEnabled,
+      githubClientId: data.githubClientId || '',
+      githubClientSecret: data.githubClientSecret || '',
+      casdoorOAuthEnabled: !!data.casdoorOAuthEnabled,
+      casdoorServerUrl: data.casdoorServerUrl || '',
+      casdoorClientId: data.casdoorClientId || '',
+      casdoorClientSecret: data.casdoorClientSecret || '',
+      casdoorOrganizationName: data.casdoorOrganizationName || '',
+      googleOAuthEnabled: !!data.googleOAuthEnabled,
+      googleClientId: data.googleClientId || '',
+      googleClientSecret: data.googleClientSecret || '',
+      customOAuthEnabled: !!data.customOAuthEnabled,
+      customOAuthDisplayName: data.customOAuthDisplayName || '',
+      customOAuthAuthorizeUrl: data.customOAuthAuthorizeUrl || '',
+      customOAuthTokenUrl: data.customOAuthTokenUrl || '',
+      customOAuthUserInfoUrl: data.customOAuthUserInfoUrl || '',
+      customOAuthScope: data.customOAuthScope || '',
+      customOAuthClientId: data.customOAuthClientId || '',
+      customOAuthClientSecret: data.customOAuthClientSecret || '',
+      customOAuthUserIdField: data.customOAuthUserIdField || '',
+      customOAuthUsernameField: data.customOAuthUsernameField || '',
+      customOAuthNameField: data.customOAuthNameField || '',
+      customOAuthEmailField: data.customOAuthEmailField || '',
+      customOAuthAvatarField: data.customOAuthAvatarField || '',
       riskWindowMinutes: data.riskWindowMinutes ?? 10,
       riskMaxAttempts: data.riskMaxAttempts ?? 4,
       riskBanHours: data.riskBanHours ?? 168
@@ -516,7 +626,27 @@ const saveConfig = async () => {
       body: JSON.stringify(configToSave)
     })
 
-    if (!response.ok) throw new Error('保存配置失败')
+    if (!response.ok) {
+      let message = '保存配置失败'
+      try {
+        const errorData = await response.json()
+        console.error('API错误响应:', errorData)
+
+        const getErrorMessage = (err) => {
+          if (err?.data?.error) return err.data.error
+          if (err?.message) return err.message
+          if (err?.statusMessage && err.statusMessage !== 'Error') return err.statusMessage
+          if (err?.data?.message) return err.data.message
+          if (err?.error) return err.error
+          return null
+        }
+
+        message = getErrorMessage(errorData) || '保存配置失败'
+      } catch (parseError) {
+        console.error('无法解析API错误响应:', parseError)
+      }
+      throw new Error(message)
+    }
 
     saveSuccess.value = true
     originalData.value = JSON.parse(JSON.stringify(formData.value))
@@ -527,7 +657,11 @@ const saveConfig = async () => {
     }, 3000)
   } catch (error) {
     console.error('保存配置失败:', error)
-    showNotification('保存配置失败，请重试', 'error')
+    let message = '保存配置失败，请重试'
+    if (error?.message) {
+      message = error.message
+    }
+    showNotification(message, 'error')
   } finally {
     saving.value = false
   }

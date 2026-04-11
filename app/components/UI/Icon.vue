@@ -23,10 +23,16 @@
       />
     </g>
 
-    <!-- 暂停图标 -->
+    <!-- 播放/暂停 -->
     <g v-else-if="name === 'pause'">
       <rect fill="currentColor" height="16" width="4" x="6" y="4" />
       <rect fill="currentColor" height="16" width="4" x="14" y="4" />
+    </g>
+
+    <!-- 播放圈图标 (单曲播放等使用) -->
+    <g v-else-if="name === 'play-circle'">
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="10 8 16 12 10 16 10 8" />
     </g>
 
     <!-- 停止图标 -->
@@ -99,6 +105,14 @@
       <circle cx="12" cy="12" r="10" />
       <circle cx="12" cy="12" r="6" />
       <circle cx="12" cy="12" r="2" />
+    </g>
+
+    <!-- 展开/全屏图标 -->
+    <g v-else-if="name === 'maximize-2'">
+      <polyline points="15 3 21 3 21 9" />
+      <polyline points="9 21 3 21 3 15" />
+      <line x1="21" y1="3" x2="14" y2="10" />
+      <line x1="3" y1="21" x2="10" y2="14" />
     </g>
 
     <!-- 拇指向上 -->

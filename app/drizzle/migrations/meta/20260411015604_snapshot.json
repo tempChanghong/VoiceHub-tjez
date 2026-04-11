@@ -1,6 +1,6 @@
 {
-  "id": "be7d22f7-e91d-470e-9156-e3a175ffa597",
-  "prevId": "c7f699c3-e374-421d-9ff5-d4af03886293",
+  "id": "670e3fc7-b543-4908-b3d8-699ecdf347b2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -228,6 +228,57 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.collaboration_logs": {
+      "name": "collaboration_logs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "collaborator_id": {
+          "name": "collaborator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operator_id": {
+          "name": "operator_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.EmailTemplate": {
       "name": "EmailTemplate",
       "schema": "",
@@ -281,6 +332,96 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ip_blacklists": {
+      "name": "ip_blacklists",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ip": {
+          "name": "ip",
+          "type": "varchar(45)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banned_at": {
+          "name": "banned_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "ip_blacklists_ip_unique": {
+          "name": "ip_blacklists_ip_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ip"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.login_logs": {
+      "name": "login_logs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ip": {
+          "name": "ip",
+          "type": "varchar(45)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -500,6 +641,91 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.RequestTime": {
+      "name": "RequestTime",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startTime": {
+          "name": "startTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endTime": {
+          "name": "endTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expected": {
+          "name": "expected",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "accepted": {
+          "name": "accepted",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "past": {
+          "name": "past",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.Schedule": {
       "name": "Schedule",
       "schema": "",
@@ -689,6 +915,122 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.song_collaborators": {
+      "name": "song_collaborators",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "song_id": {
+          "name": "song_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "collaborator_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.song_replay_requests": {
+      "name": "song_replay_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "song_id": {
+          "name": "song_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "status": {
+          "name": "status",
+          "type": "replay_request_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "song_replay_requests_song_id_user_id_unique": {
+          "name": "song_replay_requests_song_id_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "song_id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.Song": {
       "name": "Song",
       "schema": "",
@@ -780,6 +1122,31 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "submissionNote": {
+          "name": "submissionNote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submissionNotePublic": {
+          "name": "submissionNotePublic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "hitRequestId": {
+          "name": "hitRequestId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recommendation": {
+          "name": "recommendation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -863,6 +1230,19 @@
           "primaryKey": false,
           "notNull": false
         },
+        "gonganNumber": {
+          "name": "gonganNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "showBeianIcon": {
+          "name": "showBeianIcon",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "enableSubmissionLimit": {
           "name": "enableSubmissionLimit",
           "type": "boolean",
@@ -878,6 +1258,12 @@
         },
         "weeklySubmissionLimit": {
           "name": "weeklySubmissionLimit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "monthlySubmissionLimit": {
+          "name": "monthlySubmissionLimit",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -947,12 +1333,343 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'校园广播站'"
+        },
+        "enableRequestTimeLimitation": {
+          "name": "enableRequestTimeLimitation",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "forceBlockAllRequests": {
+          "name": "forceBlockAllRequests",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "enableReplayRequests": {
+          "name": "enableReplayRequests",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "enableRecommendation": {
+          "name": "enableRecommendation",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "requireRecommendation": {
+          "name": "requireRecommendation",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "recommendationMinLength": {
+          "name": "recommendationMinLength",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 50
+        },
+        "recommendationMaxLength": {
+          "name": "recommendationMaxLength",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 100
+        },
+        "enableCollaborativeSubmission": {
+          "name": "enableCollaborativeSubmission",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "enableSubmissionRemarks": {
+          "name": "enableSubmissionRemarks",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "allowOAuthRegistration": {
+          "name": "allowOAuthRegistration",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "oauthRedirectUri": {
+          "name": "oauthRedirectUri",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "oauthStateSecret": {
+          "name": "oauthStateSecret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "oauthProviders": {
+          "name": "oauthProviders",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'"
+        },
+        "githubOAuthEnabled": {
+          "name": "githubOAuthEnabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "githubClientId": {
+          "name": "githubClientId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "githubClientSecret": {
+          "name": "githubClientSecret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "casdoorOAuthEnabled": {
+          "name": "casdoorOAuthEnabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "casdoorServerUrl": {
+          "name": "casdoorServerUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "casdoorClientId": {
+          "name": "casdoorClientId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "casdoorClientSecret": {
+          "name": "casdoorClientSecret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "casdoorOrganizationName": {
+          "name": "casdoorOrganizationName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "googleOAuthEnabled": {
+          "name": "googleOAuthEnabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "googleClientId": {
+          "name": "googleClientId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "googleClientSecret": {
+          "name": "googleClientSecret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthEnabled": {
+          "name": "customOAuthEnabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "customOAuthDisplayName": {
+          "name": "customOAuthDisplayName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthAuthorizeUrl": {
+          "name": "customOAuthAuthorizeUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthTokenUrl": {
+          "name": "customOAuthTokenUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthUserInfoUrl": {
+          "name": "customOAuthUserInfoUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthScope": {
+          "name": "customOAuthScope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthClientId": {
+          "name": "customOAuthClientId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthClientSecret": {
+          "name": "customOAuthClientSecret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthUserIdField": {
+          "name": "customOAuthUserIdField",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthUsernameField": {
+          "name": "customOAuthUsernameField",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthNameField": {
+          "name": "customOAuthNameField",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthEmailField": {
+          "name": "customOAuthEmailField",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customOAuthAvatarField": {
+          "name": "customOAuthAvatarField",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "riskWindowMinutes": {
+          "name": "riskWindowMinutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 10
+        },
+        "riskMaxAttempts": {
+          "name": "riskMaxAttempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 4
+        },
+        "riskBanHours": {
+          "name": "riskBanHours",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 168
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.UserIdentity": {
+      "name": "UserIdentity",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerUserId": {
+          "name": "providerUserId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerUsername": {
+          "name": "providerUsername",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserIdentity_userId_User_id_fk": {
+          "name": "UserIdentity_userId_User_id_fk",
+          "tableFrom": "UserIdentity",
+          "tableTo": "User",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "UserIdentity_provider_providerUserId_unique": {
+          "name": "UserIdentity_provider_providerUserId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "provider",
+            "providerUserId"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -1204,12 +1921,31 @@
         "KEYWORD"
       ]
     },
+    "public.collaborator_status": {
+      "name": "collaborator_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "ACCEPTED",
+        "REJECTED"
+      ]
+    },
+    "public.replay_request_status": {
+      "name": "replay_request_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "FULFILLED",
+        "REJECTED"
+      ]
+    },
     "public.user_status": {
       "name": "user_status",
       "schema": "public",
       "values": [
         "active",
-        "withdrawn"
+        "withdrawn",
+        "graduate"
       ]
     }
   },

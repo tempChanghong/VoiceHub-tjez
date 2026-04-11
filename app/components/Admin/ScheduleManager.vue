@@ -268,6 +268,12 @@
                   value-key="name"
                   @update:model-value="handleSemesterSelect"
                 />
+                <CustomSelect
+                  v-if="playTimeEnabled"
+                  v-model="selectedFilterPlayTime"
+                  label="期望时段"
+                  :options="filterPlayTimeOptions"
+                />
                 <div class="grid grid-cols-2 gap-2">
                   <CustomSelect v-model="selectedGrade" label="年级" :options="availableGrades" />
                   <CustomSelect v-model="songSortOption" label="排序" :options="sortOptions" />
@@ -320,15 +326,33 @@
                   </div>
 
                   <div class="flex-1 min-w-0 flex flex-col gap-0.5">
-                    <h4 class="font-bold text-zinc-100 text-sm truncate">
-                      <span
-                        v-if="isBilibiliSong(song)"
-                        class="text-zinc-100 flex items-center gap-1 w-full text-left"
+                    <div class="flex items-center gap-2">
+                      <h4 class="font-bold text-zinc-100 text-sm truncate">
+                        <span
+                          v-if="isBilibiliSong(song)"
+                          class="text-zinc-100 flex items-center gap-1 w-full text-left"
+                        >
+                          <span class="truncate">{{ song.title }}</span>
+                        </span>
+                        <span v-else>{{ song.title }}</span>
+                      </h4>
+                      <button
+                        v-if="song.hasSubmissionNote && song.submissionNote"
+                        class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-all flex-shrink-0"
+                        title="查看备注留言"
+                        @click.stop="openSubmissionRemark(song)"
                       >
-                        <span class="truncate">{{ song.title }}</span>
+                        <MessageSquare :size="12" />
+                      </button>
+                      <span
+                        v-if="song.hasSubmissionNote && song.submissionNote"
+                        class="text-xs text-blue-400/80 truncate max-w-[200px] cursor-pointer hover:text-blue-400 transition-colors"
+                        title="查看备注留言"
+                        @click.stop="openSubmissionRemark(song)"
+                      >
+                        {{ song.submissionNote.length > 25 ? song.submissionNote.substring(0, 25) + '...' : song.submissionNote }}
                       </span>
-                      <span v-else>{{ song.title }}</span>
-                    </h4>
+                    </div>
                     <div class="text-xs text-zinc-400 truncate">{{ song.artist }}</div>
                     <div class="text-[10px] text-zinc-500 truncate flex items-center gap-1">
                       <span>{{ song.requester }}</span>
@@ -485,6 +509,16 @@
                     >全部已播放</span
                   >
                 </button>
+                <button
+                  class="p-2 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 text-zinc-500 hover:text-purple-400 rounded-xl transition-all group relative"
+                  @click="openMoveDateDialog"
+                >
+                  <ArrowRight class="w-3.5 h-3.5" />
+                  <span
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-zinc-800 text-[9px] text-zinc-300 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-zinc-700"
+                    >迁移日期</span
+                  >
+                </button>
               </div>
               <div class="h-6 w-[1px] bg-zinc-800 mx-1" />
               <button
@@ -580,6 +614,22 @@
                       <h4 class="font-bold text-zinc-200 text-sm truncate">
                         {{ schedule.song.title }}
                       </h4>
+                      <button
+                        v-if="schedule.song.hasSubmissionNote && schedule.song.submissionNote"
+                        class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-all flex-shrink-0"
+                        title="查看备注留言"
+                        @click.stop="openSubmissionRemark(schedule.song)"
+                      >
+                        <MessageSquare :size="12" />
+                      </button>
+                      <span
+                        v-if="schedule.song.hasSubmissionNote && schedule.song.submissionNote"
+                        class="text-xs text-blue-400/80 truncate max-w-[150px] cursor-pointer hover:text-blue-400 transition-colors"
+                        title="查看备注留言"
+                        @click.stop="openSubmissionRemark(schedule.song)"
+                      >
+                        {{ schedule.song.submissionNote.length > 25 ? schedule.song.submissionNote.substring(0, 25) + '...' : schedule.song.submissionNote }}
+                      </span>
                       <!-- 重播标识 -->
                       <span
                         v-if="schedule.song.replayRequestCount > 0"
@@ -673,39 +723,48 @@
       <div
         class="lg:hidden fixed bottom-0 left-0 right-0 z-40 p-3 bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-800 flex items-center gap-3 pb-6"
       >
-        <!-- 次要操作栏 (图标按钮) -->
-        <button
-          class="p-3 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
-          @click="openDownloadDialog"
-        >
-          <Download class="w-5 h-5" />
-        </button>
-        <button
-          title="导出音频文件"
-          class="p-3 bg-zinc-900 border border-zinc-800 text-emerald-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
-          @click="openBatchDownloadDialog"
-        >
-          <Archive class="w-5 h-5" />
-        </button>
-        <button
-          class="p-3 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
-          @click="saveDraft"
-        >
-          <Save class="w-5 h-5" />
-        </button>
-        <button
-          class="p-3 bg-zinc-900 border border-zinc-800 text-emerald-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
-          @click="markAllAsPlayed"
-        >
-          <CheckCircle2 class="w-5 h-5" />
-        </button>
-        <button
-          class="p-3 bg-zinc-900 border border-zinc-800 text-blue-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
-          title="仅发布排期"
-          @click="publishSchedule"
-        >
-          <Send class="w-5 h-5" />
-        </button>
+        <div class="w-[148px] overflow-x-auto scrollbar-hide">
+          <div class="flex items-center gap-2 w-max">
+            <button
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              @click="openDownloadDialog"
+            >
+              <Download class="w-5 h-5" />
+            </button>
+            <button
+              title="导出音频文件"
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-emerald-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              @click="openBatchDownloadDialog"
+            >
+              <Archive class="w-5 h-5" />
+            </button>
+            <button
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              @click="saveDraft"
+            >
+              <Save class="w-5 h-5" />
+            </button>
+            <button
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-emerald-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              @click="markAllAsPlayed"
+            >
+              <CheckCircle2 class="w-5 h-5" />
+            </button>
+            <button
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-purple-400 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              @click="openMoveDateDialog"
+            >
+              <ArrowRight class="w-5 h-5" />
+            </button>
+            <button
+              class="w-11 h-11 shrink-0 bg-zinc-900 border border-zinc-800 text-blue-500 rounded-xl flex items-center justify-center active:scale-95 transition-all"
+              title="仅发布排期"
+              @click="publishSchedule"
+            >
+              <Send class="w-5 h-5" />
+            </button>
+          </div>
+        </div>
 
         <!-- 主要操作 -->
         <button
@@ -715,6 +774,48 @@
         >
           <FileBadge class="w-4 h-4" /> 保存并发布
         </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    v-if="showMoveDateDialog"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+  >
+    <div
+      class="bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl w-full max-w-sm overflow-hidden"
+      @click.stop
+    >
+      <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+        <h3 class="text-sm font-black text-zinc-100 uppercase tracking-widest">迁移排期日期</h3>
+        <button
+          class="text-zinc-500 hover:text-zinc-300 transition-colors"
+          @click="showMoveDateDialog = false"
+        >
+          <CloseIcon class="w-5 h-5" />
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="text-xs text-zinc-500">当前日期：{{ selectedDate }}</div>
+        <input
+          v-model="moveTargetDate"
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-200 focus:outline-none focus:border-purple-500 transition-colors"
+          type="date"
+        >
+        <div class="flex gap-3">
+          <button
+            class="flex-1 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold rounded-xl transition-colors uppercase tracking-wider"
+            @click="showMoveDateDialog = false"
+          >
+            取消
+          </button>
+          <button
+            class="flex-1 py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-purple-900/20 transition-colors uppercase tracking-wider"
+            @click="confirmMoveDate"
+          >
+            下一步
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -814,6 +915,16 @@
       </div>
     </div>
   </div>
+
+  <SubmissionRemarkDialog
+    :show="submissionRemarkDialog.show"
+    :song-title="submissionRemarkDialog.songTitle"
+    :content="submissionRemarkDialog.content"
+    :is-public="submissionRemarkDialog.isPublic"
+    :is-updating-public="submissionRemarkDialog.isUpdatingPublic"
+    @close="submissionRemarkDialog.show = false"
+    @update:is-public="updateSubmissionNotePublic"
+  />
 </template>
 
 <script setup>
@@ -845,9 +956,11 @@ import {
   Minus,
   CircleDot,
   ExternalLink,
-  Archive
+  Archive,
+  MessageSquare
 } from 'lucide-vue-next'
 import SongDownloadDialog from './SongDownloadDialog.vue'
+import SubmissionRemarkDialog from './SubmissionRemarkDialog.vue'
 import ScheduleDownloadModal from './ScheduleDownloadModal.vue'
 import ConfirmDialog from '../UI/ConfirmDialog.vue'
 import Pagination from '~/components/UI/Common/Pagination.vue'
@@ -896,6 +1009,18 @@ const showReplayModal = ref(false)
 const replayModalTitle = ref('')
 const replayModalRequests = ref([])
 const replayModalSongId = ref(null)
+const showMoveDateDialog = ref(false)
+const moveTargetDate = ref('')
+const submissionRemarkDialog = ref({
+  show: false,
+  songId: null,
+  title: '',
+  artist: '',
+  songTitle: '',
+  content: '',
+  isPublic: true,
+  isUpdatingPublic: false
+})
 
 const openReplayModal = (song) => {
   replayModalTitle.value = song.title
@@ -909,6 +1034,64 @@ const closeReplayModal = () => {
   replayModalTitle.value = ''
   replayModalRequests.value = []
   replayModalSongId.value = null
+}
+
+const openSubmissionRemark = (song) => {
+  if (!song?.submissionNote) return
+  submissionRemarkDialog.value = {
+    show: true,
+    songId: song.id,
+    title: song.title,
+    artist: song.artist,
+    songTitle: `${song.title} - ${song.artist}`,
+    content: song.submissionNote,
+    isPublic: song.submissionNotePublic === true
+  }
+}
+
+const updateSubmissionNotePublic = async (isPublic) => {
+  const dialogData = submissionRemarkDialog.value
+  if (!dialogData.songId || dialogData.isUpdatingPublic) return
+
+  dialogData.isUpdatingPublic = true
+  dialogData.isPublic = isPublic
+
+  try {
+    await adminService.updateSong(dialogData.songId, {
+      title: dialogData.title,
+      artist: dialogData.artist,
+      submissionNotePublic: isPublic
+    })
+
+    if (songsService && songsService.songs && songsService.songs.value) {
+      const songIndex = songsService.songs.value.findIndex(s => s.id === dialogData.songId)
+      if (songIndex !== -1) {
+        songsService.songs.value[songIndex].submissionNotePublic = isPublic
+      }
+    }
+
+    const localScheduledIndex = localScheduledSongs.value.findIndex(s => s.song && s.song.id === dialogData.songId)
+    if (localScheduledIndex !== -1) {
+      localScheduledSongs.value[localScheduledIndex].song.submissionNotePublic = isPublic
+    }
+
+    const publicScheduleIndex = publicSchedules.value.findIndex(s => s.song && s.song.id === dialogData.songId)
+    if (publicScheduleIndex !== -1) {
+      publicSchedules.value[publicScheduleIndex].song.submissionNotePublic = isPublic
+    }
+
+    if (window.$showNotification) {
+      window.$showNotification('备注留言可见性已更新', 'success')
+    }
+  } catch (error) {
+    console.error('更新备注可见性失败:', error)
+    if (window.$showNotification) {
+      window.$showNotification('更新备注可见性失败', 'error')
+    }
+    dialogData.isPublic = !isPublic
+  } finally {
+    dialogData.isUpdatingPublic = false
+  }
 }
 
 // 拖拽状态
@@ -968,6 +1151,25 @@ const isDraftMode = ref(false)
 const playTimes = ref([])
 const playTimeEnabled = ref(false)
 const selectedPlayTime = ref('')
+const selectedFilterPlayTime = ref('all')
+
+// 待排歌曲的播出时段筛选选项
+const filterPlayTimeOptions = computed(() => {
+  const options = [
+    { label: '全部时段', value: 'all' },
+    { label: '未指定时段', value: 'none' }
+  ]
+  if (playTimes.value) {
+    playTimes.value.forEach((pt) => {
+      let label = pt.name
+      if (pt.startTime || pt.endTime) {
+        label += ` (${formatPlayTimeRange(pt)})`
+      }
+      options.push({ label, value: pt.id })
+    })
+  }
+  return options
+})
 
 // 播出时段选项
 const playTimeOptions = computed(() => {
@@ -1082,12 +1284,12 @@ const allUnscheduledSongs = computed(() => {
     if (isScheduledInCurrentView) return false
 
     if (activeTab.value === 'replay' || activeTab.value === 'all') {
-      // 重播申请和所有歌曲模式不需要检查 played 状态，只要当前视图没排上就行
-      return true
-    } else {
-      // 普通投稿需未播放，且未在任何日期的排期中
-      return !song.played && !scheduledSongIds.value.has(song.id)
-    }
+            // 重播申请和所有歌曲模式不需要检查 played 状态，只要当前视图没排上就行
+            return true
+          } else {
+            // 普通投稿需未播放，且未在任何日期的排期中
+            return !song.played && !song.scheduled && !scheduledSongIds.value.has(song.id)
+          }
   })
 
   // 搜索过滤
@@ -1110,6 +1312,16 @@ const allUnscheduledSongs = computed(() => {
     unscheduledSongs = unscheduledSongs.filter(
       (song) => song.requesterGrade === selectedGrade.value
     )
+  }
+
+  // 播出时段过滤
+  if (selectedFilterPlayTime.value !== 'all') {
+    unscheduledSongs = unscheduledSongs.filter((song) => {
+      if (selectedFilterPlayTime.value === 'none') {
+        return !song.preferredPlayTimeId
+      }
+      return song.preferredPlayTimeId === selectedFilterPlayTime.value
+    })
   }
 
   return [...unscheduledSongs].sort((a, b) => {
@@ -1457,6 +1669,11 @@ watch(selectedGrade, () => {
   resetAllPages()
 })
 
+// 监听期望时段筛选变化，重置分页
+watch(selectedFilterPlayTime, () => {
+  resetAllPages()
+})
+
 // 加载重播申请
 const fetchReplayRequests = async () => {
   try {
@@ -1508,14 +1725,13 @@ const loadData = async () => {
   try {
     // 使用选中的学期过滤歌曲，如果选择"全部"则不传递学期参数
     const semester = selectedSemester.value === '全部' ? undefined : selectedSemester.value
-    
-    // 播放列表应该始终显示当前学期的歌曲（或者全部，如果未设置当前学期），不受待排歌曲学期选择的影响
-    const playlistSemester = semesterService?.currentSemester?.value?.name
 
+    // 播放列表应该显示所有学期的排期，不受待排歌曲学期选择的影响
+    // 因为在界面上我们是按日期（selectedDate）来过滤显示排期的
     // 并行加载数据
     await Promise.all([
       songsService.fetchSongs(false, semester, false, true),
-      songsService.fetchPublicSchedules(false, playlistSemester, false, true),
+      songsService.fetchPublicSchedules(false, undefined, false, true),
       loadPlayTimes(),
       loadDrafts(), // 加载草稿列表
       fetchReplayRequests() // 加载重播申请
@@ -1569,7 +1785,13 @@ const formatPlayTimeRange = (playTime) => {
 const getPlayTimeName = (playTimeId) => {
   if (!playTimeId || !playTimes.value) return ''
   const playTime = playTimes.value.find((pt) => pt.id === playTimeId)
-  return playTime ? playTime.name : ''
+  if (!playTime) return ''
+  
+  let label = playTime.name
+  if (playTime.startTime || playTime.endTime) {
+    label += ` (${formatPlayTimeRange(playTime)})`
+  }
+  return label
 }
 
 // 加载学期列表
@@ -1979,6 +2201,98 @@ const saveSequence = async () => {
   } catch (err) {
     console.error('保存并发布失败:', err)
   }
+}
+
+const openMoveDateDialog = () => {
+  if (hasChanges.value) {
+    if (window.$showNotification) {
+      window.$showNotification('请先保存当前未发布修改后再执行迁移', 'warning')
+    }
+    return
+  }
+
+  moveTargetDate.value = selectedDate.value
+  showMoveDateDialog.value = true
+}
+
+const confirmMoveDate = async () => {
+  const targetDate = moveTargetDate.value.trim()
+
+  const targetDateTime = new Date(`${targetDate}T00:00:00.000Z`)
+  if (
+    Number.isNaN(targetDateTime.getTime()) ||
+    targetDateTime.toISOString().split('T')[0] !== targetDate
+  ) {
+    if (window.$showNotification) {
+      window.$showNotification('目标日期无效，请使用 YYYY-MM-DD 格式并确保日期有效', 'error')
+    }
+    return
+  }
+
+  if (targetDate === selectedDate.value) {
+    if (window.$showNotification) {
+      window.$showNotification('目标日期不能与当前日期相同', 'warning')
+    }
+    return
+  }
+
+  const sourceDate = selectedDate.value
+  const sourceSchedules = [...publicSchedules.value, ...drafts.value].filter((schedule) => {
+    if (!schedule.playDate) return false
+    return new Date(schedule.playDate).toISOString().split('T')[0] === sourceDate
+  })
+
+  if (sourceSchedules.length === 0) {
+    if (window.$showNotification) {
+      window.$showNotification('当前日期没有可迁移的歌曲', 'warning')
+    }
+    return
+  }
+
+  confirmDialogTitle.value = '迁移排期日期'
+  confirmDialogMessage.value = `确定将 ${sourceDate} 的所有 ${sourceSchedules.length} 首歌曲迁移到 ${targetDate} 吗？歌曲顺序与内容将保持不变。`
+  confirmDialogType.value = 'warning'
+  confirmDialogConfirmText.value = '确认迁移'
+  showMoveDateDialog.value = false
+
+  confirmAction.value = async () => {
+    loading.value = true
+    try {
+      const result = await $fetch('/api/admin/schedule/move-date', {
+        method: 'POST',
+        body: {
+          fromDate: sourceDate,
+          toDate: targetDate
+        },
+        ...auth.getAuthConfig()
+      })
+
+      await loadData()
+      updateLocalScheduledSongs()
+
+      if (window.$showNotification) {
+        window.$showNotification(
+          result?.movedCount > 0
+            ? `已迁移 ${result.movedCount} 首歌曲到 ${targetDate}`
+            : '当前日期没有可迁移的歌曲',
+          result?.movedCount > 0 ? 'success' : 'warning'
+        )
+      }
+    } catch (error) {
+      console.error('迁移排期日期失败:', error)
+      if (window.$showNotification) {
+        const backendMessage = error.data?.message || error.data?.statusMessage || error.message
+        window.$showNotification(
+          '迁移失败: ' + (backendMessage || '未知错误'),
+          'error'
+        )
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  showConfirmDialog.value = true
 }
 
 // 草稿相关方法

@@ -9,6 +9,9 @@ const isPlaying = ref(false)
 const progress = ref(0)
 const currentTime = ref(0)
 const duration = ref(0)
+const volume = ref(1) // 0.0 到 1.0
+const isMuted = ref(false)
+const preMuteVolume = ref(1)
 const hasError = ref(false)
 const coverError = ref(false)
 const showQualitySettings = ref(false)
@@ -26,8 +29,8 @@ const isLoadingTrack = ref(false)
 const progressBarRef = ref<HTMLElement | null>(null)
 const hasUserInteracted = ref(false)
 
-// 播放模式: 'off' (播放完退出) | 'order' (顺序播放) | 'loopOne' (单曲循环)
-const playMode = ref<'off' | 'order' | 'loopOne'>('off')
+// 播放模式: 'off' (单曲播放完退出) | 'order' (顺序播放列表) | 'loopOne' (单曲循环)
+const playMode = ref<'off' | 'order' | 'loopOne'>('order')
 
 // 共享歌词实例
 const lyrics = useLyrics()
@@ -298,28 +301,20 @@ export const useAudioPlayerControl = () => {
 
       return true
     } catch (error) {
-      console.error('加载歌曲失败:', error)
-
-      // 重试逻辑
-      if (retryCount < 2 && typeof songUrlOrSong === 'object' && songUrlOrSong?.musicPlatform) {
-        console.log(`第 ${retryCount + 1} 次重试加载歌曲...`)
-        await new Promise((resolve) => setTimeout(resolve, 1000)) // 等待1秒后重试
+      // 重试逻辑（针对网络抖动等临时错误）
+      if (
+        retryCount < 2 &&
+        !hasError.value &&
+        typeof songUrlOrSong === 'object' &&
+        songUrlOrSong?.musicPlatform
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        if (hasError.value) return false
         return await loadSong(songUrlOrSong, retryCount + 1)
       }
 
       hasError.value = true
       isLoadingNewSong.value = false
-
-      // 显示详细错误信息
-      let errorMessage = '加载歌曲失败'
-      if (error instanceof Error) {
-        errorMessage = error.message
-      }
-
-      if (window.$showNotification) {
-        window.$showNotification(errorMessage, 'error')
-      }
-
       return false
     }
   }
@@ -587,12 +582,20 @@ export const useAudioPlayerControl = () => {
   }
 
   // 音频事件处理
+  let hasPrefetchedForCurrentSong = false
+  
   const onTimeUpdate = (currentTimeValue: number) => {
     if (isDragging.value) return
 
     currentTime.value = currentTimeValue
     if (duration.value > 0) {
       progress.value = (currentTimeValue / duration.value) * 100
+      
+      // 距离结束还有15秒时，提前预加载下一首
+      if (!hasPrefetchedForCurrentSong && duration.value - currentTimeValue <= 15) {
+        hasPrefetchedForCurrentSong = true
+        globalAudioPlayer.prefetchNextSong()
+      }
     }
 
     // 更新歌词时间
@@ -603,6 +606,7 @@ export const useAudioPlayerControl = () => {
   const onLoaded = (durationValue: number) => {
     duration.value = durationValue
     hasError.value = false
+    hasPrefetchedForCurrentSong = false // 重置预加载标志
   }
 
   const onError = (error: any) => {
@@ -706,6 +710,9 @@ export const useAudioPlayerControl = () => {
   // 设置音频播放器引用
   const setAudioPlayerRef = (element: HTMLAudioElement | null) => {
     audioPlayer.value = element
+    if (element) {
+      element.volume = volume.value
+    }
   }
 
   // 清理资源
@@ -791,6 +798,34 @@ export const useAudioPlayerControl = () => {
     return false
   }
 
+  // 音量控制
+  const setVolume = (val: number) => {
+    const newVolume = Math.max(0, Math.min(1, val))
+    
+    // 当用户手动调节非0音量时，记录为下一次取消静音的恢复值
+    if (newVolume > 0) {
+      preMuteVolume.value = newVolume
+    }
+    
+    volume.value = newVolume
+    isMuted.value = newVolume === 0
+    if (audioPlayer.value) {
+      audioPlayer.value.volume = newVolume
+    }
+  }
+
+  const toggleMute = () => {
+    if (isMuted.value || volume.value === 0) {
+      // 取消静音：如果用户手动把音量拉到 0 后又点击了恢复，此时记录的 preMuteVolume 会被用来恢复
+      // 但如果连 preMuteVolume 记录的值都极小(如初始状态就是0)，那就默认恢复到 10%
+      setVolume(preMuteVolume.value > 0.01 ? preMuteVolume.value : 0.1)
+    } else {
+      // 触发静音前，再更新一次历史音量
+      preMuteVolume.value = volume.value
+      setVolume(0)
+    }
+  }
+
   return {
     // 状态
     audioPlayer,
@@ -798,6 +833,8 @@ export const useAudioPlayerControl = () => {
     progress,
     currentTime,
     duration,
+    volume,
+    isMuted,
     hasError,
     coverError,
     showQualitySettings,
@@ -819,6 +856,8 @@ export const useAudioPlayerControl = () => {
     togglePlay,
     loadSong,
     forceUpdatePosition,
+    setVolume,
+    toggleMute,
 
     // 音频事件处理
     onTimeUpdate,

@@ -92,7 +92,7 @@
           </div>
 
           <!-- 联合投稿人区域 -->
-          <div v-if="user" class="collaborators-section">
+          <div v-if="user && enableCollaborativeSubmission" class="collaborators-section">
             <div class="section-label">联合投稿</div>
             <div class="collaborators-list">
               <div v-for="user in collaborators" :key="user.id" class="collaborator-tag">
@@ -230,34 +230,6 @@
 
             <!-- 网易云音乐登录状态和选项 -->
             <div v-if="platform === 'netease'" class="netease-options">
-              <div class="netease-header">
-                <div class="netease-badge">
-                  <span class="netease-dot" />
-                  <span class="netease-title">网易云音乐账号</span>
-                </div>
-                <div class="header-actions">
-                  <button
-                    v-if="isNeteaseLoggedIn"
-                    class="header-btn"
-                    title="导出Cookie数据"
-                    type="button"
-                    @click="handleExportData"
-                  >
-                    <Icon :size="14" name="download" />
-                    导出
-                  </button>
-                  <button
-                    v-if="isNeteaseLoggedIn"
-                    class="logout-btn"
-                    type="button"
-                    @click="handleLogoutNetease"
-                  >
-                    <Icon :size="14" name="logout" />
-                    退出
-                  </button>
-                </div>
-              </div>
-
               <!-- 加载中状态 -->
               <div v-if="checkingNeteaseLogin" class="netease-loading-state">
                 <div class="loading-content">
@@ -269,8 +241,7 @@
               <!-- 未登录状态 -->
               <div v-else-if="!isNeteaseLoggedIn" class="login-entry">
                 <div class="login-desc">
-                  <p class="login-title">登录网易云音乐</p>
-                  <p class="login-hint">支持搜索您的个人歌单、收藏及播客内容</p>
+                  <p class="login-title">登录网易云获取完整体验</p>
                 </div>
                 <div class="login-actions">
                   <button class="login-btn" type="button" @click="showLoginModal = true">
@@ -313,7 +284,7 @@
                       @click="showRecentSongsModal = true"
                     >
                       <Icon :size="14" name="history" />
-                      <span>最近播放</span>
+                      <span>最近</span>
                     </button>
                     <button
                       class="action-btn-compact"
@@ -322,7 +293,25 @@
                       @click="showPlaylistModal = true"
                     >
                       <Icon :size="14" name="playlist" />
-                      <span>从歌单投稿</span>
+                      <span>歌单</span>
+                    </button>
+                    <button
+                      class="action-btn-compact"
+                      aria-label="导出Cookie数据"
+                      title="导出Cookie数据"
+                      type="button"
+                      @click="handleExportData"
+                    >
+                      <Icon :size="14" name="download" />
+                    </button>
+                    <button
+                      class="action-btn-compact text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                      aria-label="退出登录"
+                      title="退出登录"
+                      type="button"
+                      @click="handleLogoutNetease"
+                    >
+                      <Icon :size="14" name="logout" />
                     </button>
                   </div>
                 </div>
@@ -331,6 +320,53 @@
           </div>
 
           <div class="results-content">
+            <!-- 播出时段和备注 -->
+            <div v-if="playTimeSelectionEnabled || enableSubmissionRemarks" class="form-row">
+              <!-- 播出时段选择 -->
+              <div v-if="playTimeSelectionEnabled" class="form-group">
+                <div class="input-wrapper">
+                  <CustomSelect
+                    v-model="preferredPlayTimeId"
+                    :options="formattedPlayTimes"
+                    label="期望播出时段"
+                    label-key="displayName"
+                    value-key="id"
+                    placeholder="选择时段"
+                  />
+                </div>
+              </div>
+
+              <div v-if="enableSubmissionRemarks" class="form-group">
+                <div class="input-wrapper">
+                  <div class="flex items-center justify-between mb-2">
+                    <label for="submission-note" class="text-[12px] font-bold text-zinc-300">投稿备注留言</label>
+                    <label class="custom-checkbox-wrapper">
+                      <input
+                        v-model="submissionNotePublic"
+                        type="checkbox"
+                        class="custom-checkbox-input"
+                      >
+                      <span class="custom-checkbox-box">
+                        <svg class="custom-checkbox-icon" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 5L4.5 8.5L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                      <span class="custom-checkbox-text">公开给已登录用户</span>
+                    </label>
+                  </div>
+                  <textarea
+                    id="submission-note"
+                    v-model="submissionNote"
+                    maxlength="300"
+                    class="w-full min-h-[60px] rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-2 text-sm text-zinc-100 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 resize-y transition-all"
+                  />
+                  <div class="mt-1 flex justify-end text-[11px] text-zinc-500">
+                    <span>{{ submissionNote.length }}/300</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- 加载状态 -->
             <div v-if="searching" class="loading-state">
               <div class="loading-spinner" />
@@ -546,20 +582,6 @@
             </Transition>
           </div>
         </div>
-
-        <!-- 播出时段选择 -->
-        <div v-if="playTimeSelectionEnabled && playTimes.length > 0" class="form-group">
-          <div class="input-wrapper">
-            <CustomSelect
-              v-model="preferredPlayTimeId"
-              :options="formattedPlayTimes"
-              label="期望播出时段"
-              label-key="displayName"
-              value-key="id"
-              placeholder="选择时段"
-            />
-          </div>
-        </div>
       </form>
 
       <div v-if="groupedSimilarSongs.length > 0" class="similar-song-alert">
@@ -763,6 +785,7 @@
 
     <!-- 用户搜索弹窗 -->
     <UserSearchModal
+      v-if="enableCollaborativeSubmission"
       v-model:show="showUserSearchModal"
       :exclude-ids="[user?.id, ...collaborators.map((u) => u.id)]"
       :multiple="true"
@@ -782,20 +805,23 @@
       >
         <div
           v-if="showManualModal"
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+          class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-zinc-950/80 backdrop-blur-sm"
           @click.self="showManualModal = false"
         >
-          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-
           <div
-            class="relative w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+            class="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
             @click.stop
           >
             <!-- Header -->
-            <div class="flex items-center justify-between p-8 pb-4">
-              <h3 class="text-xl font-black text-zinc-100 tracking-tight">手动输入歌曲信息</h3>
+            <div class="px-8 py-6 border-b border-zinc-800/50 flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500">
+                  <Edit3 :size="24" />
+                </div>
+                <h3 class="text-xl font-black text-zinc-100 tracking-tight">手动输入歌曲信息</h3>
+              </div>
               <button
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 transition-all"
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 transition-all"
                 @click="showManualModal = false"
               >
                 <X class="w-5 h-5" />
@@ -803,18 +829,15 @@
             </div>
 
             <!-- Body -->
-            <div class="flex-1 overflow-y-auto p-8 pt-4 custom-scrollbar">
-              <div class="manual-form-fields space-y-6">
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+              <div class="grid grid-cols-1 gap-6">
                 <!-- 歌曲名称 -->
-                <div class="form-field space-y-2">
-                  <label
-                    class="field-label text-sm font-black text-zinc-500 uppercase tracking-widest ml-1"
-                    >歌曲名称</label
-                  >
-                  <div class="input-container relative group">
+                <div class="space-y-2">
+                  <label class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1">歌曲名称</label>
+                  <div class="relative group">
                     <input
                       :value="title"
-                      class="w-full px-6 py-4 bg-zinc-800/30 border border-zinc-800 rounded-2xl text-zinc-400 font-bold focus:outline-none cursor-not-allowed transition-all"
+                      class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-400 font-bold focus:outline-none cursor-not-allowed transition-all"
                       readonly
                       type="text"
                     >
@@ -825,48 +848,35 @@
                 </div>
 
                 <!-- 歌手名称 -->
-                <div class="form-field space-y-2">
-                  <label
-                    for="modal-artist"
-                    class="field-label text-sm font-black text-zinc-500 uppercase tracking-widest ml-1"
-                    >歌手名称</label
+                <div class="space-y-2">
+                  <label for="modal-artist" class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1">歌手名称</label>
+                  <input
+                    id="modal-artist"
+                    v-model="manualArtist"
+                    class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500/30 transition-all"
+                    placeholder="请输入歌手名称"
+                    required
+                    type="text"
                   >
-                  <div class="input-container relative group">
-                    <input
-                      id="modal-artist"
-                      v-model="manualArtist"
-                      class="w-full px-6 py-4 bg-zinc-800/50 border border-zinc-700/50 rounded-2xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-700 focus:bg-zinc-800 transition-all"
-                      placeholder="请输入歌手名称"
-                      required
-                      type="text"
-                    >
-                  </div>
                 </div>
 
                 <!-- 歌曲封面地址 -->
-                <div class="form-field space-y-2">
-                  <label
-                    for="modal-cover"
-                    class="field-label text-sm font-black text-zinc-500 uppercase tracking-widest ml-1"
-                    >歌曲封面地址（选填）</label
-                  >
-                  <div class="input-container relative group">
+                <div class="space-y-2">
+                  <label for="modal-cover" class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1">歌曲封面地址（选填）</label>
+                  <div class="relative group">
                     <input
                       id="modal-cover"
                       v-model="manualCover"
                       :class="[
-                        'w-full px-6 py-4 bg-zinc-800/50 border rounded-2xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 transition-all',
+                        'w-full bg-zinc-950 border rounded-xl px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none transition-all',
                         manualCover && !coverValidation.valid
-                          ? 'border-red-500/50 focus:ring-red-500/20'
-                          : 'border-zinc-700/50 focus:ring-zinc-700 focus:bg-zinc-800'
+                          ? 'border-red-500/50 focus:border-red-500/50'
+                          : 'border-zinc-800 focus:border-blue-500/30'
                       ]"
                       placeholder="请输入歌曲封面图片URL"
                       type="url"
                     >
-                    <div
-                      v-if="coverValidation.validating"
-                      class="absolute inset-y-0 right-4 flex items-center"
-                    >
+                    <div v-if="coverValidation.validating" class="absolute inset-y-0 right-4 flex items-center">
                       <Loader2 class="w-4 h-4 text-zinc-400 animate-spin" />
                     </div>
                   </div>
@@ -875,41 +885,34 @@
                     enter-from-class="opacity-0 -translate-y-1"
                     enter-to-class="opacity-100 translate-y-0"
                   >
-                    <div v-if="manualCover && !coverValidation.validating" class="px-1">
-                      <p v-if="!coverValidation.valid" class="text-xs font-bold text-red-400">
-                        {{ coverValidation.error }}
+                    <div v-if="manualCover && !coverValidation.validating" class="px-1 pt-1">
+                      <p v-if="!coverValidation.valid" class="text-[10px] font-bold text-red-500/80 flex items-center gap-1">
+                        <X class="w-3 h-3" /> {{ coverValidation.error }}
                       </p>
-                      <p v-else class="text-xs font-bold text-emerald-400 flex items-center">
-                        <Check class="w-3 h-3 mr-1" /> URL有效
+                      <p v-else class="text-[10px] font-bold text-emerald-500/80 flex items-center gap-1">
+                        <Check class="w-3 h-3" /> URL有效
                       </p>
                     </div>
                   </Transition>
                 </div>
 
                 <!-- 播放地址 -->
-                <div class="form-field space-y-2">
-                  <label
-                    for="modal-play-url"
-                    class="field-label text-sm font-black text-zinc-500 uppercase tracking-widest ml-1"
-                    >播放地址（选填）</label
-                  >
-                  <div class="input-container relative group">
+                <div class="space-y-2">
+                  <label for="modal-play-url" class="text-[10px] font-black text-zinc-600 uppercase tracking-widest px-1">播放地址（选填）</label>
+                  <div class="relative group">
                     <input
                       id="modal-play-url"
                       v-model="manualPlayUrl"
                       :class="[
-                        'w-full px-6 py-4 bg-zinc-800/50 border rounded-2xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 transition-all',
+                        'w-full bg-zinc-950 border rounded-xl px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none transition-all',
                         manualPlayUrl && !playUrlValidation.valid
-                          ? 'border-red-500/50 focus:ring-red-500/20'
-                          : 'border-zinc-700/50 focus:ring-zinc-700 focus:bg-zinc-800'
+                          ? 'border-red-500/50 focus:border-red-500/50'
+                          : 'border-zinc-800 focus:border-blue-500/30'
                       ]"
                       placeholder="请输入歌曲播放URL"
                       type="url"
                     >
-                    <div
-                      v-if="playUrlValidation.validating"
-                      class="absolute inset-y-0 right-4 flex items-center"
-                    >
+                    <div v-if="playUrlValidation.validating" class="absolute inset-y-0 right-4 flex items-center">
                       <Loader2 class="w-4 h-4 text-zinc-400 animate-spin" />
                     </div>
                   </div>
@@ -918,12 +921,12 @@
                     enter-from-class="opacity-0 -translate-y-1"
                     enter-to-class="opacity-100 translate-y-0"
                   >
-                    <div v-if="manualPlayUrl && !playUrlValidation.validating" class="px-1">
-                      <p v-if="!playUrlValidation.valid" class="text-xs font-bold text-red-400">
-                        {{ playUrlValidation.error }}
+                    <div v-if="manualPlayUrl && !playUrlValidation.validating" class="px-1 pt-1">
+                      <p v-if="!playUrlValidation.valid" class="text-[10px] font-bold text-red-500/80 flex items-center gap-1">
+                        <X class="w-3 h-3" /> {{ playUrlValidation.error }}
                       </p>
-                      <p v-else class="text-xs font-bold text-emerald-400 flex items-center">
-                        <Check class="w-3 h-3 mr-1" /> URL有效
+                      <p v-else class="text-[10px] font-bold text-emerald-500/80 flex items-center gap-1">
+                        <Check class="w-3 h-3" /> URL有效
                       </p>
                     </div>
                   </Transition>
@@ -932,24 +935,22 @@
             </div>
 
             <!-- Footer -->
-            <div class="p-8 pt-0">
-              <div class="flex gap-3">
-                <button
-                  class="flex-1 px-6 py-4 rounded-2xl bg-zinc-800 text-zinc-300 font-bold hover:bg-zinc-700 hover:text-zinc-100 transition-all active:scale-95"
-                  type="button"
-                  @click="showManualModal = false"
-                >
-                  取消
-                </button>
-                <button
-                  :disabled="!canSubmitManualForm || submitting"
-                  class="flex-[2] px-6 py-4 rounded-2xl bg-zinc-100 text-zinc-900 font-black hover:bg-white disabled:opacity-50 disabled:hover:bg-zinc-100 disabled:active:scale-100 transition-all active:scale-95"
-                  type="button"
-                  @click="handleManualSubmit"
-                >
-                  {{ submitting ? '提交中...' : '确认提交' }}
-                </button>
-              </div>
+            <div class="px-8 py-6 bg-zinc-900/50 border-t border-zinc-800/50 flex gap-3 justify-end shrink-0">
+              <button
+                class="px-6 py-2.5 text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-all"
+                type="button"
+                @click="showManualModal = false"
+              >
+                取消
+              </button>
+              <button
+                :disabled="!canSubmitManualForm || submitting"
+                class="px-8 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-black rounded-lg transition-all disabled:opacity-50"
+                type="button"
+                @click="handleManualSubmit"
+              >
+                {{ submitting ? '提交中...' : '确认提交' }}
+              </button>
             </div>
           </div>
         </div>
@@ -976,7 +977,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import searchIcon from '~~/public/images/search.svg'
-import { X, Lock, Loader2, Check } from 'lucide-vue-next'
+import { X, Lock, Loader2, Check, Edit3 } from 'lucide-vue-next'
 import { useSongs } from '~/composables/useSongs'
 import { useAudioPlayer } from '~/composables/useAudioPlayer'
 import { useSiteConfig } from '~/composables/useSiteConfig'
@@ -1035,7 +1036,7 @@ const props = defineProps({
 const emit = defineEmits(['request', 'vote'])
 
 // 站点配置
-const { guidelines: submissionGuidelines, refreshSiteConfig, enableReplayRequests } = useSiteConfig()
+const { guidelines: submissionGuidelines, refreshSiteConfig, enableReplayRequests, enableCollaborativeSubmission, enableSubmissionRemarks } = useSiteConfig()
 
 // 用户认证
 const auth = useAuth()
@@ -1052,6 +1053,8 @@ const title = ref('')
 const artist = ref('')
 const platform = ref('tencent') // 默认使用QQ音乐
 const preferredPlayTimeId = ref('')
+const submissionNote = ref('')
+const submissionNotePublic = ref(true)
 const error = ref('')
 const success = ref('')
 const submitting = ref(false)
@@ -1395,10 +1398,14 @@ const enabledPlayTimes = computed(() => {
 })
 
 const formattedPlayTimes = computed(() => {
-  return enabledPlayTimes.value.map((pt) => ({
+  const options = enabledPlayTimes.value.map((pt) => ({
     ...pt,
     displayName: pt.startTime || pt.endTime ? `${pt.name} (${formatPlayTimeRange(pt)})` : pt.name
   }))
+  return [
+    { id: '', displayName: '不指定时段' },
+    ...options
+  ]
 })
 
 // 格式化播出时段时间范围
@@ -1440,6 +1447,20 @@ watch(
     }
   }
 )
+
+watch(enableCollaborativeSubmission, (enabled) => {
+  if (!enabled) {
+    showUserSearchModal.value = false
+    collaborators.value = []
+  }
+})
+
+watch(enableSubmissionRemarks, (enabled) => {
+  if (!enabled) {
+    submissionNote.value = ''
+    submissionNotePublic.value = true
+  }
+})
 
 // 检查相似歌曲
 const checkSimilarSongs = async () => {
@@ -2251,6 +2272,8 @@ const submitSong = async (result, options = {}) => {
       cover: selectedCover.value,
       musicPlatform: result.actualMusicPlatform || result.musicPlatform || platform.value, // 优先使用搜索结果的实际平台来源
       musicId: result.musicId ? String(result.musicId) : null,
+      submissionNote: submissionNote.value.trim() || null,
+      submissionNotePublic: submissionNotePublic.value,
       collaborators: collaborators.value.map((u) => u.id),
       bilibiliCid: bilibiliCid || null,
       bilibiliPage: bilibiliPage
@@ -2306,6 +2329,8 @@ const handleSubmit = async () => {
       cover: selectedCover.value,
       musicPlatform: platform.value,
       musicId: null, // 手动输入时没有musicId
+      submissionNote: submissionNote.value.trim() || null,
+      submissionNotePublic: submissionNotePublic.value,
       collaborators: collaborators.value.map((u) => u.id)
     }
 
@@ -2532,14 +2557,19 @@ const handleManualSubmit = async () => {
       return
     }
     // 构建歌曲数据对象
+    // 如果手动填入了 playUrl，则不保留平台标识符
+    const trimmedPlayUrl = manualPlayUrl.value?.trim() || ''
+    const hasManualPlayUrl = !!trimmedPlayUrl
     const songData = {
       title: title.value,
       artist: manualArtist.value,
       preferredPlayTimeId: preferredPlayTimeId.value ? parseInt(preferredPlayTimeId.value) : null,
-      cover: manualCover.value || '',
-      playUrl: manualPlayUrl.value || '',
-      musicPlatform: platform.value,
-      musicId: null // 手动输入时没有musicId
+      cover: manualCover.value?.trim() || '',
+      playUrl: trimmedPlayUrl,
+      musicPlatform: hasManualPlayUrl ? null : platform.value,
+      musicId: null, // 手动输入时没有musicId
+      submissionNote: submissionNote.value.trim() || null,
+      submissionNotePublic: submissionNotePublic.value
     }
 
     if (enableRecommendation && enableRecommendation.value) {
@@ -2701,6 +2731,8 @@ const resetForm = () => {
   manualPlayUrl.value = ''
   hasSearched.value = false
   collaborators.value = []
+  submissionNote.value = ''
+  submissionNotePublic.value = true
   // 重置URL验证状态
   coverValidation.value = { valid: true, error: '', validating: false }
   playUrlValidation.value = { valid: true, error: '', validating: false }
@@ -3129,12 +3161,70 @@ defineExpose({
   color: #fff;
 }
 
+/* 自定义复选框样式 */
+.custom-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox-input {
+  display: none;
+}
+
+.custom-checkbox-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid #3f3f46;
+  background: rgba(24, 24, 27, 0.5);
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox-icon {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: white;
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box .custom-checkbox-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.custom-checkbox-text {
+  font-size: 11px;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.custom-checkbox-input:checked ~ .custom-checkbox-text {
+  color: #d1d5db;
+}
+
+.custom-checkbox-wrapper:hover .custom-checkbox-box {
+  border-color: #60a5fa;
+}
+
 /* 横向投稿状态样式 */
 .submission-status-horizontal {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  margin-bottom: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -3268,104 +3358,66 @@ defineExpose({
 /* 平台选择按钮样式 */
 .platform-selection-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .platform-selection {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  gap: 0.5rem;
+  align-items: center;
 }
 
-/* 网易云音乐登录选项 */
+/* 网易云音乐登录选项 - 内联风格 */
 .netease-options {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 0.4rem 0.75rem; /* 稍微缩小内边距 */
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem; /* 缩小间距 */
-  overflow: hidden;
-  transition: all 0.3s ease;
+  gap: 0;
+  flex: 1;
+  min-width: 300px;
+  justify-content: center;
 }
 
 .netease-options:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: transparent;
+  border-color: transparent;
 }
 
 .netease-options::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #ef4444, #f87171, #ef4444);
-  opacity: 0.6;
-}
-
-.netease-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.netease-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.netease-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #c20c0c;
-  box-shadow: 0 0 8px rgba(194, 12, 12, 0.6);
-}
-
-.netease-title {
-  font-family: 'MiSans', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  color: #ffffff;
+  display: none;
 }
 
 .login-entry {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 0.6rem 0.85rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.3s ease;
-}
-
-.login-entry:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: transparent;
+  padding: 0;
+  border: none;
 }
 
 .login-desc {
-  flex: 1;
-  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .login-title {
   font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 500;
+  color: #a1a1aa;
   margin: 0;
-  letter-spacing: 0.02em;
 }
 
 .login-hint {
@@ -3723,7 +3775,7 @@ defineExpose({
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: 0.75rem 1.25rem 1.25rem 1.25rem; /* 稍微缩小内边距 */
+  padding: 0.5rem 1rem 1rem 1rem;
   position: relative;
   z-index: 1;
 }
@@ -3929,9 +3981,9 @@ defineExpose({
 .similar-song-alert {
   background: #21242d;
   border-radius: 10px;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -4899,11 +4951,16 @@ defineExpose({
   }
 
   /* 移动端平台选择按钮 */
+  .platform-selection-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
   .platform-selection {
     background: rgba(0, 0, 0, 0.2);
     padding: 4px;
     border-radius: 12px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
     overflow: visible;
   }
@@ -5145,25 +5202,26 @@ defineExpose({
 
 /* 网易云音乐账号加载状态样式 */
 .netease-loading-state {
-  padding: 20px;
+  padding: 0;
   background-color: transparent;
-  border-radius: 8px;
+  border-radius: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 10px 0;
+  justify-content: flex-end;
+  margin: 0;
   border: none;
+  height: 32px; /* 匹配旁边按钮的高度 */
 }
 
 .loading-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .netease-loading-state .loading-spinner {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   border: 2px solid rgba(239, 68, 68, 0.2);
   border-top-color: #ef4444;
   border-radius: 50%;
@@ -5171,8 +5229,8 @@ defineExpose({
 }
 
 .netease-loading-state .loading-text {
-  color: #ef4444;
-  font-size: 14px;
+  color: #a1a1aa;
+  font-size: 13px;
   font-weight: 500;
   margin: 0;
 }

@@ -11,6 +11,8 @@ const colors = {
   yellow: '\x1b[33m',
   cyan: '\x1b[36m'
 }
+const BUILD_MEMORY_MB = 6144
+const DEFAULT_NODE_OPTIONS = `--max-old-space-size=${BUILD_MEMORY_MB}`
 
 function log(message, color = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`)
@@ -71,22 +73,35 @@ async function netlifyBuild() {
 
     // 3. 安装依赖
     logStep('📦', '安装依赖...')
+    let installed = false
     if (fileExists('node_modules')) {
       safeExec('rm -rf node_modules')
     }
 
-    if (!safeExec('npm ci')) {
-      throw new Error('依赖安装失败')
+    if (fileExists('pnpm-lock.yaml')) {
+      if (safeExec('pnpm install --frozen-lockfile')) {
+        installed = true
+        logSuccess('依赖安装完成 (pnpm install --frozen-lockfile)')
+      } else {
+        logWarning('pnpm install --frozen-lockfile 安装失败，准备回退到 pnpm install...')
+      }
+    } else {
+      logWarning('未检测到 pnpm-lock.yaml，跳过冻结锁文件安装，直接使用 pnpm install...')
+    }
+
+    if (!installed) {
+      if (!safeExec('pnpm install')) {
+        throw new Error('依赖安装失败')
+      }
+      logSuccess('依赖安装完成 (pnpm install)')
     }
 
     // 验证 Drizzle 依赖
-    if (!safeExec('npm list drizzle-orm drizzle-kit')) {
-      if (!safeExec('npm install drizzle-orm drizzle-kit')) {
+    if (!safeExec('pnpm list drizzle-orm drizzle-kit')) {
+      if (!safeExec('pnpm add drizzle-orm drizzle-kit')) {
         throw new Error('Drizzle 依赖安装失败')
       }
     }
-    logSuccess('依赖安装完成')
-
     // 4. 检查 Drizzle 配置
     if (!fileExists('drizzle.config.ts') || !fileExists('app/drizzle/schema.ts')) {
       throw new Error('Drizzle 配置文件不完整')
@@ -110,7 +125,7 @@ async function netlifyBuild() {
       // 检查管理员账户
       if (fileExists('scripts/create-admin.js')) {
         logStep('👤', '检查管理员账户...')
-        safeExec('npm run create-admin', { env })
+        safeExec('pnpm run create-admin', { env })
       }
     } else {
       logWarning('未设置 DATABASE_URL')
@@ -118,7 +133,11 @@ async function netlifyBuild() {
 
     // 7. 构建应用
     logStep('🔨', '构建应用...')
-    if (!safeExec('npx nuxt build')) {
+    const buildEnv = {
+      ...process.env,
+      NODE_OPTIONS: process.env.NODE_OPTIONS || DEFAULT_NODE_OPTIONS
+    }
+    if (!safeExec('pnpm exec nuxt build', { env: buildEnv })) {
       throw new Error('构建失败')
     }
     logSuccess('构建完成')

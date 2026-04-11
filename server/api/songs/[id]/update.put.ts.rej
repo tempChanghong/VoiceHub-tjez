@@ -1,0 +1,58 @@
+diff a/server/api/songs/[id]/update.put.ts b/server/api/songs/[id]/update.put.ts	(rejected hunks)
+@@ -35,33 +36,46 @@ export default defineEventHandler(async (event) => {
+     if (!songId) {
+       throw createError({
+         statusCode: 400,
+-        statusMessage: 'Invalid song ID'
++        message: 'Invalid song ID'
+       })
+     }
+ 
+     // 获取请求体
+     const body = await readBody(event)
+-    const { title, artist, requester, semester, musicPlatform, musicId, cover, playUrl } = body
++    const { title, artist, requester, semester, musicPlatform, musicId, cover, playUrl, preferredPlayTimeId } = body
++    const ipAddress =
++      (event.node.req.headers['x-forwarded-for'] as string) || event.node.req.socket.remoteAddress
+ 
+     // 验证必填字段
+     if (!title || !artist) {
+       throw createError({
+         statusCode: 400,
+-        statusMessage: 'Title and artist are required'
++        message: 'Title and artist are required'
+       })
+     }
+ 
+-    // 准备更新数据
+-    const updateData = {
++    const existingSongResult = await db.select().from(songs).where(eq(songs.id, songId)).limit(1)
++    const existingSong = existingSongResult[0]
++
++    if (!existingSong) {
++      throw createError({
++        statusCode: 404,
++        message: '歌曲不存在'
++      })
++    }
++
++    const updateData: Partial<typeof songs.$inferInsert> = {
+       title: title.trim(),
+       artist: artist.trim(),
+-      semester: semester || null,
+-      musicPlatform: musicPlatform || null,
+-      musicId: musicId || null,
+-      cover: cover || null,
+-      playUrl: playUrl || null
+     }
+ 
++    if (body.semester !== undefined) updateData.semester = body.semester || null
++    if (body.preferredPlayTimeId !== undefined) updateData.preferredPlayTimeId = body.preferredPlayTimeId || null
++    if (body.musicPlatform !== undefined) updateData.musicPlatform = body.musicPlatform || null
++    if (body.musicId !== undefined) updateData.musicId = body.musicId || null
++    if (body.cover !== undefined) updateData.cover = body.cover || null
++    if (body.playUrl !== undefined) updateData.playUrl = body.playUrl || null
++
+     // 处理投稿人
+     if ('requester' in body) {
+       const requester = body.requester

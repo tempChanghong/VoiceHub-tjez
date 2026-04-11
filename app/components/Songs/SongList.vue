@@ -244,6 +244,14 @@
                     已排期
                   </span>
                   <span v-else-if="song.isReplay" title="重播歌曲" class="replay-tag"> 重播 </span>
+                  <button
+                    v-if="song.hasSubmissionNote && song.submissionNote"
+                    class="submission-note-trigger"
+                    title="查看备注留言"
+                    @click.stop="openSubmissionNote(song)"
+                  >
+                    <Icon :size="14" name="message-circle" />
+                  </button>
                 </h3>
                 <div class="song-meta">
                   <span
@@ -363,6 +371,41 @@
           @confirm="confirmAction"
           @cancel="cancelConfirm"
         />
+
+        <Teleport to="body">
+          <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <div
+              v-if="submissionNoteDialog.show"
+              class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              @click="closeSubmissionNote"
+            >
+              <div class="submission-note-modal" @click.stop>
+                <div class="submission-note-header">
+                  <h4>投稿备注留言</h4>
+                  <button @click="closeSubmissionNote">
+                    <Icon :size="14" name="close" />
+                  </button>
+                </div>
+                <div class="submission-note-meta">
+                  <span class="song-title-tag">{{ submissionNoteDialog.songTitle }}</span>
+                  <span :class="['visibility-tag', submissionNoteDialog.isPublic ? 'visibility-public' : 'visibility-private']">
+                    {{ submissionNoteDialog.isPublic ? '公开备注' : '仅管理员可见' }}
+                  </span>
+                </div>
+                <div class="submission-note-content-box">
+                  <p class="submission-note-content">{{ submissionNoteDialog.note }}</p>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </Teleport>
       </div>
     </Transition>
   </div>
@@ -373,8 +416,6 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useAuth } from '~/composables/useAuth'
 import { useAudioPlayer } from '~/composables/useAudioPlayer'
 import { useSemesters } from '~/composables/useSemesters'
-import { useMusicSources } from '~/composables/useMusicSources'
-import { useAudioQuality } from '~/composables/useAudioQuality'
 import { useSongs } from '~/composables/useSongs'
 import { useSiteConfig } from '~/composables/useSiteConfig'
 import Icon from '~/components/UI/Icon.vue'
@@ -383,6 +424,7 @@ import MarqueeText from '~/components/UI/MarqueeText.vue'
 import ConfirmDialog from '~/components/UI/ConfirmDialog.vue'
 import { convertToHttps } from '~/utils/url'
 import { isBilibiliSong } from '~/utils/bilibiliSource'
+import { getMusicUrl as resolveMusicUrl } from '~/utils/musicUrl'
 import thumbsUp from '~~/public/images/thumbs-up.svg'
 
 import dayjs from 'dayjs'
@@ -604,6 +646,12 @@ const confirmDialog = ref({
   type: 'warning', // 'warning', 'danger', 'info', 'success'
   action: '',
   data: null
+})
+const submissionNoteDialog = ref({
+  show: false,
+  songTitle: '',
+  note: '',
+  isPublic: false
 })
 
 // 格式化日期为 X年X月X日
@@ -982,6 +1030,20 @@ const cancelConfirm = () => {
   confirmDialog.value.show = false
 }
 
+const openSubmissionNote = (song) => {
+  if (!song?.submissionNote) return
+  submissionNoteDialog.value = {
+    show: true,
+    songTitle: `${song.title} - ${song.artist}`,
+    note: song.submissionNote,
+    isPublic: song.submissionNotePublic === true
+  }
+}
+
+const closeSubmissionNote = () => {
+  submissionNoteDialog.value.show = false
+}
+
 // 处理图片加载错误
 const handleImageError = (event, song) => {
   if (event?.target) {
@@ -1000,59 +1062,39 @@ const getFirstChar = (title) => {
 }
 
 // 播放歌曲的辅助函数，处理 URL 获取和播放列表构建
-// 提取此函数以避免在 togglePlaySong 中重复相同的错误处理逻辑
 const playSongWithUrlFetching = async (song) => {
+  let url = null
   try {
-    const url = await getMusicUrl(song)
-
-    // 对于哔哩哔哩视频，即使没有 URL 也允许播放
-    if (!url && !isBilibiliSong(song)) {
-      if (window.$showNotification) {
-        window.$showNotification('无法获取音乐播放链接，请稍后再试', 'error')
-      }
-      return
-    }
-
-    const playableSong = {
-      ...song,
-      musicUrl: url || null
-    }
-
-    // 构建播放列表并设置当前歌曲索引
-    const playlist = await buildPlayablePlaylist(song)
-    const currentIndex = playlist.findIndex((item) => item.id === song.id)
-    audioPlayer.playSong(playableSong, playlist, currentIndex)
-
-    // 后台预取后续歌曲的播放链接（不阻塞当前播放）
-    ;(async () => {
-      for (let i = currentIndex + 1; i < playlist.length; i++) {
-        const s = playlist[i]
-        if (!s.musicUrl && ((s.musicPlatform && s.musicId) || s.playUrl)) {
-          try {
-            s.musicUrl = await getMusicUrl(s)
-          } catch (error) {
-            console.warn(`后台预取失败: ${s.title}`, error)
-            s.musicUrl = null
-          }
-        }
-      }
-    })()
+    url = await getMusicUrl(song)
   } catch (error) {
-    // 对于哔哩哔哩视频，即使获取失败也允许播放
-    if (isBilibiliSong(song)) {
-      const playableSong = {
-        ...song,
-        musicUrl: null
-      }
-      const playlist = await buildPlayablePlaylist(song)
-      const currentIndex = playlist.findIndex((item) => item.id === song.id)
-      audioPlayer.playSong(playableSong, playlist, currentIndex)
-    } else {
+    if (!isBilibiliSong(song)) {
       if (window.$showNotification) {
         window.$showNotification('获取音乐播放链接失败', 'error')
       }
     }
   }
+
+  const playableSong = { ...song, musicUrl: url || null }
+  const playlist = await buildPlayablePlaylist(song)
+  const currentIndex = playlist.findIndex((item) => item.id === song.id)
+  audioPlayer.playSong(playableSong, playlist, currentIndex)
+
+  if (!url && !isBilibiliSong(song)) return
+
+  // 后台预取后续歌曲的播放链接（不阻塞当前播放）
+  ;(async () => {
+    for (let i = currentIndex + 1; i < playlist.length; i++) {
+      const s = playlist[i]
+      if (!s.musicUrl && ((s.musicPlatform && s.musicId) || s.playUrl)) {
+        try {
+          s.musicUrl = await getMusicUrl(s)
+        } catch (error) {
+          console.warn(`后台预取失败: ${s.title}`, error)
+          s.musicUrl = null
+        }
+      }
+    }
+  })()
 }
 
 // 切换歌曲播放/暂停
@@ -1118,63 +1160,14 @@ const getMusicUrl = async (song) => {
     throw new Error('歌曲缺少音乐平台或音乐ID信息，无法获取播放链接')
   }
 
-  const { getQuality } = useAudioQuality()
-  const { getSongUrl } = useMusicSources()
-
-  const quality = getQuality(platform)
-
-  // 使用统一组件的音源选择逻辑
-  console.log(
-    `[SongList] 使用统一音源选择逻辑获取播放链接: platform=${platform}, musicId=${musicId}`
-  )
-
   // 检查是否为播客内容
   const isPodcast =
     platform === 'netease-podcast' ||
     sourceInfo?.type === 'voice' ||
     (sourceInfo?.source === 'netease-backup' && sourceInfo?.type === 'voice')
 
-  // 如果是播客内容，强制 unblock=false
   const options = isPodcast ? { unblock: false } : {}
-
-  const result = await getSongUrl(musicId, quality, platform, undefined, options)
-  if (result.success && result.url) {
-    console.log('[SongList] 统一音源选择获取音乐URL成功')
-    return result.url
-  }
-  console.warn('[SongList] 统一音源选择未返回有效链接，回退到直接调用 vkeys')
-
-  // 回退到 vkeys
-  let apiUrl
-  if (platform === 'netease') {
-    apiUrl = `https://api.vkeys.cn/v2/music/netease?id=${musicId}&quality=${quality}`
-  } else if (platform === 'tencent') {
-    apiUrl = `https://api.vkeys.cn/v2/music/tencent?id=${musicId}&quality=${quality}`
-  } else {
-    throw new Error('不支持的音乐平台')
-  }
-
-  const response = await fetch(apiUrl, {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-  })
-  if (!response.ok) {
-    throw new Error('获取音乐URL失败')
-  }
-
-  const data = await response.json()
-  if (data.code === 200 && data.data && data.data.url) {
-    // 将HTTP URL改为HTTPS
-    let url = data.data.url
-    if (url.startsWith('http://')) {
-      url = url.replace('http://', 'https://')
-    }
-    return url
-  }
-
-  throw new Error('vkeys返回成功但未获取到音乐URL')
+  return resolveMusicUrl(platform, musicId, undefined, options)
 }
 
 // 判断当前是否正在播放指定ID的歌曲
@@ -2997,5 +2990,120 @@ button:disabled {
 
 .page-move {
   transition: transform 0.4s ease;
+}
+
+.submission-note-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #60a5fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+}
+
+.submission-note-trigger:hover {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 6px 12px rgba(96, 165, 250, 0.15);
+}
+
+.submission-note-modal {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+  color: #f3f4f6;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.submission-note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.submission-note-header h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #f4f4f5;
+}
+
+.submission-note-header button {
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submission-note-header button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f4f4f5;
+}
+
+.submission-note-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.song-title-tag {
+  font-size: 12px;
+  color: #a1a1aa;
+  font-weight: 500;
+}
+
+.visibility-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.visibility-public {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.visibility-private {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.submission-note-content-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.submission-note-content {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #e4e4e7;
 }
 </style>

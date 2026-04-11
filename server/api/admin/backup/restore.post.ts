@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     if (!user || !['ADMIN', 'SUPER_ADMIN'].includes(user.role)) {
       throw createError({
         statusCode: 403,
-        statusMessage: '权限不足'
+        message: '权限不足'
       })
     }
 
@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
       if (!formData) {
         throw createError({
           statusCode: 400,
-          statusMessage: '请上传备份文件'
+          message: '请上传备份文件'
         })
       }
 
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
       if (!fileData) {
         throw createError({
           statusCode: 400,
-          statusMessage: '请上传备份文件'
+          message: '请上传备份文件'
         })
       }
 
@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
       } catch (error) {
         throw createError({
           statusCode: 400,
-          statusMessage: '备份文件格式错误'
+          message: '备份文件格式错误'
         })
       }
 
@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
       if (!filename) {
         throw createError({
           statusCode: 400,
-          statusMessage: '请指定备份文件名或上传备份文件'
+          message: '请指定备份文件名或上传备份文件'
         })
       }
 
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
       if (safeFilename !== filename) {
         throw createError({
           statusCode: 400,
-          statusMessage: '备份文件名不合法'
+          message: '备份文件名不合法'
         })
       }
 
@@ -117,7 +117,7 @@ export default defineEventHandler(async (event) => {
       clearExisting = bodyClearExisting
       overwriteSuperAdmin = bodyOverwriteSuperAdmin
 
-      console.log(`开始恢复数据库备份: ${safeFilename}`)
+      console.log(`开始恢复数据库备份：${safeFilename}`)
 
       // 读取备份文件
       const backupDir = path.join(process.cwd(), 'backups')
@@ -129,7 +129,7 @@ export default defineEventHandler(async (event) => {
       } catch (error) {
         throw createError({
           statusCode: 404,
-          statusMessage: '备份文件不存在或格式错误'
+          message: '备份文件不存在或格式错误'
         })
       }
     }
@@ -138,12 +138,12 @@ export default defineEventHandler(async (event) => {
     if (!backupData.metadata || !backupData.data) {
       throw createError({
         statusCode: 400,
-        statusMessage: '备份文件格式无效'
+        message: '备份文件格式无效'
       })
     }
 
     console.log(`备份文件信息:`)
-    console.log(`- 版本: ${backupData.metadata.version}`)
+    console.log(`- 版本：${backupData.metadata.version}`)
     console.log(`- 创建时间: ${backupData.metadata.timestamp}`)
     console.log(`- 创建者: ${backupData.metadata.creator}`)
     console.log(`- 总记录数: ${backupData.metadata.totalRecords}`)
@@ -153,7 +153,7 @@ export default defineEventHandler(async (event) => {
     if (overwriteSuperAdmin && user.role !== 'SUPER_ADMIN') {
       throw createError({
         statusCode: 403,
-        statusMessage: '仅超级管理员可以覆盖超级管理员账号数据'
+        message: '仅超级管理员可以覆盖超级管理员账号数据'
       })
     }
     const shouldOverwriteSuperAdmin =
@@ -735,7 +735,9 @@ export default defineEventHandler(async (event) => {
                           'semester',
                           'cover',
                           'musicPlatform',
-                          'musicId'
+                          'musicId',
+                          'submissionNote',
+                          'submissionNotePublic'
                         ]
                         songFields.forEach((field) => {
                           if (record.hasOwnProperty(field)) {
@@ -1000,6 +1002,8 @@ export default defineEventHandler(async (event) => {
                           'requestTimeLimitation',
                           'forceBlockAllRequests',
                           'enableReplayRequests',
+                          'enableCollaborativeSubmission',
+                          'enableSubmissionRemarks',
                           'hideStudentInfo',
                           'smtpEnabled',
                           'smtpHost',
@@ -1008,7 +1012,35 @@ export default defineEventHandler(async (event) => {
                           'smtpUsername',
                           'smtpPassword',
                           'smtpFromEmail',
-                          'smtpFromName'
+                          'smtpFromName',
+                          'allowOAuthRegistration',
+                          'oauthRedirectUri',
+                          'oauthStateSecret',
+                          'oauthProviders',
+                          'githubOAuthEnabled',
+                          'githubClientId',
+                          'githubClientSecret',
+                          'casdoorOAuthEnabled',
+                          'casdoorServerUrl',
+                          'casdoorClientId',
+                          'casdoorClientSecret',
+                          'casdoorOrganizationName',
+                          'googleOAuthEnabled',
+                          'googleClientId',
+                          'googleClientSecret',
+                          'customOAuthEnabled',
+                          'customOAuthDisplayName',
+                          'customOAuthAuthorizeUrl',
+                          'customOAuthTokenUrl',
+                          'customOAuthUserInfoUrl',
+                          'customOAuthScope',
+                          'customOAuthClientId',
+                          'customOAuthClientSecret',
+                          'customOAuthUserIdField',
+                          'customOAuthUsernameField',
+                          'customOAuthNameField',
+                          'customOAuthEmailField',
+                          'customOAuthAvatarField'
                         ]
 
                         // 只添加备份数据中存在的字段
@@ -2198,7 +2230,7 @@ export default defineEventHandler(async (event) => {
     console.error('恢复数据库备份失败:', error)
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || '恢复数据库备份失败'
+      message: error.message || '恢复数据库备份失败'
     })
   }
 })

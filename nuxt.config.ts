@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   dir: {
     public: fileURLToPath(new URL('./public', import.meta.url))
   },
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   devServer: {
     host: '0.0.0.0', // 允许局域网访问
     port: 3000
@@ -45,6 +45,7 @@ export default defineNuxtConfig({
     redisUrl: process.env.REDIS_URL || '',
     // 公共键（会暴露到客户端）
     public: {
+      host: process.env.NUXT_PUBLIC_HOST || '', // 用于 CORS 和反向代理的主机名验证
       apiBase: '/api',
       oauth: {
         github: !!process.env.GITHUB_CLIENT_ID,
@@ -61,8 +62,6 @@ export default defineNuxtConfig({
 
   // 配置环境变量
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
-    layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
       title: process.env.NUXT_PUBLIC_SITE_TITLE || '天津二中校园广播站',
       meta: [
@@ -122,7 +121,7 @@ export default defineNuxtConfig({
   },
 
   features: {
-    inlineStyles: true
+    inlineStyles: false
   },
 
   // TypeScript配置
@@ -255,6 +254,22 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ['drizzle-orm'],
       exclude: ['@applemusic-like-lyrics/vue', '@applemusic-like-lyrics/lyric']
+    },
+    build: {
+      target: 'esnext',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return
+            if (id.includes('lucide-vue-next')) return 'icons'
+            if (id.includes('@pixi')) return 'pixi'
+            if (id.includes('@applemusic-like-lyrics')) return 'lyric-engine'
+            if (id.includes('drizzle-orm') || id.includes('postgres')) return 'database'
+            if (id.includes('xlsx') || id.includes('jspdf') || id.includes('jszip')) return 'office'
+          }
+        }
+      }
     },
     // 添加 WASM 支持配置
     assetsInclude: ['**/*.wasm'],

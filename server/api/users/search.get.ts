@@ -1,6 +1,6 @@
 import { createError, defineEventHandler, getQuery } from 'h3'
 import { db } from '~/drizzle/db'
-import { users } from '~/drizzle/schema'
+import { users, systemSettings } from '~/drizzle/schema'
 import { and, ilike, or, ne, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
@@ -9,12 +9,20 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: '未登录'
+      message: '未登录'
     })
   }
 
   const query = getQuery(event)
   const { keyword } = query
+
+  const settings = await db.select().from(systemSettings).limit(1)
+  if (settings[0]?.enableCollaborativeSubmission === false) {
+    throw createError({
+      statusCode: 403,
+      message: '联合投稿功能已关闭'
+    })
+  }
 
   if (!keyword || typeof keyword !== 'string' || keyword.trim().length < 1) {
     return {
@@ -63,7 +71,7 @@ export default defineEventHandler(async (event) => {
     console.error('搜索用户失败:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: '搜索用户失败'
+      message: '搜索用户失败'
     })
   }
 })

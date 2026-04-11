@@ -3,44 +3,7 @@ import { systemSettings } from '~/drizzle/schema'
 import { cacheService } from '../services/cacheService'
 import { isRedisReady } from '../utils/redis'
 
-// 过滤敏感字段，只返回公开配置
-const publicFields = [
-  'siteTitle',
-  'siteLogoUrl',
-  'schoolLogoHomeUrl',
-  'schoolLogoPrintUrl',
-  'siteDescription',
-  'submissionGuidelines',
-  'icpNumber',
-  'enablePlayTimeSelection',
-  'enableSubmissionLimit',
-  'dailySubmissionLimit',
-  'weeklySubmissionLimit',
-  'monthlySubmissionLimit',
-  'showBlacklistKeywords',
-  'hideStudentInfo',
-  'enableReplayRequests',
-  'enableRequestTimeLimitation',
-  'forceBlockAllRequests',
-  'smtpEnabled',
-  'enableRecommendation',
-  'requireRecommendation',
-  'recommendationMinLength',
-  'recommendationMaxLength'
-]
-
-const filterPublicSettings = (data: any) => {
-  if (!data) {
-    return {}
-  }
-  const result: Record<string, any> = {}
-  for (const key of publicFields) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      result[key] = data[key]
-    }
-  }
-  return result
-}
+import { SYSTEM_SETTINGS_DEFAULTS, filterPublicSettings } from '../utils/system-settings-defaults'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -62,23 +25,11 @@ export default defineEventHandler(async (event) => {
       const newSettings = await db
         .insert(systemSettings)
         .values({
-          enablePlayTimeSelection: false,
+          ...SYSTEM_SETTINGS_DEFAULTS,
           enableRecommendation: false,
           requireRecommendation: false,
           recommendationMinLength: 50,
-          recommendationMaxLength: 100,
-          siteTitle: 'VoiceHub',
-          siteLogoUrl: '/favicon.ico',
-          schoolLogoHomeUrl: null,
-          schoolLogoPrintUrl: null,
-          siteDescription: '校园广播站点歌系统 - 让你的声音被听见',
-          submissionGuidelines: '请遵守校园规定，提交健康向上的歌曲。',
-          icpNumber: null,
-          enableSubmissionLimit: false,
-          dailySubmissionLimit: null,
-          weeklySubmissionLimit: null,
-          showBlacklistKeywords: false,
-          hideStudentInfo: true
+          recommendationMaxLength: 100
         })
         .returning()
 
@@ -98,7 +49,7 @@ export default defineEventHandler(async (event) => {
     console.error('获取系统设置失败:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: '获取系统设置失败'
+      message: '获取系统设置失败'
     })
   }
 })
