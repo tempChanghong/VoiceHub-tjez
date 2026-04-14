@@ -35,7 +35,11 @@ export const SYSTEM_SETTINGS_DEFAULTS = {
   smtpPassword: null,
   smtpFromEmail: null,
   smtpFromName: '校园广播站',
-  allowOAuthRegistration: false
+  allowOAuthRegistration: false,
+  enableRecommendation: false,
+  requireRecommendation: false,
+  recommendationMinLength: 50,
+  recommendationMaxLength: 100
 }
 
 export const PUBLIC_SETTINGS_FIELDS = [
@@ -66,7 +70,11 @@ export const PUBLIC_SETTINGS_FIELDS = [
   'casdoorOAuthEnabled',
   'googleOAuthEnabled',
   'customOAuthEnabled',
-  'customOAuthDisplayName'
+  'customOAuthDisplayName',
+  'enableRecommendation',
+  'requireRecommendation',
+  'recommendationMinLength',
+  'recommendationMaxLength'
 ]
 
 export const filterPublicSettings = (data: any) => {
