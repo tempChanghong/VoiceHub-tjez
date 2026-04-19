@@ -182,6 +182,30 @@
             >
               <LazyAdminApiKeyManager />
             </div>
+
+            <!-- AI 配置 -->
+            <div
+              v-if="activeTab === 'ai-config' && permissions.canAccessPage('ai-config')"
+              class="animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <LazyAdminAiConfigManager />
+            </div>
+
+            <!-- AI 预驳回管理 -->
+            <div
+              v-if="activeTab === 'ai-pre-rejected' && permissions.canAccessPage('ai-pre-rejected')"
+              class="animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <LazyAdminAiPreRejectedManager />
+            </div>
+
+            <!-- AI Token 监控 -->
+            <div
+              v-if="activeTab === 'ai-tokens' && permissions.canAccessPage('ai-tokens')"
+              class="animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <LazyAdminAiTokenDashboard />
+            </div>
           </div>
         </main>
       </div>
@@ -246,7 +270,10 @@ const getPageTitle = () => {
     blacklist: '黑名单管理',
     'ip-security': 'IP 安全管理',
     'site-config': '站点配置',
-    database: '数据库操作'
+    database: '数据库操作',
+    'ai-config': 'AI 审核配置',
+    'ai-pre-rejected': '预驳回管理',
+    'ai-tokens': 'Token 监控'
   }
   return titles[activeTab.value] || '管理后台'
 }

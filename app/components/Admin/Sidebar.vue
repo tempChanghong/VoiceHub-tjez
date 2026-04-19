@@ -136,7 +136,10 @@ import {
   Globe,
   Database,
   Lock,
-  ShieldAlert
+  ShieldAlert,
+  Bot,
+  ShieldX,
+  Coins
 } from 'lucide-vue-next'
 import logo from '~~/public/images/logo.png'
 
@@ -199,6 +202,14 @@ const menuGroups = [
       { icon: ShieldAlert, label: 'IP 安全管理', id: 'ip-security' },
       { icon: Globe, label: '站点配置', id: 'site-config' },
       { icon: Database, label: '数据库操作', id: 'database' }
+    ]
+  },
+  {
+    section: 'AI 审核',
+    items: [
+      { icon: Bot, label: 'AI 配置', id: 'ai-config' },
+      { icon: ShieldX, label: '预驳回管理', id: 'ai-pre-rejected' },
+      { icon: Coins, label: 'Token 监控', id: 'ai-tokens' },
     ]
   },
   {

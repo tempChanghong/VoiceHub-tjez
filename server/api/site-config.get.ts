@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
         })
         .returning()
 
-      settings = newSettings[0]
+      settings = newSettings[0] ?? null
     }
 
     const publicSettings = filterPublicSettings(settings)

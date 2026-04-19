@@ -6,6 +6,14 @@ export const blacklistTypeEnum = pgEnum('BlacklistType', ['SONG', 'KEYWORD']);
 export const userStatusEnum = pgEnum('user_status', ['active', 'withdrawn', 'graduate']);
 export const collaboratorStatusEnum = pgEnum('collaborator_status', ['PENDING', 'ACCEPTED', 'REJECTED']);
 export const replayRequestStatusEnum = pgEnum('replay_request_status', ['PENDING', 'FULFILLED', 'REJECTED']);
+export const aiSongStatusEnum = pgEnum('ai_song_status', [
+  'PENDING',        // 等待 AI 审核
+  'APPROVED',       // AI 合规通过
+  'PRE_REJECTED',   // AI 预驳回（等待人工复核）
+  'REJECTED',       // 正式驳回（超时自动或人工确认）
+  'RESTORED',       // 管理员从预驳回恢复
+  'SCORED',         // 已完成价值评分
+]);
 
 // 用户表
 export const users = pgTable('User', {
@@ -63,6 +71,24 @@ export const songs = pgTable('Song', {
   submissionNotePublic: boolean('submissionNotePublic').default(false).notNull(),
   hitRequestId: integer(),
   recommendation: text('recommendation'),
+  // --- AI 审核与评分字段（Phase 1 增量） ---
+  // AI 审核状态（默认 PENDING，表示等待 AI 处理）
+  aiStatus: text('ai_status').default('PENDING'),
+  // AI 合规审查结果 JSON: { passed, reason, categories, confidence, risk_level }
+  aiComplianceResult: text('ai_compliance_result'),
+  aiComplianceAt: timestamp('ai_compliance_at'),
+  // AI 价值评分（0-100）
+  aiScore: integer('ai_score'),
+  // AI 评分明细 JSON: { dimensions: [...], summary, highlightTags }
+  aiScoreBreakdown: text('ai_score_breakdown'),
+  aiScoreAt: timestamp('ai_score_at'),
+  // 人工干预标记
+  aiManualCorrected: boolean('ai_manual_corrected').default(false),
+  aiManualScore: integer('ai_manual_score'),
+  aiManualCorrectedBy: integer('ai_manual_corrected_by'),
+  aiManualCorrectedAt: timestamp('ai_manual_corrected_at'),
+  // 预驳回时间戳：+ preRejectGraceDays 后 Cron 自动转正式 REJECTED
+  aiPreRejectedAt: timestamp('ai_pre_rejected_at'),
 });
 
 // 投票表
@@ -511,6 +537,71 @@ export const ipBlacklists = pgTable('ip_blacklists', {
   expiresAt: timestamp('expires_at'), // null = 永久封禁
 });
 
+// --- AI 审核与评分系统（Phase 1 增量） ---
+
+// AI 审计日志表：记录每一次 LLM 调用的 Token 消耗、延迟、请求/响应摘要
+export const aiAuditLogs = pgTable('ai_audit_logs', {
+  id: serial('id').primaryKey(),
+  songId: integer('song_id').notNull(),
+  action: varchar('action', { length: 50 }).notNull(),
+  // 动作类型: COMPLIANCE_SCAN | COMPLIANCE_PASS | COMPLIANCE_PRE_REJECT
+  //         | VALUE_SCORE | MANUAL_OVERRIDE | AUTO_REJECT | MANUAL_RESTORE
+  inputTokens: integer('input_tokens').default(0),
+  outputTokens: integer('output_tokens').default(0),
+  totalTokens: integer('total_tokens').default(0),
+  modelName: varchar('model_name', { length: 100 }),
+  promptVersion: varchar('prompt_version', { length: 50 }),
+  requestPayload: text('request_payload'),   // 请求摘要（截断存储，不超过 2KB）
+  responsePayload: text('response_payload'), // 响应摘要
+  latencyMs: integer('latency_ms'),
+  error: text('error'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  operatorId: integer('operator_id'),        // 若为人工触发，记录管理员 ID
+});
+
+// AI 配置表：全局单例（始终使用 id=1 的记录）
+export const aiSettings = pgTable('ai_settings', {
+  id: serial('id').primaryKey(),
+  // LLM 连接配置
+  provider: varchar('provider', { length: 50 }).default('openai'),
+  apiKey: text('api_key'),                    // 加密存储（由应用层处理加解密）
+  apiBaseUrl: text('api_base_url'),
+  modelName: varchar('model_name', { length: 100 }).default('gpt-4o-mini'),
+  connectionVerified: boolean('connection_verified').default(false),
+  connectionVerifiedAt: timestamp('connection_verified_at'),
+  // 审核与评分准则（管理员自定义追加）
+  complianceCriteria: text('compliance_criteria'),
+  scoringCriteria: text('scoring_criteria'),
+  // 功能开关
+  enableAiCompliance: boolean('enable_ai_compliance').default(false),
+  enableAiScoring: boolean('enable_ai_scoring').default(false),
+  // 成本控制
+  dailyTokenLimit: integer('daily_token_limit').default(100000),
+  monthlyTokenLimit: integer('monthly_token_limit').default(2000000),
+  // 预驳回自动转正式驳回的宽限天数
+  preRejectGraceDays: integer('pre_reject_grace_days').default(3),
+  // 排期排序权重（AI 分 vs 投票热度）
+  scoreSortWeight: integer('score_sort_weight').default(70),
+  voteSortWeight: integer('vote_sort_weight').default(30),
+  // 批量扫描配置（适配 Vercel 10s 超时）
+  batchSize: integer('batch_size').default(10),
+  scanIntervalMinutes: integer('scan_interval_minutes').default(30),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// AI 审计日志 ↔ 歌曲 / 操作员关系
+export const aiAuditLogsRelations = relations(aiAuditLogs, ({ one }) => ({
+  song: one(songs, {
+    fields: [aiAuditLogs.songId],
+    references: [songs.id],
+  }),
+  operator: one(users, {
+    fields: [aiAuditLogs.operatorId],
+    references: [users.id],
+  }),
+}));
+
 // 导出所有表的类型
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -552,6 +643,10 @@ export type RequestTime = typeof requestTimes.$inferSelect;
 export type NewRequestTime = typeof requestTimes.$inferInsert;
 export type UserIdentity = typeof userIdentities.$inferSelect;
 export type NewUserIdentity = typeof userIdentities.$inferInsert;
+export type AiAuditLog = typeof aiAuditLogs.$inferSelect;
+export type NewAiAuditLog = typeof aiAuditLogs.$inferInsert;
+export type AiSettings = typeof aiSettings.$inferSelect;
+export type NewAiSettings = typeof aiSettings.$inferInsert;
 export type LoginLog = typeof loginLogs.$inferSelect;
 export type NewLoginLog = typeof loginLogs.$inferInsert;
 export type IpBlacklist = typeof ipBlacklists.$inferSelect;

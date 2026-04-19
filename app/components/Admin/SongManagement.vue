@@ -170,7 +170,7 @@
         <div
           class="col-span-2 text-[10px] font-black text-zinc-600 uppercase tracking-widest text-center"
         >
-          状态
+          状态 / AI
         </div>
         <div
           class="col-span-2 text-[10px] font-black text-zinc-600 uppercase tracking-widest text-right pr-4"
@@ -302,7 +302,7 @@
             </button>
           </div>
 
-          <div class="col-span-3 lg:col-span-2 text-center">
+          <div class="col-span-3 lg:col-span-2 flex flex-col items-center gap-1.5">
             <span
               :class="[
                 'px-2 py-0.5 text-[10px] font-black rounded-md uppercase tracking-wider',
@@ -315,6 +315,51 @@
             >
               {{ getStatusText(song) }}
             </span>
+            <!-- AI 状态徽章 -->
+            <span
+              v-if="song.aiStatus"
+              :class="['px-1.5 py-0.5 text-[9px] font-black rounded uppercase tracking-wider border', getAiStatusStyle(song.aiStatus)]"
+            >
+              {{ getAiStatusLabel(song.aiStatus) }}
+            </span>
+            <!-- AI 评分（可点击编辑） -->
+            <template v-if="song.aiStatus === 'SCORED' || song.aiScore != null">
+              <div v-if="editingScoreSongId !== song.id" class="flex items-center gap-1">
+                <span
+                  class="text-[10px] font-black text-blue-400 cursor-pointer hover:text-blue-300 transition-colors"
+                  :title="song.aiManualCorrected ? '人工修正分数' : 'AI 评分'"
+                  @click="openScoreEdit(song)"
+                >
+                  {{ song.aiManualScore ?? song.aiScore ?? '—' }}
+                  <span class="text-zinc-700 font-normal">分</span>
+                </span>
+                <span v-if="song.aiManualCorrected" class="text-[8px] text-purple-400 font-bold">人工</span>
+              </div>
+              <div v-else class="flex items-center gap-1">
+                <input
+                  v-model.number="editingScoreValue"
+                  type="number"
+                  min="0"
+                  max="100"
+                  class="w-14 bg-zinc-950 border border-blue-500/40 rounded px-1.5 py-0.5 text-[10px] text-zinc-200 focus:outline-none text-center"
+                  @keydown.enter="submitScoreEdit(song)"
+                  @keydown.esc="editingScoreSongId = null"
+                >
+                <button
+                  class="text-emerald-400 hover:text-emerald-300 transition-colors"
+                  :disabled="savingScore"
+                  @click="submitScoreEdit(song)"
+                >
+                  <Check :size="12" />
+                </button>
+                <button
+                  class="text-zinc-600 hover:text-zinc-400 transition-colors"
+                  @click="editingScoreSongId = null"
+                >
+                  <X :size="12" />
+                </button>
+              </div>
+            </template>
           </div>
 
           <div
@@ -1086,6 +1131,70 @@ const sortOptions = [
   { label: '标题 A-Z', value: 'title-asc' },
   { label: '标题 Z-A', value: 'title-desc' }
 ]
+
+// AI 评分内联编辑
+const editingScoreSongId = ref(null)
+const editingScoreValue = ref(0)
+const savingScore = ref(false)
+
+/**
+ * 打开评分编辑框
+ */
+function openScoreEdit(song) {
+  editingScoreSongId.value = song.id
+  editingScoreValue.value = song.aiManualScore ?? song.aiScore ?? 0
+}
+
+/**
+ * 提交人工改分
+ */
+async function submitScoreEdit(song) {
+  if (savingScore.value) return
+  const score = Math.max(0, Math.min(100, Math.round(editingScoreValue.value)))
+  savingScore.value = true
+  try {
+    await $fetch('/api/admin/ai/override', {
+      method: 'POST',
+      body: { songId: song.id, action: 'update_score', newScore: score },
+    })
+    song.aiManualScore = score
+    song.aiManualCorrected = true
+    editingScoreSongId.value = null
+    showNotification('评分已更新', 'success')
+  } catch (e) {
+    showNotification(e?.data?.message || '更新失败', 'error')
+  } finally {
+    savingScore.value = false
+  }
+}
+
+/**
+ * AI 状态徽章样式
+ */
+function getAiStatusStyle(status) {
+  const map = {
+    PENDING: 'bg-zinc-800 border-zinc-700 text-zinc-500',
+    APPROVED: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+    RESTORED: 'bg-purple-500/10 border-purple-500/20 text-purple-400',
+    SCORED: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
+    PRE_REJECTED: 'bg-red-500/10 border-red-500/20 text-red-400',
+  }
+  return map[status] || 'bg-zinc-800 border-zinc-700 text-zinc-500'
+}
+
+/**
+ * AI 状态中文标签
+ */
+function getAiStatusLabel(status) {
+  const map = {
+    PENDING: 'AI待审',
+    APPROVED: 'AI通过',
+    RESTORED: '已恢复',
+    SCORED: 'AI评分',
+    PRE_REJECTED: 'AI预驳',
+  }
+  return map[status] || status
+}
 
 // 删除对话框相关
 const showDeleteDialog = ref(false)
