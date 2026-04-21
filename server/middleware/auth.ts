@@ -40,7 +40,8 @@ export default defineEventHandler(async (event) => {
     '/api/open/', // 开放API路径，由api-auth中间件处理认证
     '/api/auth/webauthn/login', // WebAuthn 登录接口
     '/api/music/state', // 音乐状态同步
-    '/api/music/websocket' // WebSocket 连接
+    '/api/music/websocket', // WebSocket 连接
+    '/api/cron/' // 定时任务API，由接口内部的 CRON_SECRET 鉴权
   ]
 
   // 公共路径跳过认证检查
