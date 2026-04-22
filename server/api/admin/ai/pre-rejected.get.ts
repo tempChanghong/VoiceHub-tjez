@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
     })
 
     return {
-      items,
+      list: items,
       total,
       page,
       pageSize,

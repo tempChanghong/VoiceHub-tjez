@@ -82,22 +82,22 @@
           <!-- 申请人 -->
           <div class="col-span-12 lg:col-span-2 flex items-center">
             <div>
-              <p class="text-xs font-bold text-zinc-300">{{ item.requesterName || '—' }}</p>
-              <p class="text-[10px] text-zinc-600">{{ item.requesterEmail || '' }}</p>
+              <p class="text-xs font-bold text-zinc-300">{{ item.requester?.name || '—' }}</p>
+              <p class="text-[10px] text-zinc-600">{{ item.requester?.grade ? `${item.requester.grade}年级${item.requester.class || ''}班` : '' }}</p>
             </div>
           </div>
 
           <!-- 驳回原因 -->
           <div class="col-span-12 lg:col-span-3">
             <div
-              v-if="item.complianceResult"
+              v-if="item.aiComplianceResult"
               class="space-y-1"
             >
-              <p class="text-[10px] font-black text-red-400 uppercase tracking-widest">{{ item.complianceResult.verdict }}</p>
-              <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2">{{ item.complianceResult.reason }}</p>
-              <div v-if="item.complianceResult.violatedRules?.length" class="flex flex-wrap gap-1 mt-1">
+              <p class="text-[10px] font-black text-red-400 uppercase tracking-widest">{{ item.aiComplianceResult.verdict }}</p>
+              <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2">{{ item.aiComplianceResult.reason }}</p>
+              <div v-if="item.aiComplianceResult.violatedRules?.length" class="flex flex-wrap gap-1 mt-1">
                 <span
-                  v-for="rule in item.complianceResult.violatedRules"
+                  v-for="rule in item.aiComplianceResult.violatedRules"
                   :key="rule"
                   class="px-1.5 py-0.5 bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] font-bold rounded-md"
                 >
